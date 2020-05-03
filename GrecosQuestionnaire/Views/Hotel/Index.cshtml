@@ -1,0 +1,78 @@
+﻿@model IEnumerable<GrecosQuestionnaire.Models.HotelModel>
+
+<div class="row">
+    <div class="col-md-8"><h2>Hotele</h2></div>
+    <div class="col-md-4" style="padding-top: 22px;">
+        <a href="@Url.Action("Import", "Import")" role="button" class="btn btn-primary pull-right">
+            <span class="glyphicon glyphicon-arrow-down"></span>
+            Import z systemu Magic
+        </a>
+    </div>
+</div>
+
+@using (Html.BeginForm("Import", "Hotel", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input id="block-submit" type="submit" class="btn btn-default" value="Importuj" />
+        </div>
+    </div>
+}
+
+
+
+
+<form class="navbar-form navbar-left" role="search" style="background: #3DB6DB; color: white; width: 100%; padding-bottom: 7px; padding-top: 7px;">
+    Filtruj według: <br />
+    @*<div class="form-group" style="margin-top: 7px;">
+            @Html.TextBox("Imię", "FirstName", GridFilterType.String, GridFilterComparison.Ct)
+            @Html.GridFilterTextPlaceholder("Nazwisko", "LastName", GridFilterType.String, GridFilterComparison.Ct)
+            @Html.GridFilterTextPlaceholder("Numer", "BookingNo", GridFilterType.String, GridFilterComparison.Ct)
+            @Html.GridFilterTextPlaceholder("Źródło (ABC)", "Source", GridFilterType.String, GridFilterComparison.Ct)
+            @Html.GridFilterTextPlaceholder("Cel (ABC)", "Dest", GridFilterType.String, GridFilterComparison.Ct)
+            @Html.GridFilterDatePlaceHolder("Data wylotu od (yyyy-mm-dd)", "Date^1", GridFilterType.DateTime, GridFilterComparison.Gt)
+            @Html.GridFilterDatePlaceHolder("Data wylotu do (yyyy-mm-dd)", "Date^2", GridFilterType.DateTime, GridFilterComparison.Lt)
+            @Html.GridFilterTextPlaceholder("Hotel", "HotelName", GridFilterType.String, GridFilterComparison.Ct)
+            @Html.GridFilterDatePlaceHolder("Data zameld. od (yyyy-mm-dd)", "CheckInDate^1", GridFilterType.DateTime, GridFilterComparison.Gt)
+            @Html.GridFilterDatePlaceHolder("Data zameld do (yyyy-mm-dd)", "CheckInDate^2", GridFilterType.DateTime, GridFilterComparison.Lt)
+        </div>*@
+</form>
+
+@*<table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Kod Hotelu</th>
+                <th>Nazwa Hotelu</th>
+                <th>Kraj</th>
+                <th>Destynacja</th>
+                <th>Nazwa pokoju</th>
+                <th>Główny pokój</th>
+                <th>Pokój</th>
+                <th>Sezon</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @item.HotelCode
+                </td>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.Country
+                </td>
+                <td>
+                    @item.Destination
+                </td>
+                <td>
+                    @item.DestinationSeasonName
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>*@
