@@ -1,16 +1,19 @@
 ﻿@model IEnumerable<GrecosQuestionnaire.Models.HotelModel>
 
+
+
+
 <div class="row">
     <div class="col-md-8"><h2>Hotele</h2></div>
     <div class="col-md-4" style="padding-top: 22px;">
-        <a href="@Url.Action("Import", "Import")" role="button" class="btn btn-primary pull-right">
+        <a href="@Url.Action("Import", "Hotel")" role="button" class="btn btn-primary pull-right">
             <span class="glyphicon glyphicon-arrow-down"></span>
             Import z systemu Magic
         </a>
     </div>
 </div>
 
-@using (Html.BeginForm("Import", "Hotel", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@*@using (Html.BeginForm("Import", "Hotel", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
 
     <div class="form-group">
@@ -18,7 +21,7 @@
             <input id="block-submit" type="submit" class="btn btn-default" value="Importuj" />
         </div>
     </div>
-}
+}*@
 
 
 
@@ -39,18 +42,17 @@
         </div>*@
 </form>
 
-@*<table class="table table-striped table-hover">
+<table class="table table-striped table-hover">
         <thead>
             <tr>
                 <th>Kod Hotelu</th>
                 <th>Nazwa Hotelu</th>
                 <th>Kraj</th>
                 <th>Destynacja</th>
-                <th>Nazwa pokoju</th>
-                <th>Główny pokój</th>
-                <th>Pokój</th>
                 <th>Sezon</th>
                 <th></th>
+                <th></th>
+                <th>Zapisz</th>
             </tr>
         </thead>
         <tbody>
@@ -70,9 +72,21 @@
                     @item.Destination
                 </td>
                 <td>
-                    @item.DestinationSeasonName
+                    @item.Season
+                </td>
+                <td>
+                    <a class="btn-lg" href="@Url.Action("Assign", "Hotel", new { id = @item.Id }, null)" title="Przypisz">
+                        <span class="glyphicon glyphicon-import">_</span>
+                    </a>
+                </td>
+                <td>
+                    @item.HotelPartnerId
+                    @Html.DropDownList(item.HotelPartnerId.ToString() , ViewBag.Partners as IEnumerable<SelectListItem>, "Partnerzy", new { @class = "form-control" })
+                </td>
+                <td>
+                    Zapisz
                 </td>
             </tr>
             }
         </tbody>
-    </table>*@
+    </table>

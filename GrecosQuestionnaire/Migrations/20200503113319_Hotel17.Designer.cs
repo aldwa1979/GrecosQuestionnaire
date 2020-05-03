@@ -4,14 +4,16 @@ using GrecosQuestionnaire.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GrecosQuestionnaire.Migrations
 {
     [DbContext(typeof(HotelDBContext))]
-    partial class HotelDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200503113319_Hotel17")]
+    partial class Hotel17
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,9 +37,6 @@ namespace GrecosQuestionnaire.Migrations
                     b.Property<string>("HotelCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("HotelPartnerId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -47,6 +46,26 @@ namespace GrecosQuestionnaire.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Hotels");
+                });
+
+            modelBuilder.Entity("GrecosQuestionnaire.Models.HotelPartner", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("HotelModelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HotelPartnerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HotelModelId");
+
+                    b.ToTable("HotelPartners");
                 });
 
             modelBuilder.Entity("GrecosQuestionnaire.Models.MainRoomModel", b =>
@@ -67,21 +86,6 @@ namespace GrecosQuestionnaire.Migrations
                     b.HasIndex("HotelModelId");
 
                     b.ToTable("MainRooms");
-                });
-
-            modelBuilder.Entity("GrecosQuestionnaire.Models.PartnerModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Partners");
                 });
 
             modelBuilder.Entity("GrecosQuestionnaire.Models.SeasonModel", b =>
@@ -120,6 +124,13 @@ namespace GrecosQuestionnaire.Migrations
                     b.HasIndex("MainRoomModelId");
 
                     b.ToTable("SharedUnits");
+                });
+
+            modelBuilder.Entity("GrecosQuestionnaire.Models.HotelPartner", b =>
+                {
+                    b.HasOne("GrecosQuestionnaire.Models.HotelModel", null)
+                        .WithMany("HotelPartner")
+                        .HasForeignKey("HotelModelId");
                 });
 
             modelBuilder.Entity("GrecosQuestionnaire.Models.MainRoomModel", b =>

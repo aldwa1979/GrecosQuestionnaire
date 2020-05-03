@@ -15,5 +15,6 @@ namespace GrecosQuestionnaire.Models
         public string Destination { get; set; }
         public List<MainRoomModel> MainRoom { get; set; } = new List<MainRoomModel>();
         public int Season { get; set; }
+        public int? HotelPartnerId { get; set; }
     }
 }

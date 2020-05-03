@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GrecosQuestionnaire.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GrecosQuestionnaire.Controllers
 {
@@ -20,8 +21,9 @@ namespace GrecosQuestionnaire.Controllers
 
         public IActionResult Index()
         {
-            return View();
-
+            var model = _hotelRepository.GetAllHotels();
+            AddViewBag();
+            return View(model);
         }
 
         [HttpPost]
@@ -130,5 +132,52 @@ namespace GrecosQuestionnaire.Controllers
 
             return RedirectToAction("Index");
         }
+
+        public IActionResult Assign (int id)
+        {
+            var model = _hotelRepository.GetHotelId(id);
+
+            AddViewBag();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Assign(HotelModel hotelModel)
+        {
+            if(ModelState.IsValid)
+            {
+                _hotelRepository.UploadNewHotels(hotelModel);
+            }
+            
+            return RedirectToAction("Index");
+        }
+
+
+        private void AddViewBag()
+        {
+            var partners = _hotelRepository.GetPartners().Select(x => new SelectListItem()
+            {
+                Text = x.Name.ToString(),
+                Value = x.Id.ToString()
+            }).ToList();
+
+            //partners.Insert(0,
+            //    new SelectListItem() { Selected = true, Text = string.Empty, Value = (-1).ToString(CultureInfo.InvariantCulture) });
+
+            ViewBag.Partners = partners;
+            //ViewBag.Owners = partners;
+
+            //var users = Entity.Query<User>().Where(x => x.Partner.IsSpecial).Select(x => new SelectListItem()
+            //{
+            //    Selected = false,
+            //    Text = x.Name,
+            //    Value = x.Id.ToString(CultureInfo.InvariantCulture)
+            //}).ToList();
+
+            //ViewBag.Users = users;
+        }
+
+
     }
 }

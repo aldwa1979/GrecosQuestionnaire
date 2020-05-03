@@ -1,0 +1,34 @@
+﻿@model GrecosQuestionnaire.Models.HotelModel
+
+@{
+    ViewData["Title"] = "Przypisanie partnera";
+}
+
+<div class="row">
+    <div class="col-md-8"><h2>Przypisanie partnera</h2></div>
+    <div class="col-md-4" style="padding-top: 22px;">
+
+    </div>
+</div>
+
+@using (Html.BeginForm("Assign", "Hotel", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.HotelCode)
+    @Html.HiddenFor(x => x.Name)
+    @Html.HiddenFor(x => x.Country)
+    @Html.HiddenFor(x => x.Destination)
+    @Html.HiddenFor(x => x.Season)
+
+    @Html.ValidationSummary(true)
+    <fieldset>
+        @Html.DropDownListFor(m => m.HotelPartnerId, ViewBag.Partners as IEnumerable<SelectListItem>, "Partnerzy", new { @class = "form-control" })
+    </fieldset>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Zapisz" />
+        </div>
+    </div>
+}

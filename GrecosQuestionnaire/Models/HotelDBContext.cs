@@ -17,5 +17,6 @@ namespace GrecosQuestionnaire.Models
         public DbSet<HotelModel> Hotels { get; set; }
         public DbSet<MainRoomModel> MainRooms { get; set; }
         public DbSet<SharedUnitModel> SharedUnits { get; set; }
+        public DbSet<PartnerModel> Partners { get; set; }
     }
 }

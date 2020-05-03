@@ -19,7 +19,19 @@ namespace GrecosQuestionnaire.Models
             return _context.Hotels.ToList();
         }
 
-        //Szukam id hotelu w bazie hoteli
+        //Szukam wszystkich partnerów
+        public List<PartnerModel> GetPartners()
+        {
+            return _context.Partners.ToList();
+        }
+
+        //Szukam id hotelu w bazie hoteli po id
+        public HotelModel GetHotelId(int id)
+        {
+            return _context.Hotels.Where(p => p.Id == id).FirstOrDefault();
+        }
+
+        //Szukam id hotelu w bazie hoteli po kodzie i sezonie
         public int GetHotelId(string hotelCode, int season)
         {
             return _context.Hotels.Where(p => p.HotelCode == hotelCode && p.Season == season).FirstOrDefault().Id;

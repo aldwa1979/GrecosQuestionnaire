@@ -8,6 +8,8 @@ namespace GrecosQuestionnaire.Models
     public interface IHotelRepository
     {
         IEnumerable<HotelModel> GetAllHotels();
+        List<PartnerModel> GetPartners();
+        HotelModel GetHotelId(int id);
         int GetHotelId(string code, int season);
         int GetMainRoomlId(string hotelCode, string roomCode, int season);
         HotelModel GetHotel(string code, int season);
