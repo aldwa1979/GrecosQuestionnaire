@@ -14,14 +14,14 @@
 </div>
 
 @*@using (Html.BeginForm("Import", "Hotel", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{
+    {
 
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input id="block-submit" type="submit" class="btn btn-default" value="Importuj" />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input id="block-submit" type="submit" class="btn btn-default" value="Importuj" />
+            </div>
         </div>
-    </div>
-}*@
+    }*@
 
 
 
@@ -43,21 +43,21 @@
 </form>
 
 <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th>Kod Hotelu</th>
-                <th>Nazwa Hotelu</th>
-                <th>Kraj</th>
-                <th>Destynacja</th>
-                <th>Sezon</th>
-                <th></th>
-                <th></th>
-                <th>Zapisz</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    <thead>
+        <tr>
+            <th>Kod Hotelu</th>
+            <th>Nazwa Hotelu</th>
+            <th>Kraj</th>
+            <th>Destynacja</th>
+            <th>Sezon</th>
+            <th></th>
+            <th></th>
+            <th>Zapisz</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
             <tr>
                 <td>
                     @item.HotelCode
@@ -80,13 +80,14 @@
                     </a>
                 </td>
                 <td>
-                    @item.HotelPartnerId
-                    @Html.DropDownList(item.HotelPartnerId.ToString() , ViewBag.Partners as IEnumerable<SelectListItem>, "Partnerzy", new { @class = "form-control" })
+                    @Html.DropDownListFor(model => item.HotelPartnerId, (IEnumerable<SelectListItem>)ViewBag.Partners, "Brak", new { style = "width: 150px;",  @disabled = "disabled" , @class = "form-control" })
+                    
+                    @ViewBag.Partner
                 </td>
                 <td>
                     Zapisz
                 </td>
             </tr>
-            }
-        </tbody>
-    </table>
+        }
+    </tbody>
+</table>

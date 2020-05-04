@@ -23,7 +23,7 @@
 
     @Html.ValidationSummary(true)
     <fieldset>
-        @Html.DropDownListFor(m => m.HotelPartnerId, ViewBag.Partners as IEnumerable<SelectListItem>, "Partnerzy", new { @class = "form-control" })
+        @Html.DropDownListFor(m => m.HotelPartnerId, ViewBag.Partners as IEnumerable<SelectListItem>, "Brak", new { @class = "form-control" })
     </fieldset>
 
     <div class="form-group">
