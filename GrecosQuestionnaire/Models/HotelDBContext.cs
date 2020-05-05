@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GrecosQuestionnaire.Models
 {
-    public class HotelDBContext : DbContext
+    public class HotelDBContext : IdentityDbContext
     {
         public HotelDBContext(DbContextOptions<HotelDBContext> option) : base (option)
         {

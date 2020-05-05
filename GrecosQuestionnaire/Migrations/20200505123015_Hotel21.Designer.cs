@@ -4,14 +4,16 @@ using GrecosQuestionnaire.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GrecosQuestionnaire.Migrations
 {
     [DbContext(typeof(HotelDBContext))]
-    partial class HotelDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200505123015_Hotel21")]
+    partial class Hotel21
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

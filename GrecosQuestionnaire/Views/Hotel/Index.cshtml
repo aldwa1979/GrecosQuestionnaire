@@ -52,7 +52,6 @@
             <th>Sezon</th>
             <th></th>
             <th></th>
-            <th>Zapisz</th>
         </tr>
     </thead>
     <tbody>
@@ -83,9 +82,6 @@
                     @Html.DropDownListFor(model => item.HotelPartnerId, (IEnumerable<SelectListItem>)ViewBag.Partners, "Brak", new { style = "width: 150px;",  @disabled = "disabled" , @class = "form-control" })
                     
                     @ViewBag.Partner
-                </td>
-                <td>
-                    Zapisz
                 </td>
             </tr>
         }

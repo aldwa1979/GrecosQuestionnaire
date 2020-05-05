@@ -1,0 +1,24 @@
+﻿@model IEnumerable<GrecosQuestionnaire.ViewModel.UserViewModel>
+
+@{
+    ViewData["Title"] = "Użytkownicy systemu";
+}
+
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.Email
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+

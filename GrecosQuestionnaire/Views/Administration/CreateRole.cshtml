@@ -1,0 +1,20 @@
+﻿@model GrecosQuestionnaire.ViewModel.RoleViewModel
+
+<form method="post">
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="RoleName" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="RoleName" class="form-control" />
+            <span asp-validation-for="RoleName" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-primary" value="Dodaj rolę" />
+        </div>
+    </div>
+</form>
