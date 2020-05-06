@@ -22,15 +22,7 @@ namespace GrecosQuestionnaire.Controllers
         public IActionResult Index()
         {
             var users = _userManager.Users;
-
-            List<UserViewModel> userViewModel = new List<UserViewModel>();
-
-            foreach (var item in users)
-            {
-                userViewModel.Add(new UserViewModel(item.Email));
-            }
-
-            return View(userViewModel);
+            return View(users);
         }
 
 
