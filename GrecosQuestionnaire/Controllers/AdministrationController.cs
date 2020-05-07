@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GrecosQuestionnaire.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GrecosQuestionnaire.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdministrationController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -163,7 +165,7 @@ namespace GrecosQuestionnaire.Controllers
             {
                 var user = await _userManager.FindByIdAsync(model[i].UserId);
 
-                IdentityResult result = null;
+                IdentityResult result;// = null;
                 
                 if (model[i].IsSelected && !(await _userManager.IsInRoleAsync(user, role.Name)))
                 {

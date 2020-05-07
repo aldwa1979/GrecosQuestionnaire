@@ -4,14 +4,16 @@ using GrecosQuestionnaire.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GrecosQuestionnaire.Migrations
 {
     [DbContext(typeof(HotelDBContext))]
-    partial class HotelDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200507165404_Hotel22")]
+    partial class Hotel22
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -129,7 +131,10 @@ namespace GrecosQuestionnaire.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("PartnerModelID")
+                    b.Property<string>("PartnerID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PartnerModelId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserID")
@@ -137,7 +142,7 @@ namespace GrecosQuestionnaire.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("PartnerModelID");
+                    b.HasIndex("PartnerModelId");
 
                     b.ToTable("UserPartnerModel");
                 });
@@ -360,9 +365,7 @@ namespace GrecosQuestionnaire.Migrations
                 {
                     b.HasOne("GrecosQuestionnaire.Models.PartnerModel", null)
                         .WithMany("UsersIDs")
-                        .HasForeignKey("PartnerModelID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PartnerModelId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

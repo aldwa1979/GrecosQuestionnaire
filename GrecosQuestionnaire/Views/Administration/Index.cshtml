@@ -11,14 +11,9 @@
     foreach (var role in Model)
     {
         <div class="card mb-3">
-            <div class="card-header">
-                Role id :  @role.Id
-            </div>
             <div class="card-body">
-                <h5 class="card-title">@role.Name</h5>
-            </div>
-            <div class="card-footer">
                 <form asp-action="Delete" asp-controller="Administration" asp-route-id="@role.Id" method="post">
+                    <a class="card-title">@role.Name </a>
                     <a class="btn btn-primary" asp-action="Edit" asp-controller="Administration" asp-route-id="@role.Id">Edit</a>
                     
                     <span id="confirmDeleteSpan_@role.Id" style="display:none">

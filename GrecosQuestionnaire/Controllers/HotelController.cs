@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GrecosQuestionnaire.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GrecosQuestionnaire.Controllers
 {
+    [Authorize]
     public class HotelController : Controller
     {
         private readonly IHotelRepository _hotelRepository;
@@ -28,6 +30,7 @@ namespace GrecosQuestionnaire.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Import()
         {
             //pobieram z magica bazę hoteli i pokoju dla każdego sezonu
@@ -134,6 +137,7 @@ namespace GrecosQuestionnaire.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Assign (int id)
         {
             var model = _hotelRepository.GetHotelId(id);
@@ -144,6 +148,7 @@ namespace GrecosQuestionnaire.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Assign(HotelModel hotelModel)
         {
             if(ModelState.IsValid)
@@ -154,6 +159,32 @@ namespace GrecosQuestionnaire.Controllers
             return RedirectToAction("Index");
         }
 
+        public IActionResult PartnerList()
+        {
+            var model = _hotelRepository.GetPartners();
+            return View(model);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddPartner()
+        {
+            return View(new PartnerModel());
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddPartner(PartnerModel partner)
+        {
+            if (ModelState.IsValid)
+            {
+                _hotelRepository.AddNewPartner(partner);
+                return RedirectToAction("partnerlist");
+            }
+            else
+            {
+                return View(partner);
+            }
+        }
 
         private void AddViewBag()
         {

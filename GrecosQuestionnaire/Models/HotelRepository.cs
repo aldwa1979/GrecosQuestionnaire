@@ -85,6 +85,13 @@ namespace GrecosQuestionnaire.Models
             _context.SaveChanges();
         }
 
+        //Zapisuję do bazy nowego partnera
+        public void AddNewPartner(PartnerModel partner)
+        {
+            _context.Update(partner);
+            _context.SaveChanges();
+        }
+
         //Zapisuję do bazy nowy sezon
         public void UploadNewSeason(SeasonModel season)
         {

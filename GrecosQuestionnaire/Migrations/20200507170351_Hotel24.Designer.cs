@@ -4,14 +4,16 @@ using GrecosQuestionnaire.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GrecosQuestionnaire.Migrations
 {
     [DbContext(typeof(HotelDBContext))]
-    partial class HotelDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200507170351_Hotel24")]
+    partial class Hotel24
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,26 +122,6 @@ namespace GrecosQuestionnaire.Migrations
                     b.HasIndex("MainRoomModelId");
 
                     b.ToTable("SharedUnits");
-                });
-
-            modelBuilder.Entity("GrecosQuestionnaire.Models.UserPartnerModel", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("PartnerModelID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserID")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("PartnerModelID");
-
-                    b.ToTable("UserPartnerModel");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -352,15 +334,6 @@ namespace GrecosQuestionnaire.Migrations
                     b.HasOne("GrecosQuestionnaire.Models.MainRoomModel", null)
                         .WithMany("SharedUnit")
                         .HasForeignKey("MainRoomModelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("GrecosQuestionnaire.Models.UserPartnerModel", b =>
-                {
-                    b.HasOne("GrecosQuestionnaire.Models.PartnerModel", null)
-                        .WithMany("UsersIDs")
-                        .HasForeignKey("PartnerModelID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
