@@ -7,7 +7,7 @@ namespace GrecosQuestionnaire.Models
 {
     public class UserPartnerModel
     {
-        public int id { get; set; }
+        public int Id { get; set; }
         public string UserID { get; set; }
         public int PartnerModelID { get; set; }
     }

@@ -99,5 +99,12 @@ namespace GrecosQuestionnaire.Models
             _context.SaveChanges();
         }
 
+        //Zapisuję do bazy powiązanie między użytkowiniem a partnerem
+        public void UploadMatchUserPartner(UserPartnerModel userPartner)
+        {
+            _context.Update(userPartner);
+            _context.SaveChanges();
+        }
+
     }
 }

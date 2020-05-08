@@ -20,5 +20,6 @@ namespace GrecosQuestionnaire.Models
         SharedUnitModel GetSharedUnit(string sharedUnitCode, string hotelCode, string roomCode, int season);
         void AddNewPartner(PartnerModel partner);
         void UploadNewSeason(SeasonModel season);
+        void UploadMatchUserPartner(UserPartnerModel userPartner);
     }
 }

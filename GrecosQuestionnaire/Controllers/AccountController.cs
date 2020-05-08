@@ -7,6 +7,7 @@ using GrecosQuestionnaire.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GrecosQuestionnaire.Controllers
 {
@@ -43,7 +44,6 @@ namespace GrecosQuestionnaire.Controllers
             return View(new LoginViewModel());
         }
 
-        
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -65,16 +65,23 @@ namespace GrecosQuestionnaire.Controllers
 
         public IActionResult Register()
         {
+            AddViewBag();
             return View(new UserViewModel());
         }
 
         [HttpPost]
         public async Task<IActionResult> Register(UserViewModel model)
         {
-            if(ModelState.IsValid)
+            var userpartner = new UserPartnerModel();
+
+            if (ModelState.IsValid)
             {
                 var user = new IdentityUser { Email = model.Email, UserName = model.Email};
                 var result = await _userManager.CreateAsync(user, model.Password);
+
+                userpartner.PartnerModelID = model.PartnersId.FirstOrDefault();
+                userpartner.UserID = user.Id;
+                _hotelRepository.UploadMatchUserPartner(userpartner);
 
                 if (result.Succeeded)
                 {
@@ -106,10 +113,33 @@ namespace GrecosQuestionnaire.Controllers
             };
 
             var partners = _hotelRepository.GetPartners();
+
+
             return View();
+        }
 
+        private void AddViewBag()
+        {
+            var partners = _hotelRepository.GetPartners().Select(x => new SelectListItem()
+            {
+                Text = x.Name.ToString(),
+                Value = x.Id.ToString()
+            }).ToList();
 
+            //partners.Insert(0,
+            //    new SelectListItem() { Selected = true, Text = string.Empty, Value = (-1).ToString(CultureInfo.InvariantCulture) });
 
+            ViewBag.Partners = partners;
+            //ViewBag.Owners = partners;
+
+            //var users = Entity.Query<User>().Where(x => x.Partner.IsSpecial).Select(x => new SelectListItem()
+            //{
+            //    Selected = false,
+            //    Text = x.Name,
+            //    Value = x.Id.ToString(CultureInfo.InvariantCulture)
+            //}).ToList();
+
+            //ViewBag.Users = users;
         }
     }
 }

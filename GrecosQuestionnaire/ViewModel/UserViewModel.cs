@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GrecosQuestionnaire.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,18 +10,21 @@ namespace GrecosQuestionnaire.ViewModel
     public class UserViewModel
     {
         [Required]
-        [Display(Name = "Adres e-mail")]
+        [Display(Name = "E-mail")]
         public string Email { get; set; }
+
+        [Display(Name = "Partners")]
+        public IEnumerable<int> PartnersId { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Hasło")]
+        [Display(Name = "Password")]
         public string Password { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Potwierdź hasło")]
-        [Compare("Password", ErrorMessage="Hasło nie pasuje")]
+        [Display(Name = "Confirm password")]
+        [Compare("Password", ErrorMessage="Password doesn't match")]
         public string ConfirmPassword { get; set; }
     }
 }
