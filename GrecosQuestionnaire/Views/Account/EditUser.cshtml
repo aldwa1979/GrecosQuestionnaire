@@ -1,1 +1,55 @@
-﻿
+﻿@model GrecosQuestionnaire.ViewModel.EditUserViewModel
+
+@{
+    ViewBag.Title = "Edit User";
+}
+
+<form method="post" class="mt-3">
+
+    <div class="form-group row">
+        <label asp-for="Id" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Id" disabled class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Name" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group row">
+        <div class="col-md-10">
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a asp-action="Index" class="btn btn-primary">Cancel</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Partners</h3>
+        </div>
+        <div class="card-body">
+            @if (Model.Partners.Any())
+            {
+                foreach (var partner in Model.Partners)
+                {
+                    <h5 class="card-title">@partner</h5>
+                }
+            }
+            else
+            {
+                <h5 class="card-title">None at the moment</h5>
+
+            }
+            <div class="card-footer">
+                <a asp-action="EditUsersPartners" asp-controller="Account" asp-route-roleId="@Model.Id" class="btn btn-primary" style="width:auto">Add or remove users</a>
+
+            </div>
+        </div>
+</form>

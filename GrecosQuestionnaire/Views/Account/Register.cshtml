@@ -19,6 +19,8 @@
             <label asp-for="PartnersId" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 @Html.DropDownListFor(m => m.PartnersId, ViewBag.Partners as IEnumerable<SelectListItem>, "Brak", new { @class = "form-control" })
+                <span asp-validation-for="PartnersId" class="text-danger"></span>
+                @*@Html.ValidationMessageFor(model => model.PartnersId, "", new { @class = "text-danger" })*@
             </div>
         </div>
 

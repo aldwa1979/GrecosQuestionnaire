@@ -13,6 +13,7 @@ namespace GrecosQuestionnaire.ViewModel
         [Display(Name = "E-mail")]
         public string Email { get; set; }
 
+        [Required]
         [Display(Name = "Partners")]
         public IEnumerable<int> PartnersId { get; set; }
 

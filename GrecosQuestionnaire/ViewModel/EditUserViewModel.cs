@@ -14,6 +14,6 @@ namespace GrecosQuestionnaire.ViewModel
         [Required(ErrorMessage = "Name is required")]
         public string Name { get; set; }
 
-        public List<PartnerModel> Partners { get; set; }
+        public List<string> Partners { get; set; } = new List<string>();
     }
 }

@@ -10,6 +10,7 @@ namespace GrecosQuestionnaire.Models
         IEnumerable<HotelModel> GetAllHotels();
         List<PartnerModel> GetPartners();
         HotelModel GetHotelId(int id);
+        List<UserPartnerModel> GetUsersPartners();
         int GetHotelId(string code, int season);
         int GetMainRoomlId(string hotelCode, string roomCode, int season);
         HotelModel GetHotel(string code, int season);

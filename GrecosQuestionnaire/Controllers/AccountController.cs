@@ -93,10 +93,11 @@ namespace GrecosQuestionnaire.Controllers
                     ModelState.AddModelError("", item.Description);
                 }
             }
-            return View(model);
+            AddViewBag();
+            return View();
         }
 
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> EditUser(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
 
@@ -112,10 +113,52 @@ namespace GrecosQuestionnaire.Controllers
                 Name = user.UserName
             };
 
-            var partners = _hotelRepository.GetPartners();
+            foreach (var partner in _hotelRepository.GetPartners())
+            {
+                var partneruser = _hotelRepository.GetUsersPartners().Where(p => p.UserID == user.Id);
 
+                foreach (var partuser in partneruser)
+                {
+                    if (partner.Id == partuser.PartnerModelID)
+                    {
+                        model.Partners.Add(partner.Name);
+                    }
+                }
+            }
 
-            return View();
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditUser(EditUserViewModel model)
+        {
+            var user = await _userManager.FindByIdAsync(model.Id);
+
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"Role with Id = {model.Id} cannot be found";
+                return View("NotFound");
+            }
+
+            else
+
+            {
+                user.UserName = model.Name;
+                user.Email = model.Name;
+                var result = await _userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+
+                return View(model);
+            }
         }
 
         private void AddViewBag()

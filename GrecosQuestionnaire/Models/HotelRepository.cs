@@ -25,6 +25,12 @@ namespace GrecosQuestionnaire.Models
             return _context.Partners.ToList();
         }
 
+        //Szukam wszystkich powiązań partnerów i użytkownikó
+        public List<UserPartnerModel> GetUsersPartners()
+        {
+            return _context.UsersPartners.ToList();
+        }
+
         //Szukam id hotelu w bazie hoteli po id
         public HotelModel GetHotelId(int id)
         {

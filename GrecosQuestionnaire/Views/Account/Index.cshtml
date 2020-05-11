@@ -12,7 +12,10 @@
     {
         <div class="card mb-3">
             <div class="card-body">
-                @user.Email
+                <form asp-action="Delete" asp-controller="Administration" asp-route-id="@user.Id" method="post">
+                    <a class="card-title">@user.Email </a>
+                    <a class="btn btn-primary" asp-action="EditUser" asp-controller="Account" asp-route-id="@user.Id">Edit</a>
+                </form>
             </div>
         </div>
     }
