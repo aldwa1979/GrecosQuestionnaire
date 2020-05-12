@@ -191,7 +191,7 @@ namespace GrecosQuestionnaire.Controllers
             return RedirectToAction("Edit", new { Id = roleId });
         }
 
-            public IActionResult CreateRole()
+        public IActionResult CreateRole()
         {
             return View();
         }

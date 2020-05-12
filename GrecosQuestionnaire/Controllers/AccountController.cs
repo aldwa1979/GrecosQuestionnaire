@@ -25,7 +25,7 @@ namespace GrecosQuestionnaire.Controllers
             _hotelRepository = hotelRepository;
         }
 
-         public IActionResult Index()
+        public IActionResult Index()
         {
             var users = _userManager.Users;
             return View(users);
@@ -76,7 +76,7 @@ namespace GrecosQuestionnaire.Controllers
 
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { Email = model.Email, UserName = model.Email};
+                var user = new IdentityUser { Email = model.Email, UserName = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
 
                 userpartner.PartnerModelID = model.PartnersId.FirstOrDefault();
@@ -97,7 +97,7 @@ namespace GrecosQuestionnaire.Controllers
             return View();
         }
 
-        public async Task<IActionResult> EditUser(string id)
+        public async Task<IActionResult> Edit(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
 
@@ -130,7 +130,7 @@ namespace GrecosQuestionnaire.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditUser(EditUserViewModel model)
+        public async Task<IActionResult> Edit(EditUserViewModel model)
         {
             var user = await _userManager.FindByIdAsync(model.Id);
 
@@ -159,6 +159,65 @@ namespace GrecosQuestionnaire.Controllers
 
                 return View(model);
             }
+        }
+
+        public async Task<IActionResult> EditPartnerInUser(string userId)
+        {
+            ViewBag.UserID = userId;
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"Role with Id = {userId} cannot be found";
+                return View("NotFound");
+            }
+
+            var partnersusers = _hotelRepository.GetUsersPartners().Where(p => p.UserID == user.Id).ToList();
+
+            var partners = _hotelRepository.GetPartners();
+
+            var model = new List<PartnerUserViewModel>();
+
+            if (partnersusers.Count != 0)
+            {
+                foreach (var partner in partners)
+                {
+                    foreach (var partneruser in partnersusers)
+                    {
+                        var partnerUserViewModel = new PartnerUserViewModel
+                        {
+                            PartnerId = partner.Id.ToString(),
+                            PartnerName = partner.Name
+                        };
+
+                        if (partner.Id == partneruser.PartnerModelID)
+                        {
+                            partnerUserViewModel.IsSelected = true;
+                        }
+                        else
+                        {
+                            partnerUserViewModel.IsSelected = false;
+                        }
+                        model.Add(partnerUserViewModel);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var partner in partners)
+                {
+                    var partnerUserViewModel = new PartnerUserViewModel
+                    {
+                        PartnerId = partner.Id.ToString(),
+                        PartnerName = partner.Name,
+                        IsSelected = false
+                    };
+
+                    model.Add(partnerUserViewModel);
+                }
+            }
+
+            return View(model);
         }
 
         private void AddViewBag()
