@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace GrecosQuestionnaire.Controllers
 {
@@ -177,6 +178,8 @@ namespace GrecosQuestionnaire.Controllers
             var partners = _hotelRepository.GetPartners();
 
             var model = new List<PartnerUserViewModel>();
+            var model_true = new List<PartnerUserViewModel>();
+            var model_false = new List<PartnerUserViewModel>();
 
             if (partnersusers.Count != 0)
             {
@@ -198,9 +201,31 @@ namespace GrecosQuestionnaire.Controllers
                         {
                             partnerUserViewModel.IsSelected = false;
                         }
-                        model.Add(partnerUserViewModel);
+
+                        if (partnerUserViewModel.IsSelected == true)
+                            model_true.Add(partnerUserViewModel);
+                        else
+                            model_false.Add(partnerUserViewModel);
                     }
                 }
+
+                model.AddRange(model_true);
+
+                //foreach (var item1 in model_false)
+                //{
+                //    foreach (var item2 in model)
+                //    {
+                //        if (item1.PartnerId != item2.PartnerId)
+                //        {
+                //            model.Add(item1);
+                //        }
+                //        else
+                //            continue;
+                //    }
+                //}
+
+                
+                //model.AddRange(model_false.GroupBy(x=>x.PartnerId).Select(p=>p.FirstOrDefault()).ToList());
             }
             else
             {
@@ -217,10 +242,42 @@ namespace GrecosQuestionnaire.Controllers
                 }
             }
 
-            return View(model);
+            return View(model.Distinct().ToList());
         }
 
-        private void AddViewBag()
+        [HttpPost]
+        public IActionResult EditPartnerInUser(List<PartnerUserViewModel> model, string userId)
+        {
+            var partneruser = _hotelRepository.GetUsersPartners().Where(p => p.UserID == userId);
+
+            if (ModelState.IsValid)
+            {
+                foreach (var item in model)
+                {
+                    foreach (var match in partneruser)
+                    {
+                        if (item.IsSelected == true && match.PartnerModelID != Int32.Parse(item.PartnerId))
+                        {
+                            var userpartner = new UserPartnerModel
+                            {
+                                PartnerModelID = Int32.Parse(item.PartnerId),
+                                UserID = userId
+                            };
+
+                            _hotelRepository.UploadMatchUserPartner(userpartner);
+                        }
+                        else
+                            continue;
+                    }
+                }
+                return RedirectToAction("Index");
+            }
+
+            return View();
+        }
+
+
+            private void AddViewBag()
         {
             var partners = _hotelRepository.GetPartners().Select(x => new SelectListItem()
             {
