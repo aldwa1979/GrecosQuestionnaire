@@ -181,101 +181,81 @@ namespace GrecosQuestionnaire.Controllers
             var model_true = new List<PartnerUserViewModel>();
             var model_false = new List<PartnerUserViewModel>();
 
-            if (partnersusers.Count != 0)
+
+            //wyszukuje wszystkich zaznaczonych partnerów
+            foreach (var partner in partners)
             {
-                foreach (var partner in partners)
-                {
-                    foreach (var partneruser in partnersusers)
-                    {
-                        var partnerUserViewModel = new PartnerUserViewModel
-                        {
-                            PartnerId = partner.Id.ToString(),
-                            PartnerName = partner.Name
-                        };
-
-                        if (partner.Id == partneruser.PartnerModelID)
-                        {
-                            partnerUserViewModel.IsSelected = true;
-                        }
-                        else
-                        {
-                            partnerUserViewModel.IsSelected = false;
-                        }
-
-                        if (partnerUserViewModel.IsSelected == true)
-                            model_true.Add(partnerUserViewModel);
-                        else
-                            model_false.Add(partnerUserViewModel);
-                    }
-                }
-
-                model.AddRange(model_true);
-
-                //foreach (var item1 in model_false)
-                //{
-                //    foreach (var item2 in model)
-                //    {
-                //        if (item1.PartnerId != item2.PartnerId)
-                //        {
-                //            model.Add(item1);
-                //        }
-                //        else
-                //            continue;
-                //    }
-                //}
-
-                
-                //model.AddRange(model_false.GroupBy(x=>x.PartnerId).Select(p=>p.FirstOrDefault()).ToList());
-            }
-            else
-            {
-                foreach (var partner in partners)
+                foreach (var partneruser in partnersusers)
                 {
                     var partnerUserViewModel = new PartnerUserViewModel
                     {
                         PartnerId = partner.Id.ToString(),
-                        PartnerName = partner.Name,
-                        IsSelected = false
+                        PartnerName = partner.Name
                     };
 
-                    model.Add(partnerUserViewModel);
+                    if (partner.Id == partneruser.PartnerModelID)
+                    {
+                        partnerUserViewModel.IsSelected = true;
+                    }
+                    else
+                    {
+                        partnerUserViewModel.IsSelected = false;
+                    }
+
+                    if (partnerUserViewModel.IsSelected == true)
+                        model.Add(partnerUserViewModel);
+                    else
+                       continue;
                 }
             }
 
-            return View(model.Distinct().ToList());
+            //wyszukuje wszystkich partnerów
+            foreach (var partner in partners)
+            {
+                var partnerUserViewModel = new PartnerUserViewModel
+                {
+                    PartnerId = partner.Id.ToString(),
+                    PartnerName = partner.Name,
+                    IsSelected = false
+                };
+
+                model.Add(partnerUserViewModel);
+            }
+
+            //Usuwa duble - zostawia zaznaczonych
+            return View(model.Distinct(new PartnerEquals()).ToList());
         }
 
         [HttpPost]
         public IActionResult EditPartnerInUser(List<PartnerUserViewModel> model, string userId)
         {
-            var partneruser = _hotelRepository.GetUsersPartners().Where(p => p.UserID == userId);
+            List<int> partnerId = _hotelRepository.GetUsersPartners().Where(p => p.UserID == userId).Select(t => t.PartnerModelID).ToList();
 
             if (ModelState.IsValid)
             {
                 foreach (var item in model)
                 {
-                    foreach (var match in partneruser)
-                    {
-                        if (item.IsSelected == true && match.PartnerModelID != Int32.Parse(item.PartnerId))
-                        {
-                            var userpartner = new UserPartnerModel
-                            {
-                                PartnerModelID = Int32.Parse(item.PartnerId),
-                                UserID = userId
-                            };
+                    var y = Int32.Parse(item.PartnerId);
+                    var x = !partnerId.Contains(y);
 
-                            _hotelRepository.UploadMatchUserPartner(userpartner);
-                        }
-                        else
-                            continue;
+                    if (item.IsSelected == true && !(partnerId.Contains(Int32.Parse(item.PartnerId))))
+                    {
+                        var userpartner = new UserPartnerModel
+                        {
+                            PartnerModelID = Int32.Parse(item.PartnerId),
+                            UserID = userId
+                        };
+
+                        _hotelRepository.UploadMatchUserPartner(userpartner);
                     }
+                    else
+                        continue;
                 }
                 return RedirectToAction("Index");
             }
 
             return View();
         }
-
 
             private void AddViewBag()
         {
