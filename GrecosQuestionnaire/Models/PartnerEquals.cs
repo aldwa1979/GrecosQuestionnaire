@@ -10,11 +10,11 @@ namespace GrecosQuestionnaire.Models
     {
         public bool Equals(PartnerUserViewModel left, PartnerUserViewModel right)
         {
-            if ((object)left == null && (object)right == null)
+            if (left == null && right == null)
             {
                 return true;
             }
-            if ((object)left == null || (object)right == null)
+            if (left == null || right == null)
             {
                 return false;
             }
