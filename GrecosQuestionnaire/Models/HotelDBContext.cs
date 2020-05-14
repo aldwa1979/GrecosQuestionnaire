@@ -21,5 +21,7 @@ namespace GrecosQuestionnaire.Models
         public DbSet<SharedUnitModel> SharedUnits { get; set; }
         public DbSet<PartnerModel> Partners { get; set; }
         public DbSet<UserPartnerModel> UsersPartners { get; set; }
+        public DbSet<QuestionModel> Questions { get; set; }
+        public DbSet<QuestionItemModel> QuestionItems { get; set; }
     }
 }

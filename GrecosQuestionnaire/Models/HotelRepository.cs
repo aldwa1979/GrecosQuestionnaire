@@ -70,6 +70,16 @@ namespace GrecosQuestionnaire.Models
             return _context.SharedUnits.Where(p => p.SharedRoomCode == sharedUnitCode && p.MainRoomModelId == room).FirstOrDefault();
         }
 
+        public List<QuestionModel> GetQuestions()
+        {
+            return _context.Questions.ToList();
+        }
+
+        public List<QuestionItemModel> GetQuestionItems()
+        {
+            return _context.QuestionItems.ToList();
+        }
+
         //Zapisuje do bazy nowe hotele wraz z pokojami
         public void UploadNewHotels(HotelModel hotel)
         {
