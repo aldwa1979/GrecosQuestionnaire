@@ -112,5 +112,13 @@ namespace GrecosQuestionnaire.Models
             _context.SaveChanges();
         }
 
+        //Usuwam z bazy powiązanie między użytkowiniem a partnerem
+        public void RemoveMatchUserPartner(int id)
+        {
+            var partner = _context.UsersPartners.Where(p => p.Id == id).FirstOrDefault();
+            _context.UsersPartners.Remove(partner);
+            _context.SaveChanges();
+        }
+
     }
 }

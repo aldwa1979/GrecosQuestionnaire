@@ -22,5 +22,6 @@ namespace GrecosQuestionnaire.Models
         void AddNewPartner(PartnerModel partner);
         void UploadNewSeason(SeasonModel season);
         void UploadMatchUserPartner(UserPartnerModel userPartner);
+        void RemoveMatchUserPartner(int id);
     }
 }

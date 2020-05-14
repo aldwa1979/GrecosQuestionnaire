@@ -235,9 +235,6 @@ namespace GrecosQuestionnaire.Controllers
             {
                 foreach (var item in model)
                 {
-                    var y = Int32.Parse(item.PartnerId);
-                    var x = !partnerId.Contains(y);
-
                     if (item.IsSelected == true && !(partnerId.Contains(Int32.Parse(item.PartnerId))))
                     {
                         var userpartner = new UserPartnerModel
@@ -248,13 +245,18 @@ namespace GrecosQuestionnaire.Controllers
 
                         _hotelRepository.UploadMatchUserPartner(userpartner);
                     }
+                    else if (item.IsSelected == false && (partnerId.Contains(Int32.Parse(item.PartnerId))))
+                    {
+                        var id = _hotelRepository.GetUsersPartners().Where(p => p.PartnerModelID == Int32.Parse(item.PartnerId) && p.UserID == userId).Select(a => a.Id).FirstOrDefault();
+                        _hotelRepository.RemoveMatchUserPartner(id);
+                    }
                     else
                         continue;
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("Edit", new { Id = userId });
             }
 
-            return View();
+            return RedirectToAction("Edit", new { Id = userId });
         }
 
             private void AddViewBag()
