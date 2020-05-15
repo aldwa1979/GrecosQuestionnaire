@@ -1,0 +1,73 @@
+﻿@model GrecosQuestionnaire.Models.QuestionItemModel
+
+@{
+    Layout = null;
+}
+
+@Html.HiddenFor(x => x.QuestionId)
+
+<div class="form-group">
+    @Html.LabelFor(m => m.QuestionItemType, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+        @*@Html.DropDownListFor(m => m.QuestionItemType, Html.GetEnumSelectList(Model.GetType(Enum)), new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.QuestionItemType)*@
+
+        <select asp-for="QuestionItemType" asp-items="Html.GetEnumSelectList<QuestionItemType>()">
+            <option selected="selected" value="">Please select</option>
+        </select>
+
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Order, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Order, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Order)
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.Title, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Title)
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Items, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+        @Html.TextAreaFor(m => m.Items, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Items)
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Parts, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Parts, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Parts)
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.SingleSpace, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.SingleSpace, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.SingleSpace)
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <div class="checkbox">
+            <label>
+                @Html.CheckBoxFor(m => m.Required) @Html.LabelFor(m => m.Required)
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <input type="submit" class="btn btn-default" value="Zapisz" />
+    </div>
+</div>

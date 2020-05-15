@@ -1,5 +1,5 @@
 ﻿@using X.PagedList.Mvc.Core;
-@model X.PagedList.IPagedList<QuestionModel>
+@model X.PagedList.IPagedList<Question>
 
 @{
     ViewBag.Title = "Pytania";
@@ -48,10 +48,12 @@
                     @item.Removed
                 </td>
                 <td>
-                    <a class="btn-lg" href="@Url.Action("Index", "QuestionItem", new { questionId = @item.Id }, null)" title="Elementy">
+                    <a class="btn btn-primary" href="@Url.Action("Index", "QuestionItem", new { questionId = @item.Id }, null)" title="Elementy">
+                        Items
                         <span class="glyphicon glyphicon-th-list"></span>
                     </a>
-                    <a class="btn-lg" href="@Url.Action("Edit", "Question", new { id = @item.Id }, null)" title="Elementy">
+                    <a class="btn btn-primary" href="@Url.Action("Edit", "Question", new { id = @item.Id }, null)" title="Elementy">
+                        Edit
                         <span class="glyphicon glyphicon-edit"></span>
                     </a>
                 </td>

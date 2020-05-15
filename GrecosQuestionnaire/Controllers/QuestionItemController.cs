@@ -38,7 +38,7 @@ namespace GrecosQuestionnaire.Controllers
         {
             var model = new QuestionItemModel
             {
-                Id = (int)questionId
+                QuestionId = (int)questionId
             };
 
             return View(model);
@@ -49,20 +49,18 @@ namespace GrecosQuestionnaire.Controllers
         {
             if (ModelState.IsValid)
             {
-                var questionItem = new QuestionItemModel()
+                var questionItem = new QuestionItem()
                 {
                     Items = model.Items,
                     QuestionItemType = model.QuestionItemType,
                     Title = model.Title,
-                    ItemOrder = model.ItemOrder,
-                    Question = Entity.Get<Question>(model.QuestionId),
+                    ItemOrder = model.Order,
+                    Question = _hotelRepository.GetQuestions().Where(p => p.Id == model.QuestionId).FirstOrDefault(),    //(model.QuestionId),
                     Parts = model.Parts,
                     SingleSpace = model.SingleSpace,
                     Required = model.Required
                 };
-                Entity.Save(questionItem);
-
-                Commit();
+                _hotelRepository.UploadQuestionItems(questionItem);
 
                 TempData["Message-Success"] = "Poprawnie dodano element pytania";
                 return RedirectToAction("Index", new { questionId = model.QuestionId });
@@ -73,10 +71,10 @@ namespace GrecosQuestionnaire.Controllers
 
         public ActionResult Edit(long id)
         {
-            var item = Entity.Get<QuestionItem>(id);
+            var item = _hotelRepository.GetQuestionItems().Where(p => p.Id == id).FirstOrDefault();
             var model = new QuestionItemModel
             {
-                QuestionId = item.Question.Id,
+                QuestionId = item. Question.Id,
                 Id = item.Id,
                 Items = item.Items,
                 Order = item.ItemOrder,
@@ -95,20 +93,18 @@ namespace GrecosQuestionnaire.Controllers
         {
             if (ModelState.IsValid)
             {
-                var questionItem = Entity.Get<QuestionItem>(model.Id);
+                var questionItem = _hotelRepository.GetQuestionItems().Where(p => p.Id == model.Id).FirstOrDefault();
 
                 questionItem.Items = model.Items;
                 questionItem.QuestionItemType = model.QuestionItemType;
                 questionItem.Title = model.Title;
                 questionItem.ItemOrder = model.Order;
-                questionItem.Question = Entity.Get<Question>(model.QuestionId);
+                questionItem.Question = _hotelRepository.GetQuestions().Where(p => p.Id == model.QuestionId).FirstOrDefault();
                 questionItem.Parts = model.Parts;
                 questionItem.SingleSpace = model.SingleSpace;
                 questionItem.Required = model.Required;
 
-                Entity.Update(questionItem);
-
-                Commit();
+                _hotelRepository.UploadQuestionItems(questionItem);
 
                 TempData["Message-Success"] = "Poprawnie zaktualizowano element pytania";
                 return RedirectToAction("Index", new { questionId = model.QuestionId });
@@ -119,10 +115,10 @@ namespace GrecosQuestionnaire.Controllers
 
         public ActionResult Delete(long id)
         {
-            var item = Entity.Get<QuestionItem>(id);
+            var item = _hotelRepository.GetQuestionItems().Where(p => p.Id == id).FirstOrDefault();
             long questionId = item.Question.Id;
-            Entity.Delete(item);
-            Commit();
+
+            _hotelRepository.UploadQuestionItems(item);
 
             TempData["Message-Success"] = "Poprawnie usunięto element pytania";
             return RedirectToAction("Index", new { questionId });

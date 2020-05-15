@@ -1,0 +1,66 @@
+﻿@model GrecosQuestionnaire.Models.QuestionModel
+
+@{
+    Layout = null;
+}
+
+<div class="form-group">
+    @Html.LabelFor(m => m.Page, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Page, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Page)
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Order, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Order, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Order)
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.Title, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Title)
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Subtitle, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Subtitle, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Subtitle)
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Class, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Class, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Class)
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <div class="checkbox">
+            <label>
+                @Html.CheckBoxFor(m => m.IsHeader) @Html.LabelFor(m => m.IsHeader)
+            </label>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <div class="checkbox">
+            <label>
+                @Html.CheckBoxFor(m => m.Removed) @Html.LabelFor(m => m.Removed)
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <input type="submit" class="btn btn-default" value="Zapisz" />
+    </div>
+</div>

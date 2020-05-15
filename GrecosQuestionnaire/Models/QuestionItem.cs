@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace GrecosQuestionnaire.Models
 {
-    public class QuestionItemModel
+    public class QuestionItem
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
 
-        public virtual long QuestionId { get; set; }
+        public virtual Question Question { get; set; }
 
-        public virtual int Order { get; set; }
+        public virtual int ItemOrder { get; set; }
 
         public virtual string Title { get; set; }
 

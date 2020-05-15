@@ -1,0 +1,16 @@
+﻿@model GrecosQuestionnaire.Models.QuestionItemModel
+
+@{
+    ViewBag.Title = "Dodawanie pytania";
+}
+
+<h2>Dodawanie pytania</h2>
+@Html.ActionLink("Wróć do listy elementów pytań", "Index", "QuestionItem")
+
+@using (Html.BeginForm("Create", "QuestionItem", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <hr />
+    @Html.ValidationSummary(true)
+    @Html.Partial("_Create", Model)
+}

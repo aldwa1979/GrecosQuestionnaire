@@ -70,12 +70,12 @@ namespace GrecosQuestionnaire.Models
             return _context.SharedUnits.Where(p => p.SharedRoomCode == sharedUnitCode && p.MainRoomModelId == room).FirstOrDefault();
         }
 
-        public List<QuestionModel> GetQuestions()
+        public List<Question> GetQuestions()
         {
             return _context.Questions.ToList();
         }
 
-        public List<QuestionItemModel> GetQuestionItems()
+        public List<QuestionItem> GetQuestionItems()
         {
             return _context.QuestionItems.ToList();
         }
@@ -130,5 +130,32 @@ namespace GrecosQuestionnaire.Models
             _context.SaveChanges();
         }
 
+        //Zapisuję do bazy powiązanie między użytkowiniem a partnerem
+        public void UploadQuestions(Question questions)
+        {
+            _context.Update(questions);
+            _context.SaveChanges();
+        }
+
+        //Zapisuję do bazy powiązanie między użytkowiniem a partnerem
+        public void RemoveQuestion(Question questions)
+        {
+            _context.Remove(questions);
+            _context.SaveChanges();
+        }
+
+        //Zapisuję do bazy powiązanie między użytkowiniem a partnerem
+        public void UploadQuestionItems(QuestionItem questionsItems)
+        {
+            _context.Update(questionsItems);
+            _context.SaveChanges();
+        }
+
+        //Zapisuję do bazy powiązanie między użytkowiniem a partnerem
+        public void RemoveQuestionItems(QuestionItem questionsItems)
+        {
+            _context.Remove(questionsItems);
+            _context.SaveChanges();
+        }
     }
 }
