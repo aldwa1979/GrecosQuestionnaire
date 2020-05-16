@@ -29,5 +29,6 @@ namespace GrecosQuestionnaire.Models
         void RemoveQuestionItems(QuestionItem questionsItems);
         void UploadQuestions(Question questions);
         void RemoveQuestion(Question questions);
+        QuestionItem GetQuestionItem(int id);
     }
 }

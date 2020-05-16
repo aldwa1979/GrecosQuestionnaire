@@ -1,4 +1,4 @@
-﻿@model GrecosQuestionnaire.Models.QuestionModel
+﻿@model GrecosQuestionnaire.Models.QuestionItemModel
 
 @{
     ViewBag.Title = "Edycja pytania";
@@ -7,7 +7,7 @@
 <h2>Dodawanie partnera</h2>
 @Html.ActionLink("Wróć do listy pytań", "Index", "Question")
 
-@using (Html.BeginForm("Edit", "Question", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("Edit", "QuestionItem", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
     <hr />

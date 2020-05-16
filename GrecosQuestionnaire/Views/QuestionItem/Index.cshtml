@@ -40,10 +40,12 @@
                     @item.Title
                 </td>
                 <td>
-                    <a class="btn-lg" href="@Url.Action("Edit", "QuestionItem", new { id = item.Id }, null)" title="Edycja">
+                    <a class="btn btn-primary" href="@Url.Action("Edit", "QuestionItem", new { id = item.Id }, null)" title="Edycja">
+                        Edit
                         <span class="glyphicon glyphicon-edit"></span>
                     </a>
-                    <a class="btn-lg" href="@Url.Action("Delete", "QuestionItem", new { id = item.Id }, null)" title="Edycja">
+                    <a class="btn btn-primary" href="@Url.Action("Delete", "QuestionItem", new { id = item.Id }, null)" title="Edycja">
+                        Delete
                         <span class="glyphicon glyphicon-remove"></span>
                     </a>
                 </td>

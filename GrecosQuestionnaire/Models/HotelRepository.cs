@@ -80,6 +80,15 @@ namespace GrecosQuestionnaire.Models
             return _context.QuestionItems.ToList();
         }
 
+        public QuestionItem GetQuestionItem(int id)
+        {
+            var model = _context.QuestionItems.Where(p => p.Id == id).SingleOrDefault();
+
+            model.Question = _context.QuestionItems.Where(p => p.Id == id).Select(a => a.Question).FirstOrDefault();
+
+            return model;
+        }
+
         //Zapisuje do bazy nowe hotele wraz z pokojami
         public void UploadNewHotels(HotelModel hotel)
         {

@@ -29,7 +29,7 @@ namespace GrecosQuestionnaire.Controllers
             ViewBag.Title = question.Title;
 
             var pageNumber = page ?? 1;
-            var onePage = items.ToPagedList(pageNumber, 10);
+            var onePage = items.OrderBy(p=>p.ItemOrder).ToPagedList(pageNumber, 10);
 
             return View(onePage);
         }
@@ -71,10 +71,10 @@ namespace GrecosQuestionnaire.Controllers
 
         public ActionResult Edit(long id)
         {
-            var item = _hotelRepository.GetQuestionItems().Where(p => p.Id == id).FirstOrDefault();
+            var item = _hotelRepository.GetQuestionItem((int)id);
             var model = new QuestionItemModel
             {
-                QuestionId = item. Question.Id,
+                QuestionId = item.Question.Id,
                 Id = item.Id,
                 Items = item.Items,
                 Order = item.ItemOrder,
@@ -113,12 +113,12 @@ namespace GrecosQuestionnaire.Controllers
             return View(model);
         }
 
-        public ActionResult Delete(long id)
+        public ActionResult Delete(int id)
         {
-            var item = _hotelRepository.GetQuestionItems().Where(p => p.Id == id).FirstOrDefault();
+            var item = _hotelRepository.GetQuestionItem(id);
             long questionId = item.Question.Id;
 
-            _hotelRepository.UploadQuestionItems(item);
+            _hotelRepository.RemoveQuestionItems(item);
 
             TempData["Message-Success"] = "Poprawnie usunięto element pytania";
             return RedirectToAction("Index", new { questionId });

@@ -9,12 +9,12 @@
 <div class="form-group">
     @Html.LabelFor(m => m.QuestionItemType, new { @class = "col-md-2 control-label" })
     <div class="col-md-10">
-        @*@Html.DropDownListFor(m => m.QuestionItemType, Html.GetEnumSelectList(Model.GetType(Enum)), new { @class = "form-control" })
-        @Html.ValidationMessageFor(x => x.QuestionItemType)*@
+        @Html.DropDownListFor(m => m.QuestionItemType, Html.GetEnumSelectList<QuestionItemType>(), new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.QuestionItemType)
 
-        <select asp-for="QuestionItemType" asp-items="Html.GetEnumSelectList<QuestionItemType>()">
+        @*<select asp-for="QuestionItemType" asp-items="Html.GetEnumSelectList<QuestionItemType>()">
             <option selected="selected" value="">Please select</option>
-        </select>
+        </select>*@
 
     </div>
 </div>

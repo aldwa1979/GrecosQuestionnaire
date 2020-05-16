@@ -1,0 +1,626 @@
+﻿@using System.Globalization
+@using GrecosQuestionnaire.Models
+@model IEnumerable<GrecosQuestionnaire.Models.Question>
+
+@{
+    ViewBag.Title = "Ankieta";
+}
+@*<div class="form-blue">*@
+<div class="col-md-3"></div>
+
+@{
+    int page = int.Parse(ViewData["page"].ToString());
+}
+
+<div class="col-md-6" style="margin-top: 40px;">
+    <div style="text-align: center; ">
+        @*<a href="@Url.Action("Index", new {page = 1})"><span class="badge @(page != 1 ? "gray": string.Empty)">1</span></a>
+            <a href="@Url.Action("Index", new {page = 2})"><span class="badge @(page != 2 ? "gray": string.Empty)">2</span></a>
+            <a href="@Url.Action("Index", new {page = 3})"><span class="badge @(page != 3 ? "gray": string.Empty)">3</span></a>
+            <a href="@Url.Action("Index", new {page = 4})"><span class="badge @(page != 4 ? "gray": string.Empty)">4</span></a>
+            <a href="@Url.Action("Index", new {page = 5})"><span class="badge @(page != 5 ? "gray": string.Empty)">5</span></a>
+            <a href="@Url.Action("Index", new {page = 6})"><span class="badge @(page != 6 ? "gray": string.Empty)">6</span></a>*@
+        <span class="badge @(page != 1 ? "gray": string.Empty)">1</span>
+        <span class="badge @(page != 2 ? "gray": string.Empty)">2</span>
+        <span class="badge @(page != 3 ? "gray": string.Empty)">3</span>
+        <span class="badge @(page != 4 ? "gray": string.Empty)">4</span>
+        <span class="badge @(page != 5 ? "gray": string.Empty)">5</span>
+        <span class="badge @(page != 6 ? "gray": string.Empty)">6</span>
+    </div>
+
+    @using (Html.BeginForm("Index", "Survey", FormMethod.Post, new { role = "form", @style = "color: #005EA8" }))
+    {
+        @Html.Hidden("page", ViewData["page"])
+        /*Zliczabie petli*/
+
+        foreach (var question in Model)
+        {
+
+            if (question.IsHeader)
+            {
+                <h3><span class="label label-default" style="background-color:#005EA8; ">@question.Title</span></h3>
+                continue;
+            }
+            <div class="form-group @question.Class" style="margin-top: 25px;">
+                @Html.Label(question.Title, "", new { @class = "control-label", @style = "color: #005EA8; margin-bottom: 0; font-size: 1.1em;" })
+
+                @if (!string.IsNullOrEmpty(question.Subtitle))
+                {
+                    <br />
+                    @Html.Label(question.Subtitle, "",new { @class = "control-label small", @style = "color: gray; margin-top: -5px; margin-bottom: 0;" })
+                }
+
+                <div style="margin-top: 6px;">
+                    @{ int i = 0;}
+                    @foreach (var item in question.Items)
+                    {
+                        if (item.Parts == 0)
+                        {
+                            item.Parts = 6;
+                        }
+
+                        if (item.SingleSpace == 0)
+                        {
+                            item.SingleSpace = 2;
+                        }
+
+                        string itemValue = ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)] != null ? ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)].ToString() : string.Empty;
+
+
+
+                        if (item.QuestionItemType == QuestionItemType.Rate5)
+                        {
+                            @*<br />*@
+                            if (!string.IsNullOrEmpty(item.Title))
+                            {
+                                <div class="col-md-@(12 - item.Parts) col-xs-@(12 - item.Parts)" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
+                                    @item.Title
+                                </div>
+                            }
+
+                            <div class="col-md-@item.Parts col-xs-@item.Parts" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "")">
+                                <div class="row" style="font-size: 10px; text-align: center; white-space: nowrap;">
+                                    <div class="col-md-2 col-xs-2" style="padding: 0; padding-left: 5px;">
+                                        @((item.Items != null && item.Items.Split('\n').Length > 0) ? @item.Items.Split('\n')[0] : string.Empty)
+                                    </div>
+                                    <div class="col-md-2 col-xs-2" style="padding: 0; padding-left: 3px;">
+                                        @((item.Items != null && item.Items.Split('\n').Length > 1) ? @item.Items.Split('\n')[1] : string.Empty)
+                                    </div>
+                                    <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                        @((item.Items != null && item.Items.Split('\n').Length > 2) ? @item.Items.Split('\n')[2] : string.Empty)
+                                    </div>
+                                    <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                        @((item.Items != null && item.Items.Split('\n').Length > 3) ? @item.Items.Split('\n')[3] : string.Empty)
+                                    </div>
+                                    <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                        @((item.Items != null && item.Items.Split('\n').Length > 4) ? @item.Items.Split('\n')[4] : string.Empty)
+                                    </div>
+                                </div>
+                                <div class="row" style="text-align: center; padding-left: 5px;">
+                                    <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                        <input type="radio" name="@item.Id" id="test1" value="1"
+                                               @(itemValue == "1" ? "checked='checked'" : string.Empty) />
+
+                                    </div>
+                                    <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                        <input type="radio" name="@item.Id" id="test2" value="2"
+                                               @(itemValue == "2" ? "checked='checked'" : string.Empty) />
+
+                                    </div>
+                                    <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                        <input type="radio" name="@item.Id" id="test3" value="3"
+                                               @(itemValue == "3" ? "checked='checked'" : string.Empty) />
+
+                                    </div>
+                                    <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                        <input type="radio" name="@item.Id" id="test4" value="4"
+                                               @(itemValue == "4" ? "checked='checked'" : string.Empty) />
+
+                                    </div>
+                                    <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                        <input type="radio" name="@item.Id" id="test5" value="5"
+                                               @(itemValue == "5" ? "checked='checked'" : string.Empty) />
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        }
+                        else if (item.QuestionItemType == QuestionItemType.Rate4)
+                        {
+                            @*<br />*@
+                            if (!string.IsNullOrEmpty(item.Title))
+                            {
+                                <div class="col-md-@(12 - item.Parts) col-xs-@(12 - item.Parts)" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
+                                    @item.Title
+                                </div>
+                            }
+
+                            <div class="col-md-@item.Parts col-xs-@item.Parts" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "")">
+                                <div class="row" style="font-size: 10px; text-align: center; white-space: nowrap;   ">
+                                    <div class="col-md-2 col-xs-2" style="padding: 0; padding-left: 5px;">
+                                        @((item.Items != null && item.Items.Split('\n').Length > 0) ? @item.Items.Split('\n')[0] : string.Empty)
+                                    </div>
+                                    <div class="col-md-2 col-xs-2" style="padding: 0; padding-left: 3px;">
+                                        @((item.Items != null && item.Items.Split('\n').Length > 1) ? @item.Items.Split('\n')[1] : string.Empty)
+                                    </div>
+                                    <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                        @((item.Items != null && item.Items.Split('\n').Length > 2) ? @item.Items.Split('\n')[2] : string.Empty)
+                                    </div>
+                                    <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                        @((item.Items != null && item.Items.Split('\n').Length > 3) ? @item.Items.Split('\n')[3] : string.Empty)
+                                    </div>
+
+                                </div>
+                                <div class="row" style="text-align: center; padding-left: 5px;">
+                                    <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                        <input type="radio" name="@item.Id" id="test1" value="1"
+                                               @(itemValue == "1" ? "checked='checked'" : string.Empty) />
+
+                                    </div>
+                                    <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                        <input type="radio" name="@item.Id" id="test2" value="2"
+                                               @(itemValue == "2" ? "checked='checked'" : string.Empty) />
+
+                                    </div>
+                                    <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                        <input type="radio" name="@item.Id" id="test3" value="3"
+                                               @(itemValue == "3" ? "checked='checked'" : string.Empty) />
+
+                                    </div>
+                                    <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                        <input type="radio" name="@item.Id" id="test4" value="4"
+                                               @(itemValue == "4" ? "checked='checked'" : string.Empty) />
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        }
+                        else if (item.QuestionItemType == QuestionItemType.Rate3)
+                        {
+                            @*<br />*@
+                            if (!string.IsNullOrEmpty(item.Title))
+                            {
+                                <div class="col-md-@(12 - item.Parts) col-xs-@(12 - item.Parts)" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
+                                    @item.Title
+                                </div>
+                            }
+
+                            <div class="col-md-@item.Parts col-xs-@item.Parts" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "")">
+                                <div class="row" style="font-size: 10px; text-align: center; white-space: nowrap;   ">
+                                    <div class="col-md-@item.SingleSpace col-xs-@item.SingleSpace" style="padding: 0; padding-left: 5px;">
+                                        @((item.Items != null && item.Items.Split('\n').Length > 0) ? @item.Items.Split('\n')[0] : string.Empty)
+                                    </div>
+                                    <div class="col-md-@item.SingleSpace col-xs-@item.SingleSpace" style="padding: 0 ; padding-left: 3px;">
+                                        @((item.Items != null && item.Items.Split('\n').Length > 1) ? @item.Items.Split('\n')[1] : string.Empty)
+                                    </div>
+                                    <div class="col-md-@item.SingleSpace col-xs-@item.SingleSpace" style="padding: 0;">
+                                        @((item.Items != null && item.Items.Split('\n').Length > 2) ? @item.Items.Split('\n')[2] : string.Empty)
+                                    </div>
+
+
+                                </div>
+                                <div class="row" style="text-align: center; padding-left: 5px; ">
+                                    <span class="field-validation-valid" data-valmsg-for="@(item.Id + "1")" data-valmsg-replace="true"></span>
+                                    <div class="col-md-@item.SingleSpace col-xs-@item.SingleSpace" style="padding: 0;">
+                                        <input type="radio" name="@item.Id" id="@(item.Id + "1")" value="1"
+                                               @(itemValue == "1" ? "checked='checked'" : string.Empty) />
+                                    </div>
+                                    <div class="col-md-@item.SingleSpace col-xs-@item.SingleSpace" style="padding: 0;">
+                                        <input type="radio" name="@item.Id" id="@(item.Id + "2")" value="2"
+                                               @(itemValue == "2" ? "checked='checked'" : string.Empty) />
+                                    </div>
+                                    <div class="col-md-@item.SingleSpace col-xs-@item.SingleSpace" style="padding: 0;">
+                                        <input type="radio" name="@item.Id" id="@(item.Id + "3")" value="3"
+                                               @(itemValue == "3" ? "checked='checked'" : string.Empty) />
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="clearfix"></div>
+                        }
+                        else if (item.QuestionItemType == QuestionItemType.ComboList)
+                        {
+                            @*<br />*@
+                            foreach (var line in item.Items.Split('\n'))
+                            {
+                                if (line.Contains("$"))
+                                {
+                                    var newLine = line.Split('$')[0];
+                                    var cssClass = line.Split('$')[1];
+
+                                    <label class="radio-inline">
+                                        <input class="@cssClass" type="radio" name="@item.Id" value="@newLine"
+                                               @(itemValue.Contains(newLine) ? "checked='checked'" : string.Empty) />
+                                        @newLine
+                                    </label>
+                                }
+                                else
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="@item.Id" value="@line"
+                                               @(itemValue.Contains(line) ? "checked='checked'" : string.Empty) />
+                                        @line
+                                    </label>
+                                }
+                            }
+                        }
+                        else if (item.QuestionItemType == QuestionItemType.CheckList)
+                        {
+                            foreach (var line in item.Items.Split('\n'))
+                            {
+                                <div class="checkbox" style="margin-top: 4px;">
+                                    @if (line.Contains("[]"))
+                                    {
+                                        string newline = line.Replace("[]", "");
+
+                                        <label>
+                                            <input type="checkbox" name="@item.Id" value="@newline"
+                                                   @(itemValue.Contains(newline) ? "checked='checked'" : string.Empty) />
+                                            @newline
+                                        </label>
+                                        <input type="text" name="@(item.Id+"t")" value="@ViewData[(item.Id+"t").ToString(CultureInfo.InvariantCulture)]" />
+                                    }
+                                    else
+                                    {
+                                        <label>
+                                            <input type="checkbox" name="@item.Id" value="@line"
+                                                   @(itemValue.Contains(line) ? "checked='checked'" : string.Empty) />
+                                            @line
+                                        </label>
+                                    }
+
+                                </div>
+                            }
+                        }
+                        else if (item.QuestionItemType == QuestionItemType.TextArea)
+                        {
+                            if (!string.IsNullOrEmpty(item.Title))
+                            {
+                                <br />
+                                <span>@item.Title</span>
+                            }
+
+                            <textarea class="form-control" name="@item.Id" rows="4">@ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)]</textarea>
+                        }
+                        else if (item.QuestionItemType == QuestionItemType.TextBox)
+                        {
+                            <span>@item.Title</span>
+                            <input type="text" class="form-control" name="@item.Id" value="@ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)]" />
+                        }
+                        else if (item.QuestionItemType == QuestionItemType.Rate10)
+                        {
+                            @*<span>@item.Title</span>
+                                <input type="text" class="spinner" name="@item.Id" value="@ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)]" />*@
+
+
+                            if (!string.IsNullOrEmpty(item.Title))
+                            {
+                                <div class="col-md-@(12 - item.Parts) col-xs-@(12 - item.Parts)" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
+                                    @item.Title
+                                </div>
+                            }
+
+                            <div class="col-md-@item.Parts col-xs-@item.Parts" style="padding-left: 10px; @(i > 0 ? "margin-top: 8px;" : "")">
+                                @*Wyświetalnie podpowiedzi*@
+
+                                @*Inna podpowiedz dla jednego pytania*@
+                                @{if (question.Title == "W jakim stopniu poleciłaby Pani/Pan wakacje z Grecosem swoim znajomym?")
+                                    {
+                                        <div class="row" style="font-size: 10px; text-align: center; white-space: nowrap;">
+
+                                            <div class="col-xs-1 col-md-1" style="padding: 0; padding-left: 5px;">
+                                                wcale
+
+                                            </div>
+                                            <div class="col-xs-1 col-md-1" style="padding: 0; padding-left: 5px;"></div>
+                                            <div class="col-xs-1 col-md-1" style="padding: 0; padding-left: 5px;"></div>
+                                            <div class="col-xs-1 col-md-1" style="padding: 0; padding-left: 5px;"></div>
+                                            <div class="col-xs-1 col-md-1" style="padding: 0; padding-left: 5px;"></div>
+                                            <div class="col-xs-1 col-md-1" style="padding: 0;"></div>
+                                            <div class="col-xs-1 col-md-1" style="padding: 0;"></div>
+                                            <div class="col-xs-1 col-md-1" style="padding: 0;"></div>
+                                            <div class="col-xs-1 col-md-1" style="padding: 0;"></div>
+                                            <div class="col-xs-1 col-md-1" style="padding: 0;">bardzo</div>
+                                        </div>
+                                    }
+
+                                    else
+                                    {
+
+                                        if (i < 1)
+                                        {
+                                            <div class="row" style="font-size: 10px; text-align: center; white-space: nowrap;">
+
+                                                <div class="col-xs-1 col-md-1" style="padding: 0; padding-left: 5px;">
+                                                    b.źle
+
+                                                </div>
+                                                <div class="col-xs-1 col-md-1" style="padding: 0; padding-left: 5px;"></div>
+                                                <div class="col-xs-1 col-md-1" style="padding: 0; padding-left: 5px;"></div>
+                                                <div class="col-xs-1 col-md-1" style="padding: 0; padding-left: 5px;"></div>
+                                                <div class="col-xs-1 col-md-1" style="padding: 0; padding-left: 5px;"></div>
+                                                <div class="col-xs-1 col-md-1" style="padding: 0;"></div>
+                                                <div class="col-xs-1 col-md-1" style="padding: 0;"></div>
+                                                <div class="col-xs-1 col-md-1" style="padding: 0;"></div>
+                                                <div class="col-xs-1 col-md-1" style="padding: 0;"></div>
+                                                <div class="col-xs-1 col-md-1" style="padding: 0;">b.dobrze</div>
+                                            </div>
+                                        }
+                                        else
+                                        { <div class="row" style="font-size: 10px; text-align: center; white-space: nowrap;">
+
+                                                <div class="col-xs-1 visible-xs" style="padding: 0; padding-left: 5px;">
+                                                    b.źle
+
+                                                </div>
+                                                <div class="col-xs-1 visible-xs" style="padding: 0; padding-left: 5px;"></div>
+                                                <div class="col-xs-1 visible-xs" style="padding: 0; padding-left: 5px;"></div>
+                                                <div class="col-xs-1 visible-xs" style="padding: 0; padding-left: 5px;"></div>
+                                                <div class="col-xs-1 visible-xs" style="padding: 0; padding-left: 5px;"></div>
+                                                <div class="col-xs-1 visible-xs" style="padding: 0;"></div>
+                                                <div class="col-xs-1 visible-xs" style="padding: 0;"></div>
+                                                <div class="col-xs-1 visible-xs" style="padding: 0;"></div>
+                                                <div class="col-xs-1 visible-xs" style="padding: 0;"></div>
+                                                <div class="col-xs-1 visible-xs" style="padding: 0;">b.dobrze</div>
+                                            </div>
+                                        }
+                                    }
+                                }
+                                @*Koniec wyświetalnie podpowiedzi*@
+
+                                <div class="row" style="font-size: 10px; text-align: center; white-space: nowrap;">
+                                    <div class="col-md-1 col-xs-1" style="padding: 0; padding-left: 5px;">
+                                        @((item.Items != null && item.Items.Split('\n').Length > 0) ? @item.Items.Split('\n')[0] : string.Empty)
+                                    </div>
+                                    <div class="col-md-1 col-xs-1" style="padding: 0; padding-left: 5px;">
+                                        @((item.Items != null && item.Items.Split('\n').Length > 1) ? @item.Items.Split('\n')[1] : string.Empty)
+                                    </div>
+                                    <div class="col-md-1 col-xs-1" style="padding: 0; padding-left: 5px;">
+                                        @((item.Items != null && item.Items.Split('\n').Length > 2) ? @item.Items.Split('\n')[2] : string.Empty)
+                                    </div>
+                                    <div class="col-md-1 col-xs-1" style="padding: 0; padding-left: 5px;">
+                                        @((item.Items != null && item.Items.Split('\n').Length > 3) ? @item.Items.Split('\n')[3] : string.Empty)
+                                    </div>
+                                    <div class="col-md-1 col-xs-1" style="padding: 0; padding-left: 5px;">
+                                        @((item.Items != null && item.Items.Split('\n').Length > 4) ? @item.Items.Split('\n')[4] : string.Empty)
+                                    </div>
+                                    <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                        @((item.Items != null && item.Items.Split('\n').Length > 5) ? @item.Items.Split('\n')[5] : string.Empty)
+                                    </div>
+                                    <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                        @((item.Items != null && item.Items.Split('\n').Length > 6) ? @item.Items.Split('\n')[6] : string.Empty)
+                                    </div>
+                                    <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                        @((item.Items != null && item.Items.Split('\n').Length > 7) ? @item.Items.Split('\n')[7] : string.Empty)
+                                    </div>
+                                    <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                        @((item.Items != null && item.Items.Split('\n').Length > 8) ? @item.Items.Split('\n')[8] : string.Empty)
+                                    </div>
+                                    <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                        @((item.Items != null && item.Items.Split('\n').Length > 9) ? @item.Items.Split('\n')[9] : string.Empty)
+                                    </div>
+                                </div>
+                                <div class="row" style="text-align: center; padding-left: 5px;">
+                                    <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                        <input type="radio" name="@item.Id" id="test1" value="1"
+                                               @(itemValue == "1" ? "checked='checked'" : string.Empty) />
+
+                                    </div>
+                                    <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                        <input type="radio" name="@item.Id" id="test2" value="2"
+                                               @(itemValue == "2" ? "checked='checked'" : string.Empty) />
+
+                                    </div>
+                                    <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                        <input type="radio" name="@item.Id" id="test3" value="3"
+                                               @(itemValue == "3" ? "checked='checked'" : string.Empty) />
+
+                                    </div>
+                                    <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                        <input type="radio" name="@item.Id" id="test4" value="4"
+                                               @(itemValue == "4" ? "checked='checked'" : string.Empty) />
+
+                                    </div>
+                                    <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                        <input type="radio" name="@item.Id" id="test5" value="5"
+                                               @(itemValue == "5" ? "checked='checked'" : string.Empty) />
+
+                                    </div>
+                                    <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                        <input type="radio" name="@item.Id" id="test6" value="6"
+                                               @(itemValue == "6" ? "checked='checked'" : string.Empty) />
+
+                                    </div>
+                                    <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                        <input type="radio" name="@item.Id" id="test7" value="7"
+                                               @(itemValue == "7" ? "checked='checked'" : string.Empty) />
+
+                                    </div>
+                                    <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                        <input type="radio" name="@item.Id" id="test8" value="8"
+                                               @(itemValue == "8" ? "checked='checked'" : string.Empty) />
+
+                                    </div>
+                                    <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                        <input type="radio" name="@item.Id" id="test9" value="9"
+                                               @(itemValue == "9" ? "checked='checked'" : string.Empty) />
+
+                                    </div>
+                                    <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                        <input type="radio" name="@item.Id" id="test10" value="10"
+                                               @(itemValue == "10" ? "checked='checked'" : string.Empty) />
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+
+                        }
+                        i++;
+                        @Html.ValidationMessage(item.Id.ToString(), "*Pole jest wymagane")
+                    }
+                </div>
+            </div>
+        }
+
+        if (page == 6)
+        {
+            <h3><span class="label label-default" style="background-color:#005EA8; ">WYGRAJ VOUCHER</span></h3>
+
+            <div class="form-group">
+                <label class="control-label" style="color: #005EA8; margin-bottom: 10px; font-size: 1.1em;">
+                    DZIĘKUJEMY ZA WYPEŁNIENIE  ANKIETY. <br />
+                    PAŃSTWA OPINIA JEST DLA NAS WAŻNA.
+                </label>
+                <label class="control-label" style="color: #005EA8; margin-bottom: 0; font-size: 1.1em;">
+                    Jeśli chciałaby Pani/Pan wygrać voucher o wartości 4000 zł na kolejne wakacje, prosimy odpowiedzieć na pytanie: Dlaczego Grecos?<br />
+                </label>
+                <textarea class="form-control" name="why" rows="4">@ViewData["why"]</textarea>
+            </div>
+            <div class="form-group">
+                @Html.Label("Twój adres e-mail", "", new { @class = "control-label", @style = "color: #005EA8" })
+                <input type="text" class="form-control" id="email" name="email" value="@ViewData["email"]" data-val="true" data-val-required="Pole e-mail jest wymagane." />
+                <span class="field-validation-valid" data-valmsg-for="email" data-valmsg-replace="true"></span>
+            </div>
+            <div class="form-group">
+
+                <hr />
+                <span style="font-size: 0.9em">
+                    Z nadesłanych zgłoszeń wybierzemy jedną najciekawszą odpowiedź i i nagrodzimy jej autora voucherem o wartości 4000 zł do wykorzystania na wakacje z Grecosem w sezonie 2016.
+                    Konkurs trwa do końca października 2015. <br />
+                    <a href="@Url.Content("~/Content/Czy podobały Ci się wakacje z Grecosem-ankieta.Regulamin Konkursu 2015.pdf")">Pobierz regulamin konkursu.</a>
+                </span>
+
+                <hr />
+                <div class="checkbox" style="margin-top: 4px; font-size: 0.9em">
+                    <label>
+                        <input type="checkbox" class="checkable" name="terms" id="terms" value="terms" data-val="true" data-val-mandatory="Wymagana jest akceptacja regulaminu." />
+                        Akceptuje regulamin
+                    </label>
+                    <br />
+                    <span class="field-validation-valid" data-valmsg-for="terms" data-valmsg-replace="true"></span>
+                </div>
+
+                <div class="checkbox " style="margin-top: 4px; font-size: 0.9em">
+                    <label>
+                        <input class="checkable" type="checkbox" name="personal" id="personal" value="personal" data-val="true" data-val-mandatory="Wymagana jest zgoda na przetwarzanie danych." />
+                        Wyrażam zgodę na przetwarzanie przez organizatora moich danych osobowych na potrzeby konkursu oraz w celach marketingowych.
+                    </label>
+                    <span class="field-validation-valid" data-valmsg-for="personal" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+        }
+
+        <div style="text-align: center">
+            <a class="btn btn-default" href="@Url.Action("Back", new { page = page })" style="border: none; color:#005EA8">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+                Wróć
+            </a>
+            <button type="submit" class="btn btn-primary" style="background-color:#005EA8" value="Zapisz">
+                Dalej
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </button>
+        </div>
+    }
+
+</div>
+<div class="col-md-3"></div>
+<div class="clearfix"></div>
+
+<div id="modal-delphin" style="display:none; width: 709px; height: 617px; padding: 10px;">
+    <div style="float: right; margin-right: -20px;">
+        <a href="#" rel="modal:close">
+            <img src="~/Content/close.png" />
+        </a>
+    </div>
+    <a href="http://www.grecos.pl/Klub-Delfinki.html?utm_source=ankieta&utm_medium=popup&utm_campaign=delfinki" target="_blank" style="target-new: tab;">
+        <img src="~/Content/dolphin.jpg" />
+    </a>
+</div>
+
+@*</div>*@
+
+@section Scripts {
+   
+    <script>
+
+        $(function () {
+            $('div.show1').hide();
+            $('div.show2').hide();
+            $('div.show3').hide();
+            $('div.show4').hide();
+            $('div.show5').hide();
+
+            $('.spinner').spinner({
+                spin: function (event, ui) {
+                    if (ui.value > 10) {
+                        $(this).spinner("value", 10);
+                        return false;
+                    } else if (ui.value < 0) {
+                        $(this).spinner("value", 0);
+                        return false;
+                    }
+                }
+            });
+        });
+
+        $(document).on("change", "input.show1", function () {
+            $('div.show1').show('slow');
+        });
+
+        $(document).on("change", "input.hide1", function () {
+            $('div.show1').hide('slow');
+        });
+
+        $(document).on("change", "input.show2", function () {
+            $('div.show2').show('slow');
+        });
+
+        $(document).on("change", "input.hide2", function () {
+            $('div.show2').hide('slow');
+        });
+
+        $(document).on("change", "input.show3", function () {
+            $('div.show3').show('slow');
+        });
+
+        $(document).on("change", "input.hide3", function () {
+            $('div.show3').hide('slow');
+        });
+
+        $(document).on("change", "input.show4", function () {
+            $('div.show4').show('slow');
+        });
+
+        $(document).on("change", "input.hide4", function () {
+            $('div.show4').hide('slow');
+        });
+
+        $(document).on("change", "input.show5", function () {
+            $('div.show5').show('slow');
+        });
+
+        $(document).on("change", "input.hide5", function () {
+            $('div.show5').hide('slow');
+        });
+
+        (function ($) {
+            // http://itmeze.com/2010/12/checkbox-has-to-be-checked-with-unobtrusive-jquery-validation-and-asp-net-mvc-3/
+            $.validator.unobtrusive.adapters.add("mandatory", function (options) {
+                options.rules["required"] = true;
+                if (options.message) {
+                    options.messages["required"] = options.message;
+                }
+            });
+        }(jQuery));
+
+        (function ($) {
+            $.validator.unobtrusive.adapters.addBool("mandatory", "required");
+        }(jQuery));
+
+    </script>
+
+}
