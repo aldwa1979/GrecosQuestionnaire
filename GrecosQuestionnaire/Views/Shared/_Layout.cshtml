@@ -8,6 +8,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Grecos Questionnaire for Hotelier</title>
+    <link href="~/css/col.css" rel="stylesheet" />
+    @*<link href="~/lib/bootstrap_old/bootstrap.css" rel="stylesheet" />*@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
@@ -27,6 +29,9 @@
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="MyHotels" asp-action="Index">My Hotels</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Survey" asp-action="Index">Survey</a>
                             </li>
 
                             @if (User.IsInRole("Admin"))
@@ -67,7 +72,7 @@
         </nav>
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" class="body-content" style="margin-top: 100px; @*class="pb-3"*@>
             @RenderBody()
         </main>
     </div>

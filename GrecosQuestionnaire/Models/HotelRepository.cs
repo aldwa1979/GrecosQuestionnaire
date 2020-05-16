@@ -72,7 +72,10 @@ namespace GrecosQuestionnaire.Models
 
         public List<Question> GetQuestions()
         {
-            return _context.Questions.ToList();
+            var questions_items = _context.Questions.Select(p => p.Items).ToList();
+            var model = _context.Questions.ToList();
+
+            return model;
         }
 
         public List<QuestionItem> GetQuestionItems()
@@ -83,9 +86,7 @@ namespace GrecosQuestionnaire.Models
         public QuestionItem GetQuestionItem(int id)
         {
             var model = _context.QuestionItems.Where(p => p.Id == id).SingleOrDefault();
-
             model.Question = _context.QuestionItems.Where(p => p.Id == id).Select(a => a.Question).FirstOrDefault();
-
             return model;
         }
 

@@ -21,6 +21,8 @@ namespace GrecosQuestionnaire.Models
 
         Rate3 = 6,
 
-        Rate10 = 7
+        Rate10 = 7,
+
+        Rate2 = 8
     }
 }
