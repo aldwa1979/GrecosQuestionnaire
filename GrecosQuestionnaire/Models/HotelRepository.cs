@@ -14,6 +14,7 @@ namespace GrecosQuestionnaire.Models
             _context = context;
         }
 
+        //Pobieram listę wszystkich hoteli
         public IEnumerable<HotelModel> GetAllHotels()
         {
             return _context.Hotels.ToList();
@@ -70,6 +71,7 @@ namespace GrecosQuestionnaire.Models
             return _context.SharedUnits.Where(p => p.SharedRoomCode == sharedUnitCode && p.MainRoomModelId == room).FirstOrDefault();
         }
 
+        //Pobieram listę wszystkich pytań wraz z podpytaniami
         public List<Question> GetQuestions()
         {
             var questions_items = _context.Questions.Select(p => p.Items).ToList();
@@ -78,16 +80,30 @@ namespace GrecosQuestionnaire.Models
             return model;
         }
 
+        //Pobieram listę wszystkich podpytań
         public List<QuestionItem> GetQuestionItems()
         {
             return _context.QuestionItems.ToList();
         }
 
+        //Szukam podpytanie po id
         public QuestionItem GetQuestionItem(int id)
         {
             var model = _context.QuestionItems.Where(p => p.Id == id).SingleOrDefault();
             model.Question = _context.QuestionItems.Where(p => p.Id == id).Select(a => a.Question).FirstOrDefault();
             return model;
+        }
+
+        //Pobieram listę wszystkich głównych odpowiedzi
+        public List<ResponseModel> GetResponses()
+        {
+            return _context.Responses.ToList();
+        }
+
+        //Pobieram listę wszystkich items odpowiedzi
+        public List<ResponseItemModel> GetResponseItem()
+        {
+            return _context.ResponseItems.ToList();
         }
 
         //Zapisuje do bazy nowe hotele wraz z pokojami
@@ -165,6 +181,20 @@ namespace GrecosQuestionnaire.Models
         public void RemoveQuestionItems(QuestionItem questionsItems)
         {
             _context.Remove(questionsItems);
+            _context.SaveChanges();
+        }
+
+        //Zapisuję do bazy powiązanie między użytkowiniem a partnerem
+        public void UploadResponses(ResponseModel response)
+        {
+            _context.Update(response);
+            _context.SaveChanges();
+        }
+
+        //Zapisuję do bazy powiązanie między użytkowiniem a partnerem
+        public void UploadResponseItems(ResponseItemModel responseItem)
+        {
+            _context.Update(responseItem);
             _context.SaveChanges();
         }
     }

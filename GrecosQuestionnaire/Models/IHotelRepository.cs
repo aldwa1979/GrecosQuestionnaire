@@ -30,5 +30,9 @@ namespace GrecosQuestionnaire.Models
         void UploadQuestions(Question questions);
         void RemoveQuestion(Question questions);
         QuestionItem GetQuestionItem(int id);
+        List<ResponseModel> GetResponses();
+        List<ResponseItemModel> GetResponseItem();
+        void UploadResponses(ResponseModel response);
+        void UploadResponseItems(ResponseItemModel responseItem);
     }
 }

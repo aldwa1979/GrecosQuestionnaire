@@ -23,5 +23,7 @@ namespace GrecosQuestionnaire.Models
         public DbSet<UserPartnerModel> UsersPartners { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuestionItem> QuestionItems { get; set; }
+        public DbSet<ResponseModel> Responses { get; set; }
+        public DbSet<ResponseItemModel> ResponseItems { get; set; }
     }
 }

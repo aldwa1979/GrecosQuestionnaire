@@ -4,14 +4,16 @@ using GrecosQuestionnaire.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GrecosQuestionnaire.Migrations
 {
     [DbContext(typeof(HotelDBContext))]
-    partial class HotelDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200519141120_Hotel32")]
+    partial class Hotel32
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -153,34 +155,6 @@ namespace GrecosQuestionnaire.Migrations
                     b.HasIndex("QuestionId");
 
                     b.ToTable("QuestionItems");
-                });
-
-            modelBuilder.Entity("GrecosQuestionnaire.Models.ResponseItemModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("QuestionItemId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RawValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ResponseId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionItemId");
-
-                    b.HasIndex("ResponseId");
-
-                    b.ToTable("ResponseItems");
                 });
 
             modelBuilder.Entity("GrecosQuestionnaire.Models.ResponseModel", b =>
@@ -470,17 +444,6 @@ namespace GrecosQuestionnaire.Migrations
                     b.HasOne("GrecosQuestionnaire.Models.Question", "Question")
                         .WithMany("Items")
                         .HasForeignKey("QuestionId");
-                });
-
-            modelBuilder.Entity("GrecosQuestionnaire.Models.ResponseItemModel", b =>
-                {
-                    b.HasOne("GrecosQuestionnaire.Models.QuestionItem", "QuestionItem")
-                        .WithMany()
-                        .HasForeignKey("QuestionItemId");
-
-                    b.HasOne("GrecosQuestionnaire.Models.ResponseModel", "Response")
-                        .WithMany()
-                        .HasForeignKey("ResponseId");
                 });
 
             modelBuilder.Entity("GrecosQuestionnaire.Models.SharedUnitModel", b =>
