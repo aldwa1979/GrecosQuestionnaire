@@ -107,7 +107,7 @@ namespace GrecosQuestionnaire.Models
         }
 
         //Zapisuje do bazy nowe hotele wraz z pokojami
-        public void UploadNewHotels(HotelModel hotel)
+        public void UploadHotels(HotelModel hotel)
         {
             _context.Update(hotel);
             _context.SaveChanges();

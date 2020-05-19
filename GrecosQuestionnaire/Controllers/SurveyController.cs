@@ -41,6 +41,14 @@ namespace GrecosQuestionnaire.Controllers
         public IActionResult Index(IFormCollection formCollection, int hotel)
         {
             var response = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).FirstOrDefault();
+            var updateHotel = _hotelRepository.GetHotelId(hotel);
+
+            HotelModel hotelModel = updateHotel;
+            hotelModel.Response = true;
+            _hotelRepository.UploadHotels(hotelModel);
+            
+
+            _hotelRepository.UploadHotels(updateHotel);
 
             if (response == null)
             {
@@ -50,6 +58,28 @@ namespace GrecosQuestionnaire.Controllers
                 responseModel.UserName = User.Identity.Name;
 
                 _hotelRepository.UploadResponses(responseModel);
+
+
+                foreach (var formData in formCollection)
+                {
+                    string stringkey = formData.Key.ToString();
+                    string replaced = stringkey.Replace("t", string.Empty);
+
+                    var responseId = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
+                    int itemId;
+
+                    if (int.TryParse(replaced, out itemId))
+                    {
+                        var questionItem = _hotelRepository.GetQuestionItem(itemId);
+                        ResponseItemModel responseItem = new ResponseItemModel();
+                        responseItem.QuestionItem = questionItem;
+                        responseItem.RawValue = formData.Value;
+                        responseItem.Value = formData.Key;
+                        responseItem.Response = responseId;
+
+                        _hotelRepository.UploadResponseItems(responseItem);
+                    }
+                }
             }
             else
             {

@@ -14,7 +14,7 @@ namespace GrecosQuestionnaire.Models
         int GetHotelId(string code, int season);
         int GetMainRoomlId(string hotelCode, string roomCode, int season);
         HotelModel GetHotel(string code, int season);
-        void UploadNewHotels(HotelModel hotel);
+        void UploadHotels(HotelModel hotel);
         void UploadNewRooms(MainRoomModel hotel);
         void UploadNewShareds(SharedUnitModel hotel);
         MainRoomModel GetMainRoom(string mainRoomCode, string hotelCode, int season);

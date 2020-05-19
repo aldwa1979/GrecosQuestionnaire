@@ -67,7 +67,7 @@ namespace GrecosQuestionnaire.Controllers
 
                     try
                     {
-                        _hotelRepository.UploadNewHotels(hotelModel);
+                        _hotelRepository.UploadHotels(hotelModel);
                     }
                     catch (Exception e)
                     {
@@ -153,7 +153,7 @@ namespace GrecosQuestionnaire.Controllers
         {
             if(ModelState.IsValid)
             {
-                _hotelRepository.UploadNewHotels(hotelModel);
+                _hotelRepository.UploadHotels(hotelModel);
             }
             
             return RedirectToAction("Index");

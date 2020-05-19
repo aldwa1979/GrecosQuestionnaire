@@ -43,14 +43,21 @@
                 @item.Season
             </td>
             <td>
-                <a class="btn btn-primary" href="@Url.Action("Index", "Survey", new { hotelId = @item.Id }, null)" title="Elementy">
-                    New
-                    <span class="glyphicon glyphicon-th-list"></span>
-                </a>
+                @if (item.Response == true)
+                {
                 <a class="btn btn-primary" href="@Url.Action("Edit", "Survey", new { hotelId = @item.Id }, null)" title="Elementy">
                     Edit
                     <span class="glyphicon glyphicon-edit"></span>
                 </a>
+                }
+                else
+                {
+                <a class="btn btn-primary" href="@Url.Action("Index", "Survey", new { hotelId = @item.Id }, null)" title="Elementy">
+                New
+                <span class="glyphicon glyphicon-th-list"></span>
+                </a>
+                }
+
             </td>
             <td>
                 
