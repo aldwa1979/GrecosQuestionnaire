@@ -5,11 +5,21 @@
 @{
     ViewBag.Title = "Ankieta";
 }
+
+
 <div class="col-md-3"></div>
 
 @{
     int page = int.Parse(ViewData["page"].ToString());
-    var hotel = ViewBag.hotelId;
+
+    if (page == 1)
+    {
+        int hotel = ViewBag.Hotel;
+    }
+    else
+    {
+        int hotel = int.Parse(TempData["hotel"].ToString());
+    }
 }
 
 <div class="col-md-6" style="margin-top: 40px;">
@@ -26,8 +36,9 @@
     @using (Html.BeginForm("Index", "Survey", FormMethod.Post, new { role = "form", @style = "color: #005EA8" }))
     {
         @Html.Hidden("page", ViewData["page"])
-        @Html.Hidden("hotel")
+        @Html.Hidden("hotel", TempData["hotel"])
         /*Zliczabie petli*/
+        @Html.Display("hotel")
 
         foreach (var question in Model)
         {
@@ -496,17 +507,17 @@
             }
             else
             {
-            <a class="btn btn-default" href="@Url.Action("Back", new { page = page })" style="border: none; color:#005EA8">
-                <span class="glyphicon glyphicon-chevron-left"></span>
-                Wróć
-            </a>
+                <a class="btn btn-default" href="@Url.Action("Back", new { page = page })" style="border: none; color:#005EA8">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    Wróć
+                </a>
             }
-            <button type="submit" class="btn btn-primary" style="background-color:#005EA8" value="Zapisz" id="@hotel">
-                Zapisz
+            <button type="submit" class="btn btn-primary" style="background-color:#005EA8" value="Zapisz">
+                Next Page
                 <span class="glyphicon glyphicon-chevron-right"></span>
             </button>
         </div>
-    }
+                                    }
 
 </div>
 <div class="col-md-3"></div>

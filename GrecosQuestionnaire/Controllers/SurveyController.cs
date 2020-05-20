@@ -38,57 +38,94 @@ namespace GrecosQuestionnaire.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(IFormCollection formCollection, int hotel)
+        public IActionResult Index(IFormCollection formCollection)
         {
+            int hotel = int.Parse(formCollection["hotel"]);
+            TempData["hotel"] = hotel;
+
+            int page = int.Parse(formCollection["page"]);
+
             var response = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).FirstOrDefault();
-            var updateHotel = _hotelRepository.GetHotelId(hotel);
 
-            HotelModel hotelModel = updateHotel;
-            hotelModel.Response = true;
-            _hotelRepository.UploadHotels(hotelModel);
-            
-
-            _hotelRepository.UploadHotels(updateHotel);
-
-            if (response == null)
+            if (page == 1)
             {
-                ResponseModel responseModel = new ResponseModel();
-                responseModel.ResponseDate = DateTime.Now;
-                responseModel.HotelId = hotel;
-                responseModel.UserName = User.Identity.Name;
+                var updateHotel = _hotelRepository.GetHotelId(hotel);
 
-                _hotelRepository.UploadResponses(responseModel);
+                HotelModel hotelModel = updateHotel;
+                hotelModel.Response = true;
+                _hotelRepository.UploadHotels(hotelModel);
 
-
-                foreach (var formData in formCollection)
-                {
-                    string stringkey = formData.Key.ToString();
-                    string replaced = stringkey.Replace("t", string.Empty);
-
-                    var responseId = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
-                    int itemId;
-
-                    if (int.TryParse(replaced, out itemId))
-                    {
-                        var questionItem = _hotelRepository.GetQuestionItem(itemId);
-                        ResponseItemModel responseItem = new ResponseItemModel();
-                        responseItem.QuestionItem = questionItem;
-                        responseItem.RawValue = formData.Value;
-                        responseItem.Value = formData.Key;
-                        responseItem.Response = responseId;
-
-                        _hotelRepository.UploadResponseItems(responseItem);
-                    }
-                }
+                page = 2;
             }
             else
             {
-                return View();
+                if (response == null)
+                {
+                    ResponseModel responseModel = new ResponseModel();
+                    responseModel.ResponseDate = DateTime.Now;
+                    responseModel.HotelId = hotel;
+                    responseModel.UserName = User.Identity.Name;
+
+                    _hotelRepository.UploadResponses(responseModel);
+
+
+                    foreach (var formData in formCollection)
+                    {
+                        string stringkey = formData.Key.ToString();
+                        string replaced = stringkey.Replace("t", string.Empty);
+
+                        var responseId = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
+                        int itemId;
+
+                        if (int.TryParse(replaced, out itemId))
+                        {
+                            var questionItem = _hotelRepository.GetQuestionItem(itemId);
+                            ResponseItemModel responseItem = new ResponseItemModel();
+                            responseItem.QuestionItem = questionItem;
+                            responseItem.RawValue = formData.Value;
+                            responseItem.Value = formData.Key;
+                            responseItem.Response = responseId;
+
+                            _hotelRepository.UploadResponseItems(responseItem);
+                        }
+                    }
+                }
+                else
+                {
+                    return View("Index");
+                }
             }
+            return RedirectToAction("Index", new {page});
+        }
 
-
-
-            return RedirectToAction("Index");
+        public ActionResult Back(int page)
+        {
+            ViewBag.Dolphin = false;
+            if (page == 1)
+            {
+                page = 1;
+            }
+            else if (page == 2)
+            {
+                page = 1;
+            }
+            else if (page == 3)
+            {
+                page = 2;
+            }
+            else if (page == 4)
+            {
+                page = 3;
+            }
+            else if (page == 5)
+            {
+                page = 4;
+            }
+            else if (page == 6)
+            {
+                page = 5;
+            }
+            return RedirectToAction("Index", new { page });
         }
     }
 }
