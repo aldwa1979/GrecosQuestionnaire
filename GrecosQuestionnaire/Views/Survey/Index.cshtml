@@ -11,14 +11,14 @@
 
 @{
     int page = int.Parse(ViewData["page"].ToString());
-
+    int hotel;
     if (page == 1)
     {
-        int hotel = ViewBag.Hotel;
+        hotel = ViewBag.Hotel;
     }
     else
     {
-        int hotel = int.Parse(TempData["hotel"].ToString());
+        hotel = int.Parse(TempData["hotel"].ToString());
     }
 }
 
@@ -36,9 +36,11 @@
     @using (Html.BeginForm("Index", "Survey", FormMethod.Post, new { role = "form", @style = "color: #005EA8" }))
     {
         @Html.Hidden("page", ViewData["page"])
-        @Html.Hidden("hotel", TempData["hotel"])
+        @Html.Hidden("hotel", new { hotel })
+        @Html.Label(hotel.ToString())
+
         /*Zliczabie petli*/
-        @Html.Display("hotel")
+
 
         foreach (var question in Model)
         {
@@ -517,7 +519,7 @@
                 <span class="glyphicon glyphicon-chevron-right"></span>
             </button>
         </div>
-                                    }
+    }
 
 </div>
 <div class="col-md-3"></div>

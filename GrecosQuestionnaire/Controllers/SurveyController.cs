@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using GrecosQuestionnaire.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GrecosQuestionnaire.Controllers
 {
@@ -31,7 +32,6 @@ namespace GrecosQuestionnaire.Controllers
             var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
 
             ViewBag.Hotel = hotelId;
-            ViewBag.Dolphin = false;
             ViewData["page"] = page;
 
             return View(items);
@@ -40,14 +40,27 @@ namespace GrecosQuestionnaire.Controllers
         [HttpPost]
         public IActionResult Index(IFormCollection formCollection)
         {
-            int hotel = int.Parse(formCollection["hotel"]);
+            int page = int.Parse(formCollection["page"]);
+            int hotel = int.Parse(formCollection["hotel"].ToString().Substring(10,4));
+            
             TempData["hotel"] = hotel;
 
-            int page = int.Parse(formCollection["page"]);
-
             var response = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).FirstOrDefault();
+            var kolekcja = new Dictionary<string, string>();
 
-            if (page == 1)
+            foreach (var formData in formCollection)
+            {
+                if (formData.Key == "hotel" || formData.Key == "page")
+                    continue;
+                else
+                {
+                    TempData[formData.Key] = formData.Value;
+                    kolekcja.Add(formData.Key, formData.Value);
+                }
+            }
+
+
+                if (page == 1)
             {
                 var updateHotel = _hotelRepository.GetHotelId(hotel);
 
@@ -89,6 +102,8 @@ namespace GrecosQuestionnaire.Controllers
                             _hotelRepository.UploadResponseItems(responseItem);
                         }
                     }
+
+                    return View("Submit");
                 }
                 else
                 {
