@@ -6,6 +6,7 @@ using GrecosQuestionnaire.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace GrecosQuestionnaire.Controllers
 {
@@ -70,6 +71,7 @@ namespace GrecosQuestionnaire.Controllers
 
                 page = 2;
             }
+
             else
             {
                 if (response == null)

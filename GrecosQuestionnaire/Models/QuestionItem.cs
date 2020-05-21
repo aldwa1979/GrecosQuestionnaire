@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,5 +25,6 @@ namespace GrecosQuestionnaire.Models
         public virtual int SingleSpace { get; set; }
 
         public virtual bool Required { get; set; }
+
     }
 }
