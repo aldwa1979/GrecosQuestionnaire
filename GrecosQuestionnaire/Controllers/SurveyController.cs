@@ -60,8 +60,7 @@ namespace GrecosQuestionnaire.Controllers
                 }
             }
 
-
-                if (page == 1)
+            if (page == 1)
             {
                 var updateHotel = _hotelRepository.GetHotelId(hotel);
 
@@ -70,6 +69,11 @@ namespace GrecosQuestionnaire.Controllers
                 _hotelRepository.UploadHotels(hotelModel);
 
                 page = 2;
+            }
+
+            else if (page == 2)
+            {
+                page = 3;
             }
 
             else
