@@ -16,5 +16,7 @@ namespace GrecosQuestionnaire.Models
         public virtual string RawValue { get; set; }
 
         public virtual string Value { get; set; }
+
+        public int PoolNumber { get; set; }
     }
 }
