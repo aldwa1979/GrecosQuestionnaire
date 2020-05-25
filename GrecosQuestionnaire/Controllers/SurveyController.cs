@@ -81,6 +81,11 @@ namespace GrecosQuestionnaire.Controllers
                 page = 4;
             }
 
+            else if (page == 4)
+            {
+                page = 5;
+            }
+
             else
             {
                 if (response == null)

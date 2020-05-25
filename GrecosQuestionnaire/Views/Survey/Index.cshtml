@@ -589,6 +589,8 @@
             $('div.show3').hide();
             $('div.show4').hide();
             $('div.show5').hide();
+            $('div.show6').hide();
+            $('div.show7').hide();
 
             $('.spinner').spinner({
                 spin: function (event, ui) {
@@ -641,6 +643,22 @@
 
         $(document).on("change", "input.hide5", function () {
             $('div.show5').hide('slow');
+        });
+
+        $(document).on("change", "input.show6", function () {
+            $('div.show6').show('slow');
+        });
+
+        $(document).on("change", "input.hide6", function () {
+            $('div.show6').hide('slow');
+        });
+
+        $(document).on("change", "input.show7", function () {
+            $('div.show7').show('slow');
+        });
+
+        $(document).on("change", "input.hide7", function () {
+            $('div.show7').hide('slow');
         });
 
         (function ($) {
