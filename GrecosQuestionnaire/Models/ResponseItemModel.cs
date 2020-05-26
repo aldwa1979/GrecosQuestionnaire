@@ -11,7 +11,7 @@ namespace GrecosQuestionnaire.Models
 
         public virtual QuestionItem QuestionItem { get; set; }
 
-        public virtual ResponseModel Response { get; set; }
+        public virtual ResponseModel ResponseId { get; set; }
 
         public virtual string RawValue { get; set; }
 

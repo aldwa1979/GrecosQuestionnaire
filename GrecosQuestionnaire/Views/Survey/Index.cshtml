@@ -12,9 +12,17 @@
 @{
     int page = int.Parse(ViewData["page"].ToString());
     int hotel;
+    int? hotelIsNull = ViewBag.Hotel;
     if (page == 1)
     {
-        hotel = ViewBag.Hotel;
+        if (hotelIsNull !=0)
+        {
+            hotel = ViewBag.Hotel;
+        }
+        else
+        {
+            hotel = int.Parse(TempData["hotel"].ToString());
+        }
     }
     else
     {
@@ -560,7 +568,7 @@
             }
             else
             {
-                <a class="btn btn-default" href="@Url.Action("Back", new { page = page })" style="border: none; color:#005EA8">
+                <a class="btn btn-default" href="@Url.Action("Back", new { page = page, hotel = hotel })" style="border: none; color:#005EA8">
                     <span class="glyphicon glyphicon-chevron-left"></span>
                     Wróć
                 </a>

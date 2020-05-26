@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -103,6 +104,7 @@ namespace GrecosQuestionnaire.Models
         //Pobieram listę wszystkich items odpowiedzi
         public List<ResponseItemModel> GetResponseItem()
         {
+            var responses = _context.ResponseItems.Include("ResponseModel").ToList();
             return _context.ResponseItems.ToList();
         }
 

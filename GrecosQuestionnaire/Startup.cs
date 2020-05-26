@@ -43,6 +43,9 @@ namespace GrecosQuestionnaire
             //    .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);//You can set Time   
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,7 +69,7 @@ namespace GrecosQuestionnaire
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
