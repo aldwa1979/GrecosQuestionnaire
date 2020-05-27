@@ -47,8 +47,8 @@ namespace GrecosQuestionnaire.Controllers
         public IActionResult Index(IFormCollection formCollection, bool back = false)
         {
             int page = int.Parse(formCollection["page"]);
-            int hotel = int.Parse(formCollection["hotel"].ToString().Substring(10,4));
-            
+            int hotel = int.Parse(formCollection["hotel"].ToString().Substring(10, 4));
+
             TempData["hotel"] = hotel;
 
             var response = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).FirstOrDefault();
@@ -100,10 +100,6 @@ namespace GrecosQuestionnaire.Controllers
 
                     _hotelRepository.UploadResponses(responseModel);
 
-
-                    //foreach (var key in HttpContext.Session.Keys)
-                    //ViewData[key.ToString()] = HttpContext.Session.GetString(key);
-
                     foreach (var key in HttpContext.Session.Keys)
                     {
                         string stringkey = key.ToString();
@@ -119,7 +115,7 @@ namespace GrecosQuestionnaire.Controllers
                             responseItem.QuestionItem = questionItem;
                             responseItem.RawValue = HttpContext.Session.GetString(key);
                             responseItem.Value = key.ToString();
-                            responseItem.ResponseId = responseId;
+                            responseItem.Response = responseId;
 
                             _hotelRepository.UploadResponseItems(responseItem);
                         }
@@ -132,7 +128,7 @@ namespace GrecosQuestionnaire.Controllers
                     return View("Index");
                 }
             }
-            return RedirectToAction("Index", new {page});
+            return RedirectToAction("Index", new { page });
         }
 
         public IActionResult Back(int page, int hotel)
@@ -166,15 +162,63 @@ namespace GrecosQuestionnaire.Controllers
             return RedirectToAction("Index", new { page });
         }
 
-        public IActionResult Edit (int hotel)
+        public IActionResult BackEdit(int page, int hotel)
         {
-            int page = 1;
+            TempData["hotel"] = hotel;
 
-            var data = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
-            var data2 = _hotelRepository.GetResponseItem().ToList();
-
-            return View();
+            if (page == 1)
+            {
+                page = 1;
+            }
+            else if (page == 2)
+            {
+                page = 1;
+            }
+            else if (page == 3)
+            {
+                page = 2;
+            }
+            else if (page == 4)
+            {
+                page = 3;
+            }
+            else if (page == 5)
+            {
+                page = 4;
+            }
+            else if (page == 6)
+            {
+                page = 5;
+            }
+            return RedirectToAction("Edit", new { page });
         }
 
+        public IActionResult Edit(int? page, int hotel)
+        {
+            if (!page.HasValue)
+            {
+                page = 1;
+            }
+            if (page == 0)
+            {
+                page = 1;
+            }
+
+
+            var response = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
+            var responseitems = _hotelRepository.GetResponseItem().Where(r => r.Response.Id == response.Id).ToList();
+
+            var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
+
+            foreach (var item in responseitems)
+            {
+                ViewData[item.Value] = item.RawValue;
+            }
+
+            ViewBag.Hotel = hotel;
+            ViewData["page"] = page;
+
+            return View(items);
+        }
     }
 }

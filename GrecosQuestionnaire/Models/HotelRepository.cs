@@ -104,8 +104,9 @@ namespace GrecosQuestionnaire.Models
         //Pobieram listę wszystkich items odpowiedzi
         public List<ResponseItemModel> GetResponseItem()
         {
-            var responses = _context.ResponseItems.Include("ResponseModel").ToList();
-            return _context.ResponseItems.ToList();
+            //var responses = _context.ResponseItems.ToList();
+            var responses = _context.ResponseItems.AsQueryable().Include(p => p.Response).Include(p=>p.QuestionItem).ToList();
+            return responses;
         }
 
         //Zapisuje do bazy nowe hotele wraz z pokojami
