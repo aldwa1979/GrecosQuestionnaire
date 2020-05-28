@@ -105,7 +105,7 @@ namespace GrecosQuestionnaire.Models
         public List<ResponseItemModel> GetResponseItem()
         {
             //var responses = _context.ResponseItems.ToList();
-            var responses = _context.ResponseItems.AsQueryable().Include(p => p.Response).Include(p=>p.QuestionItem).ToList();
+            var responses = _context.ResponseItems.AsQueryable().Include(p => p.Response).Include(p=>p.QuestionItem).AsNoTracking().ToList();
             return responses;
         }
 
@@ -197,8 +197,9 @@ namespace GrecosQuestionnaire.Models
         //Zapisuję do bazy powiązanie między użytkowiniem a partnerem
         public void UploadResponseItems(ResponseItemModel responseItem)
         {
-            _context.Update(responseItem);
+            _context.ResponseItems.Update(responseItem);
             _context.SaveChanges();
         }
+
     }
 }

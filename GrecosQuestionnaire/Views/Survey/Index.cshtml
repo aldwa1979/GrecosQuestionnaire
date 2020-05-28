@@ -11,23 +11,24 @@
 
 @{
     int page = int.Parse(ViewData["page"].ToString());
-    int hotel;
-    int? hotelIsNull = ViewBag.Hotel;
-    if (page == 1)
-    {
-        if (hotelIsNull !=0)
-        {
-            hotel = ViewBag.Hotel;
-        }
-        else
-        {
-            hotel = int.Parse(TempData["hotel"].ToString());
-        }
-    }
-    else
-    {
-        hotel = int.Parse(TempData["hotel"].ToString());
-    }
+    int hotel = ViewBag.Hotel;
+    //int hotel;
+    //int? hotelIsNull = ViewBag.Hotel;
+    //if (page == 1)
+    //{
+    //    if (hotelIsNull !=0)
+    //    {
+    //        hotel = ViewBag.Hotel;
+    //    }
+    //    else
+    //    {
+    //        hotel = int.Parse(TempData["hotel"].ToString());
+    //    }
+    //}
+    //else
+    //{
+    //    hotel = int.Parse(TempData["hotel"].ToString());
+    //}
 }
 
 <div class="col-md-8" style="margin-top: 40px;">

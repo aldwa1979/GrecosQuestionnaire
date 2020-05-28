@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore.Internal;
+using X.PagedList;
 
 namespace GrecosQuestionnaire.Controllers
 {
@@ -47,9 +48,18 @@ namespace GrecosQuestionnaire.Controllers
         public IActionResult Index(IFormCollection formCollection, bool back = false)
         {
             int page = int.Parse(formCollection["page"]);
-            int hotel = int.Parse(formCollection["hotel"].ToString().Substring(10, 4));
 
-            TempData["hotel"] = hotel;
+            int hotel = formCollection["hotel"].ToString().Length;
+            if (hotel == 4)
+            {
+                hotel = int.Parse(formCollection["hotel"]);
+            }
+            else
+            {
+                hotel = int.Parse(formCollection["hotel"].ToString().Substring(10, 4));
+            }
+
+            //TempData["hotel"] = hotel;
 
             var response = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).FirstOrDefault();
 
@@ -65,12 +75,7 @@ namespace GrecosQuestionnaire.Controllers
 
             if (page == 1)
             {
-                var updateHotel = _hotelRepository.GetHotelId(hotel);
-
-                HotelModel hotelModel = updateHotel;
-                hotelModel.Response = true;
-                _hotelRepository.UploadHotels(hotelModel);
-
+                
                 page = 2;
             }
 
@@ -89,10 +94,35 @@ namespace GrecosQuestionnaire.Controllers
                 page = 5;
             }
 
+            else if (page == 5)
+            {
+                page = 6;
+            }
+
+            else if (page == 6)
+            {
+                Dictionary<string, string> roomList = new Dictionary<string, string>();
+
+                foreach (var key in HttpContext.Session.Keys)  //.Where( == "2419"))
+                {
+                    roomList.Add(key.ToString(), HttpContext.Session.GetString(key));
+                }
+
+                var x = roomList.Where(p => p.Key == "2419");
+
+                page = 7;
+            }
+
             else
             {
                 if (response == null)
                 {
+                    var updateHotel = _hotelRepository.GetHotelId(hotel);
+                    HotelModel hotelModel = updateHotel;
+                    hotelModel.Response = true;
+                    _hotelRepository.UploadHotels(hotelModel);
+
+
                     ResponseModel responseModel = new ResponseModel();
                     responseModel.ResponseDate = DateTime.Now;
                     responseModel.HotelId = hotel;
@@ -128,12 +158,12 @@ namespace GrecosQuestionnaire.Controllers
                     return View("Index");
                 }
             }
-            return RedirectToAction("Index", new { page });
+            return RedirectToAction("Index", new { page , hotel});
         }
 
         public IActionResult Back(int page, int hotel)
         {
-            TempData["hotel"] = hotel;
+            //TempData["hotel"] = hotel;
 
             if (page == 1)
             {
@@ -159,12 +189,16 @@ namespace GrecosQuestionnaire.Controllers
             {
                 page = 5;
             }
-            return RedirectToAction("Index", new { page });
+            else if (page == 7)
+            {
+                page = 6;
+            }
+            return RedirectToAction("Index", new { page, hotel });
         }
 
         public IActionResult BackEdit(int page, int hotel)
         {
-            TempData["hotel"] = hotel;
+            //TempData["hotel"] = hotel;
 
             if (page == 1)
             {
@@ -190,35 +224,269 @@ namespace GrecosQuestionnaire.Controllers
             {
                 page = 5;
             }
-            return RedirectToAction("Edit", new { page });
+            else if (page == 7)
+            {
+                page = 6;
+            }
+            return RedirectToAction("Edit", new { page , hotel});
         }
 
         public IActionResult Edit(int? page, int hotel)
         {
-            if (!page.HasValue)
+            if (!page.HasValue || page == 0)
             {
                 page = 1;
+
+                //pobieram ID odpowiedzi powiązanej z hotelem
+                var response = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
+
+                //pobieram listę odpowiedzi powiązanych z odpowiedzią
+                var responseitems = _hotelRepository.GetResponseItem().Where(r => r.Response.Id == response.Id).ToList();
+
+                //pobieram listę pytań
+                var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
+
+                foreach (var item in responseitems)
+                {
+                    ViewData[item.Value] = item.RawValue;
+                }
+
+                ViewBag.Hotel = hotel;
+                ViewData["page"] = page;
+
+                return View(items);
             }
-            if (page == 0)
+
+            else if (page == 1 || page == 2 || page == 3 || page == 4 || page == 5 || page == 6)
             {
-                page = 1;
+                //pobieram ID odpowiedzi powiązanej z hotelem
+                var response = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
+
+                //pobieram listę odpowiedzi powiązanych z odpowiedzią
+                var responseitems = _hotelRepository.GetResponseItem().Where(r => r.Response.Id == response.Id).ToList();
+
+                //pobieram listę pytań
+                var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
+
+                foreach (var item in responseitems)
+                {
+                    ViewData[item.Value] = item.RawValue;
+                }
+
+                foreach (var key in HttpContext.Session.Keys)
+                {
+                    ViewData[key.ToString()] = HttpContext.Session.GetString(key);
+                }
+
+                ViewBag.Hotel = hotel;
+                ViewData["page"] = page;
+
+                return View(items);
             }
 
-
-            var response = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
-            var responseitems = _hotelRepository.GetResponseItem().Where(r => r.Response.Id == response.Id).ToList();
-
-            var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
-
-            foreach (var item in responseitems)
+            else if (page == 7)
             {
-                ViewData[item.Value] = item.RawValue;
+                List<Question> questions = new List<Question>();
+                Dictionary<string, string> roomList = new Dictionary<string, string>();
+                List<string> list = new List<string>();
+
+                foreach (var key in HttpContext.Session.Keys)
+                {
+                    roomList.Add(key.ToString(), HttpContext.Session.GetString(key));
+                }
+
+                var x = roomList.Where(p => p.Key == "2419").Select(s => new { Value = s.Value.Split(',') });
+
+                foreach (var item in x)
+                {
+                    for (int i = 0; i < item.Value.Length; i++)
+                    {
+                        list.Add(item.Value.GetValue(i).ToString().Split("\r\n").GetValue(0).ToString());
+                    }
+                }
+
+                //Mapowanie nazw pokoi na ID pytania z bazy SQL
+                List<int> lista = new List<int>();
+
+                foreach (var item in list)
+                {
+                    if (item.Contains("standard room"))
+                    {
+                        lista.Add(1024);
+                    }
+                    else if (item.Contains("superior"))
+                    {
+                        lista.Add(1025);
+                    }
+                    else if (item.Contains("deluxe"))
+                    {
+                        lista.Add(1026);
+                    }
+                    else if (item.Contains("dbl bungalow"))
+                    {
+                        lista.Add(1027);
+                    }
+                    else if (item.Contains("family"))
+                    {
+                        lista.Add(1028);
+                    }
+                    else if (item.Contains("superior family"))
+                    {
+                        lista.Add(1029);
+                    }
+                    else if (item.Contains("studio"))
+                    {
+                        lista.Add(1030);
+                    }
+                    else if (item.Contains("apartament"))
+                    {
+                        lista.Add(1031);
+                    }
+                    else if (item.Contains("suite"))
+                    {
+                        lista.Add(1032);
+                    }
+                    else if (item.Contains("junior suite"))
+                    {
+                        lista.Add(1033);
+                    }
+                    else if (item.Contains("family suite"))
+                    {
+                        lista.Add(1034);
+                    }
+                    else if (item.Contains("executive suite"))
+                    {
+                        lista.Add(1035);
+                    }
+                    else if (item.Contains("maisonette"))
+                    {
+                        lista.Add(1036);
+                    }
+                    else if (item.Contains("economic"))
+                    {
+                        lista.Add(1037);
+                    }
+                }
+
+                //pobieram ID odpowiedzi powiązanej z hotelem
+                    var response = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
+
+                //pobieram listę odpowiedzi powiązanych z odpowiedzią
+                var responseitems = _hotelRepository.GetResponseItem().Where(r => r.Response.Id == response.Id).ToList();
+
+                //pobieram listę pytań
+                var items2 =  _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
+                var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).Where(s=>lista.Contains(s.Id)).OrderBy(x => x.ItemOrder);
+
+                foreach (var item in responseitems)
+                {
+                    ViewData[item.Value] = item.RawValue;
+                }
+
+                foreach (var key in HttpContext.Session.Keys)
+                {
+                    ViewData[key.ToString()] = HttpContext.Session.GetString(key);
+                }
+
+                ViewBag.Hotel = hotel;
+                ViewData["page"] = page;
+
+                return View(items);
+
+
             }
 
-            ViewBag.Hotel = hotel;
-            ViewData["page"] = page;
+            return View();
+        }
 
-            return View(items);
+        [HttpPost]
+        public IActionResult Edit(IFormCollection formCollection, bool back = false)
+        {
+            int page = int.Parse(formCollection["page"]);
+            int hotel = formCollection["hotel"].ToString().Length;
+            if (hotel == 4)
+            {
+                hotel = int.Parse(formCollection["hotel"]);
+            }
+            else
+            {
+                hotel = int.Parse(formCollection["hotel"].ToString().Substring(10, 4));
+            }
+
+            TempData["hotel"] = hotel;
+
+            foreach (var formData in formCollection)
+            {
+                if (formData.Key == "hotel" || formData.Key == "page")
+                    continue;
+                else
+                {
+                    HttpContext.Session.SetString(formData.Key, formData.Value);
+                }
+            }
+
+            if (page == 1)
+            {
+                page = 2;
+            }
+
+            else if (page == 2)
+            {
+                page = 3;
+            }
+
+            else if (page == 3)
+            {
+                page = 4;
+            }
+
+            else if (page == 4)
+            {
+                page = 5;
+            }
+
+            else if (page == 5)
+            {
+                page = 6;
+            }
+
+            else if (page == 6)
+            {
+                page = 7;
+            }
+
+            else
+            {
+                foreach (var key in HttpContext.Session.Keys)
+                {
+                    string stringkey = key.ToString();
+                    string replaced = stringkey.Replace("t", string.Empty);
+
+                    var response = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
+                    var responseId = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).Select(x=>x.Id).SingleOrDefault();
+                    int itemId;
+
+                    if (int.TryParse(replaced, out itemId))
+                    {
+                        var questionItem = _hotelRepository.GetQuestionItem(itemId);
+                        var questionItemId = questionItem.Id;
+
+                        ResponseItemModel responseItem = new ResponseItemModel();
+
+                        var responseItemId = _hotelRepository.GetResponseItem().Where(p => p.Response.Id == responseId && p.QuestionItem.Id == questionItemId && p.Value == key.ToString()).Select(id=>id.Id).SingleOrDefault();
+
+                        responseItem.Id = responseItemId;
+                        responseItem.QuestionItem = questionItem;
+                        responseItem.RawValue = HttpContext.Session.GetString(key);
+                        responseItem.Value = key.ToString();
+                        responseItem.Response = response;
+
+                        _hotelRepository.UploadResponseItems(responseItem);
+                    }
+                }
+                return View("Submit");
+            }
+            return RedirectToAction("Edit", new { page , hotel });
         }
     }
 }

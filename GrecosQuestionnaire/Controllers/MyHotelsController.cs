@@ -20,6 +20,7 @@ namespace GrecosQuestionnaire.Controllers
 
         public IActionResult Index()
         {
+            HttpContext.Session.Clear();
             var userIds = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var partners = _hotelRepository.GetUsersPartners().Where(p => p.UserID == userIds).Select(x=>x.PartnerModelID).ToList();
             var hotels = _hotelRepository.GetAllHotels();
