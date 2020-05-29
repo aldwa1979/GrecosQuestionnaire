@@ -25,6 +25,8 @@ namespace GrecosQuestionnaire.Models
 
         Rate2 = 8,
 
-        Label = 9
+        Label = 9,
+
+        Rate6 = 11
     }
 }
