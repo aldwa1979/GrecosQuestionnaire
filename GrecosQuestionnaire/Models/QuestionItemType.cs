@@ -27,6 +27,8 @@ namespace GrecosQuestionnaire.Models
 
         Label = 9,
 
-        Rate6 = 11
+        Rate6 = 11,
+
+        Date = 12
     }
 }

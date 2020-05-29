@@ -130,6 +130,86 @@ namespace GrecosQuestionnaire.Controllers
                 return View(items);
             }
 
+
+            if (page == 9)
+            {
+                List<Question> questions = new List<Question>();
+                Dictionary<string, string> roomList = new Dictionary<string, string>();
+                List<string> list = new List<string>();
+
+                foreach (var key in HttpContext.Session.Keys)
+                {
+                    roomList.Add(key.ToString(), HttpContext.Session.GetString(key));
+                }
+
+                var x = roomList.Where(p => p.Key == "3391").Select(s => new { Value = s.Value.Split(',') });
+
+                foreach (var item in x)
+                {
+                    for (int i = 0; i < item.Value.Length; i++)
+                    {
+                        list.Add(item.Value.GetValue(i).ToString().Split("\r\n").GetValue(0).ToString());
+                    }
+                }
+
+                //Mapowanie nazw wyżywnienia na ID pytania z bazy SQL
+                List<int> lista = new List<int>();
+
+                foreach (var item in list)
+                {
+                    if (item.Contains("BB"))
+                    {
+                        lista.Add(1039);
+                    }
+                    else if (item.Contains("HB"))
+                    {
+                        lista.Add(1040);
+                    }
+                    else if (item.Contains("FB"))
+                    {
+                        lista.Add(1041);
+                    }
+                    else if (item.Contains("FB PLUS"))
+                    {
+                        lista.Add(1042);
+                    }
+                    else if (item.Contains("LIGHT ALL INCL"))
+                    {
+                        lista.Add(1043);
+                    }
+                    else if (item.Contains("ALL INCL"))
+                    {
+                        lista.Add(1044);
+                    }
+                    else if (item.Contains("ALL INCL CLASSIC"))
+                    {
+                        lista.Add(1045);
+                    }
+                    else if (item.Contains("ALL INCL PLUS"))
+                    {
+                        lista.Add(1046);
+                    }
+                    else if (item.Contains("ALL INCL PREMIUM"))
+                    {
+                        lista.Add(1047);
+                    }
+                }
+
+                //pobieram listę pytań
+                var items2 = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
+                var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).Where(s => lista.Contains(s.Id)).OrderBy(x => x.ItemOrder);
+
+                foreach (var key in HttpContext.Session.Keys)
+                {
+                    ViewData[key.ToString()] = HttpContext.Session.GetString(key);
+                }
+
+                ViewBag.Hotel = hotel;
+                ViewData["page"] = page;
+
+                return View(items);
+            }
+
             else
             {
                 var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
@@ -144,7 +224,6 @@ namespace GrecosQuestionnaire.Controllers
 
                 return View(items);
             }
-
         }
 
         [HttpPost]
@@ -202,16 +281,25 @@ namespace GrecosQuestionnaire.Controllers
 
             else if (page == 6)
             {
-                Dictionary<string, string> roomList = new Dictionary<string, string>();
+                //Dictionary<string, string> roomList = new Dictionary<string, string>();
 
-                foreach (var key in HttpContext.Session.Keys)
-                {
-                    roomList.Add(key.ToString(), HttpContext.Session.GetString(key));
-                }
+                //foreach (var key in HttpContext.Session.Keys)
+                //{
+                //    roomList.Add(key.ToString(), HttpContext.Session.GetString(key));
+                //}
 
-                var x = roomList.Where(p => p.Key == "2419");
+                //var x = roomList.Where(p => p.Key == "2419");
 
                 page = 7;
+            }
+
+            else if (page == 7)
+            {
+                page = 8;
+            }
+            else if (page == 8)
+            {
+                page = 9;
             }
 
             else
@@ -292,6 +380,14 @@ namespace GrecosQuestionnaire.Controllers
             {
                 page = 6;
             }
+            else if (page == 8)
+            {
+                page = 7;
+            }
+            else if (page == 9)
+            {
+                page = 8;
+            }
             return RedirectToAction("Index", new { page, hotel });
         }
 
@@ -324,6 +420,14 @@ namespace GrecosQuestionnaire.Controllers
             else if (page == 7)
             {
                 page = 6;
+            }
+            else if (page == 8)
+            {
+                page = 7;
+            }
+            else if (page == 9)
+            {
+                page = 8;
             }
             return RedirectToAction("Edit", new { page , hotel});
         }
@@ -474,6 +578,98 @@ namespace GrecosQuestionnaire.Controllers
                 //pobieram listę pytań
                 var items2 =  _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
                 var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).Where(s=>lista.Contains(s.Id)).OrderBy(x => x.ItemOrder);
+
+                foreach (var item in responseitems)
+                {
+                    ViewData[item.Value] = item.RawValue;
+                }
+
+                foreach (var key in HttpContext.Session.Keys)
+                {
+                    ViewData[key.ToString()] = HttpContext.Session.GetString(key);
+                }
+
+                ViewBag.Hotel = hotel;
+                ViewData["page"] = page;
+
+                return View(items);
+
+            }
+
+
+            else if (page == 9)
+            {
+                List<Question> questions = new List<Question>();
+                Dictionary<string, string> roomList = new Dictionary<string, string>();
+                List<string> list = new List<string>();
+
+                foreach (var key in HttpContext.Session.Keys)
+                {
+                    roomList.Add(key.ToString(), HttpContext.Session.GetString(key));
+                }
+
+                var x = roomList.Where(p => p.Key == "2419").Select(s => new { Value = s.Value.Split(',') });
+
+                foreach (var item in x)
+                {
+                    for (int i = 0; i < item.Value.Length; i++)
+                    {
+                        list.Add(item.Value.GetValue(i).ToString().Split("\r\n").GetValue(0).ToString());
+                    }
+                }
+
+                //Mapowanie nazw wyżywienia na ID pytania z bazy SQL
+                List<int> lista = new List<int>();
+
+                foreach (var item in list)
+                {
+                    if (item.Contains("BB"))
+                    {
+                        lista.Add(1039);
+                    }
+                    else if (item.Contains("HB"))
+                    {
+                        lista.Add(1040);
+                    }
+                    else if (item.Contains("FB"))
+                    {
+                        lista.Add(1041);
+                    }
+                    else if (item.Contains("FB PLUS"))
+                    {
+                        lista.Add(1042);
+                    }
+                    else if (item.Contains("LIGHT ALL INCL"))
+                    {
+                        lista.Add(1043);
+                    }
+                    else if (item.Contains("ALL INCL"))
+                    {
+                        lista.Add(1044);
+                    }
+                    else if (item.Contains("ALL INCL CLASSIC"))
+                    {
+                        lista.Add(1045);
+                    }
+                    else if (item.Contains("ALL INCL PLUS"))
+                    {
+                        lista.Add(1046);
+                    }
+                    else if (item.Contains("ALL INCL PREMIUM"))
+                    {
+                        lista.Add(1047);
+                    }
+                }
+
+                //pobieram ID odpowiedzi powiązanej z hotelem
+                var response = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
+
+                //pobieram listę odpowiedzi powiązanych z odpowiedzią
+                var responseitems = _hotelRepository.GetResponseItem().Where(r => r.Response.Id == response.Id).ToList();
+
+                //pobieram listę pytań
+                var items2 = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
+                var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).Where(s => lista.Contains(s.Id)).OrderBy(x => x.ItemOrder);
 
                 foreach (var item in responseitems)
                 {
