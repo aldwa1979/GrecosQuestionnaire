@@ -602,6 +602,62 @@
                         <div class="clearfix"></div>
 
                     }
+                    else if (item.QuestionItemType == QuestionItemType.Date)
+                    {
+                        @if (!string.IsNullOrEmpty(item.Title))
+                        {
+                            <div class="col-md-@(12 - item.Parts) col-xs-@(12 - item.Parts)" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
+                                @item.Title
+                            </div>
+                        }
+                        <div>
+                            <div class="form-group row">
+                                <label for="from" class="col-sm-2 col-form-label">
+                                    from:
+                                </label>
+                                <div class="col-sm-1" style="padding-top: 5px">
+                                    <input type="date" name="@item.Id" id="from" value="@ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)]" />
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="to" class="col-sm-6 col-form-label" style="text-align:right">
+                                    to:
+                                </label>
+                                <div class="col-sm-1" style="padding-top: 5px; padding-left: 25px">
+                                    <input type="date" name="@(item.Id+"t")" id="to" value="@ViewData[(item.Id+"t").ToString(CultureInfo.InvariantCulture)]" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else if (item.QuestionItemType == QuestionItemType.Time)
+                    {
+                        @if (!string.IsNullOrEmpty(item.Title))
+                        {
+                            <div class="col-md-@(12 - item.Parts) col-xs-@(12 - item.Parts)" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
+                                @item.Title
+                            </div>
+                        }
+                        <div>
+                            <div class="form-group row">
+                                <label for="from" class="col-sm-2 col-form-label">
+                                    from:
+                                </label>
+                                <div class="col-sm-1" style="padding-top: 5px">
+                                    <input type="time" name="@item.Id" id="from" value="@ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)]" />
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="to" class="col-sm-6 col-form-label" style="text-align:right">
+                                    to:
+                                </label>
+                                <div class="col-sm-1" style="padding-top: 5px; padding-left: 25px">
+                                    <input type="time" name="@(item.Id+"t")" id="to" value="@ViewData[(item.Id+"t").ToString(CultureInfo.InvariantCulture)]" />
+                                </div>
+                            </div>
+                        </div>
+                    }
                     i++;
                     @*@Html.ValidationMessage(item.Id.ToString(), "*Pole jest wymagane")*@
                 }

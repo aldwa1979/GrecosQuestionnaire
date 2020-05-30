@@ -130,7 +130,6 @@ namespace GrecosQuestionnaire.Controllers
                 return View(items);
             }
 
-
             if (page == 9)
             {
                 List<Question> questions = new List<Question>();
@@ -281,15 +280,6 @@ namespace GrecosQuestionnaire.Controllers
 
             else if (page == 6)
             {
-                //Dictionary<string, string> roomList = new Dictionary<string, string>();
-
-                //foreach (var key in HttpContext.Session.Keys)
-                //{
-                //    roomList.Add(key.ToString(), HttpContext.Session.GetString(key));
-                //}
-
-                //var x = roomList.Where(p => p.Key == "2419");
-
                 page = 7;
             }
 
@@ -458,7 +448,7 @@ namespace GrecosQuestionnaire.Controllers
                 return View(items);
             }
 
-            else if (page == 1 || page == 2 || page == 3 || page == 4 || page == 5 || page == 6)
+            else if (page == 1 || page == 2 || page == 3 || page == 4 || page == 5 || page == 6 || page == 8)
             {
                 //pobieram ID odpowiedzi powiązanej z hotelem
                 var response = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
@@ -596,7 +586,6 @@ namespace GrecosQuestionnaire.Controllers
 
             }
 
-
             else if (page == 9)
             {
                 List<Question> questions = new List<Question>();
@@ -608,7 +597,7 @@ namespace GrecosQuestionnaire.Controllers
                     roomList.Add(key.ToString(), HttpContext.Session.GetString(key));
                 }
 
-                var x = roomList.Where(p => p.Key == "2419").Select(s => new { Value = s.Value.Split(',') });
+                var x = roomList.Where(p => p.Key == "3391").Select(s => new { Value = s.Value.Split(',') });
 
                 foreach (var item in x)
                 {
@@ -745,6 +734,16 @@ namespace GrecosQuestionnaire.Controllers
             else if (page == 6)
             {
                 page = 7;
+            }
+
+            else if (page == 7)
+            {
+                page = 8;
+            }
+
+            else if (page == 8)
+            {
+                page = 9;
             }
 
             else

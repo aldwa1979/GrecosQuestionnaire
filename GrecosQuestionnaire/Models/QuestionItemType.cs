@@ -29,6 +29,8 @@ namespace GrecosQuestionnaire.Models
 
         Rate6 = 11,
 
-        Date = 12
+        Date = 12,
+
+        Time = 13
     }
 }
