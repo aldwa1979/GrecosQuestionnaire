@@ -298,6 +298,11 @@ namespace GrecosQuestionnaire.Controllers
                 page = 10;
             }
 
+            else if (page == 10)
+            {
+                page = 11;
+            }
+
             else
             {
                 if (response == null)
@@ -388,6 +393,10 @@ namespace GrecosQuestionnaire.Controllers
             {
                 page = 9;
             }
+            else if (page == 11)
+            {
+                page = 10;
+            }
             return RedirectToAction("Index", new { page, hotel });
         }
 
@@ -433,6 +442,10 @@ namespace GrecosQuestionnaire.Controllers
             {
                 page = 9;
             }
+            else if (page == 11)
+            {
+                page = 10;
+            }
             return RedirectToAction("Edit", new { page , hotel});
         }
 
@@ -462,7 +475,7 @@ namespace GrecosQuestionnaire.Controllers
                 return View(items);
             }
 
-            else if (page == 1 || page == 2 || page == 3 || page == 4 || page == 5 || page == 6 || page == 8 || page == 10)
+            else if (page == 1 || page == 2 || page == 3 || page == 4 || page == 5 || page == 6 || page == 8 || page == 10 || page == 11)
             {
                 //pobieram ID odpowiedzi powiązanej z hotelem
                 var response = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
@@ -763,6 +776,11 @@ namespace GrecosQuestionnaire.Controllers
             else if (page == 9)
             {
                 page = 10;
+            }
+
+            else if (page == 10)
+            {
+                page = 11;
             }
 
             else

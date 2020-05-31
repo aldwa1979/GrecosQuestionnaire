@@ -201,60 +201,60 @@
 
                         <div class="col-md-@item.Parts col-xs-@item.Parts" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "")">
                             <div class="row" style="font-size: 10px; text-align: center; white-space: nowrap;">
-                                <div class="col-md-2 col-xs-2" style="padding: 0; padding-left: 5px;">
+                                <div class="col-md-1 col-xs-1" style="padding: 0; padding-left: 5px;">
                                     @((item.Items != null && item.Items.Split('\n').Length > 0) ? @item.Items.Split('\n')[0] : string.Empty)
                                 </div>
-                                <div class="col-md-2 col-xs-2" style="padding: 0; padding-left: 3px;">
+                                <div class="col-md-1 col-xs-1" style="padding: 0; padding-left: 3px;">
                                     @((item.Items != null && item.Items.Split('\n').Length > 1) ? @item.Items.Split('\n')[1] : string.Empty)
                                 </div>
-                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                <div class="col-md-1 col-xs-1" style="padding: 0;">
                                     @((item.Items != null && item.Items.Split('\n').Length > 2) ? @item.Items.Split('\n')[2] : string.Empty)
                                 </div>
-                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                <div class="col-md-1 col-xs-1" style="padding: 0;">
                                     @((item.Items != null && item.Items.Split('\n').Length > 3) ? @item.Items.Split('\n')[3] : string.Empty)
                                 </div>
-                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                <div class="col-md-1 col-xs-1" style="padding: 0;">
                                     @((item.Items != null && item.Items.Split('\n').Length > 4) ? @item.Items.Split('\n')[4] : string.Empty)
                                 </div>
-                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                <div class="col-md-1 col-xs-1" style="padding: 0;">
                                     @((item.Items != null && item.Items.Split('\n').Length > 5) ? @item.Items.Split('\n')[5] : string.Empty)
                                 </div>
-                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                <div class="col-md-1 col-xs-1" style="padding: 0;">
                                     @((item.Items != null && item.Items.Split('\n').Length > 6) ? @item.Items.Split('\n')[6] : string.Empty)
                                 </div>
                             </div>
                             <div class="row" style="text-align: center; padding-left: 5px;">
-                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                <div class="col-md-1 col-xs-1" style="padding: 0;">
                                     <input type="radio" name="@item.Id" id="test1" value="1"
                                            @(itemValue == "1" ? "checked='checked'" : string.Empty) />
 
                                 </div>
-                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                <div class="col-md-1 col-xs-1" style="padding: 0;">
                                     <input type="radio" name="@item.Id" id="test2" value="2"
                                            @(itemValue == "2" ? "checked='checked'" : string.Empty) />
 
                                 </div>
-                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                <div class="col-md-1 col-xs-1" style="padding: 0;">
                                     <input type="radio" name="@item.Id" id="test3" value="3"
                                            @(itemValue == "3" ? "checked='checked'" : string.Empty) />
 
                                 </div>
-                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                <div class="col-md-1 col-xs-1" style="padding: 0;">
                                     <input type="radio" name="@item.Id" id="test4" value="4"
                                            @(itemValue == "4" ? "checked='checked'" : string.Empty) />
 
                                 </div>
-                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                <div class="col-md-1 col-xs-1" style="padding: 0;">
                                     <input type="radio" name="@item.Id" id="test5" value="5"
                                            @(itemValue == "5" ? "checked='checked'" : string.Empty) />
 
                                 </div>
-                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                <div class="col-md-1 col-xs-1" style="padding: 0;">
                                     <input type="radio" name="@item.Id" id="test6" value="6"
                                            @(itemValue == "6" ? "checked='checked'" : string.Empty) />
 
                                 </div>
-                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                <div class="col-md-1 col-xs-1" style="padding: 0;">
                                     <input type="radio" name="@item.Id" id="test7" value="7"
                                            @(itemValue == "7" ? "checked='checked'" : string.Empty) />
 
@@ -444,12 +444,12 @@
 
                             @if (!string.IsNullOrEmpty(item.Title))
                             {
-                                <div class="col-md-@(12 - item.Parts) col-xs-@(12 - item.Parts)" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
+                                <div class="col-md-@(12 - item.Parts) col-xs-@(12 - item.Parts)" style="padding-left: 20px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
                                     @item.Title
                                 </div>
                             }
 
-                            <div class="col-sm-6">
+                            <div class="col-sm-7">
                                 <div class="dropdown">
                                     <a class="dropdown-toggle" data-toggle="dropdown">
                                         Select <span class="caret"></span>
@@ -503,7 +503,7 @@
                     else if (item.QuestionItemType == QuestionItemType.TextBox)
                     {
                         <div class="form-group row">
-                            <label for="textbox" class="col-sm-5 col-form-label">@item.Title</label>
+                            <label for="textbox" class="col-sm-5 col-form-label" style="padding-left:20px">@item.Title</label>
                             <div class="col-sm-7">
                                 <input type="text" class="form-control" id="textbox" name="@item.Id" value="@ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)]" />
                             </div>
