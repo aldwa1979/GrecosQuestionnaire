@@ -14,6 +14,7 @@ namespace GrecosQuestionnaire.Models
         }
 
         public DbSet<HotelImportModel> RoomTypes { get; set; }
+        //public DbSet<HotelImportTest> RoomTypesTest { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -22,6 +23,11 @@ namespace GrecosQuestionnaire.Models
             {
                 entity.HasNoKey();
             });
+
+            //modelBuilder.Entity<HotelImportTest>(entity =>
+            //{
+            //    entity.HasNoKey();
+            //});
         }
     }
 }

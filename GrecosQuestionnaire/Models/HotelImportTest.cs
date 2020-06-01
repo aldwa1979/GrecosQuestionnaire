@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace GrecosQuestionnaire.Models
 {
-    public class HotelImportModel
+    public class HotelImportTest
     {
         public string HotelCode { get; set; }
         public string Name { get; set; }
