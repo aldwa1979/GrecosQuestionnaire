@@ -29,7 +29,6 @@ namespace GrecosQuestionnaire.Controllers
             return View(model);
         }
 
-        [HttpPost]
         [Authorize(Roles = "Admin")]
         public IActionResult Import()
         {

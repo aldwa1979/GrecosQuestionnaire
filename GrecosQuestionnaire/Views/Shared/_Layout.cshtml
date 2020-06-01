@@ -23,7 +23,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
+                    @*<partial name="_LoginPartial" />*@
                     <ul class="navbar-nav flex-grow-1">
                         @if (signInManager.IsSignedIn(User))
                         {
@@ -69,7 +69,7 @@
         </nav>
     </header>
     <div class="container">
-        <main role="main" class="body-content" style="margin-top: 100px; @*class="pb-3"*@>
+        <main role="main" class="body-content" style="margin-top: 100px"; @*class="pb-3"*@>
             @RenderBody()
         </main>
     </div>
