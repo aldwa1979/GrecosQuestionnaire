@@ -8,14 +8,14 @@
     <div class="col-md-4" style="padding-top: 22px;">
         <a href="@Url.Action("Import")" class="btn btn-primary pull-right">
             <span class="glyphicon glyphicon-arrow-down"></span>
-            Import z systemu Magic
+            Import from Magicware
         </a>
     </div>
 </div>
 
 
 <form class="navbar-form navbar-left" role="search" style="background: #3DB6DB; color: white; width: 100%; padding-bottom: 7px; padding-top: 7px;">
-    Filtruj według: <br />
+    Filter by: <br />
     @*<div class="form-group" style="margin-top: 7px;">
             @Html.TextBox("Imię", "FirstName", GridFilterType.String, GridFilterComparison.Ct)
             @Html.GridFilterTextPlaceholder("Nazwisko", "LastName", GridFilterType.String, GridFilterComparison.Ct)
@@ -33,11 +33,11 @@
 <table class="table table-striped table-hover">
     <thead>
         <tr>
-            <th>Kod Hotelu</th>
-            <th>Nazwa Hotelu</th>
-            <th>Kraj</th>
-            <th>Destynacja</th>
-            <th>Sezon</th>
+            <th>Hotel Code</th>
+            <th>Hotel Name</th>
+            <th>Country</th>
+            <th>Destination</th>
+            <th>Season</th>
             <th></th>
             <th></th>
         </tr>
@@ -62,7 +62,7 @@
                     @item.Season
                 </td>
                 <td>
-                    <a class="btn-lg" href="@Url.Action("Assign", "Hotel", new { id = @item.Id }, null)" title="Przypisz">
+                    <a class="btn-lg" href="@Url.Action("Assign", "Hotel", new { id = @item.Id }, null)" title="Assign">
                         <span class="glyphicon glyphicon-import">_</span>
                     </a>
                 </td>

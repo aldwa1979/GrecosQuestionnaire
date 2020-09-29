@@ -10,25 +10,25 @@ namespace GrecosQuestionnaire.Models
     {
         public long Id { get; set; }
 
-        [Display(Name = "Strona")]
+        [Display(Name = "Page")]
         public virtual int Page { get; set; }
 
-        [Display(Name = "Kolejność")]
+        [Display(Name = "Order")]
         public virtual int Order { get; set; }
 
-        [Display(Name = "Tytuł")]
+        [Display(Name = "Title")]
         public virtual string Title { get; set; }
 
-        [Display(Name = "Podtytuł")]
+        [Display(Name = "Subtitle")]
         public virtual string Subtitle { get; set; }
 
-        [Display(Name = "Usunięty")]
+        [Display(Name = "Removed")]
         public virtual bool Removed { get; set; }
 
-        [Display(Name = "Nagłówek")]
+        [Display(Name = "Heading")]
         public bool IsHeader { get; set; }
 
-        [Display(Name = "Klasa")]
+        [Display(Name = "Class")]
         public string Class { get; set; }
     }
 }

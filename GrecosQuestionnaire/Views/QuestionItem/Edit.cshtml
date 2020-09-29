@@ -1,11 +1,11 @@
 ﻿@model GrecosQuestionnaire.Models.QuestionItemModel
 
 @{
-    ViewBag.Title = "Edycja pytania";
+    ViewBag.Title = "Edit the question";
 }
 
-<h2>Dodawanie partnera</h2>
-@Html.ActionLink("Wróć do listy pytań", "Index", "Question")
+    <h2>Edit the question</h2>
+@Html.ActionLink("Return to the question list", "Index", "Question")
 
 @using (Html.BeginForm("Edit", "QuestionItem", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {

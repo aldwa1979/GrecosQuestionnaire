@@ -10,7 +10,7 @@ namespace GrecosQuestionnaire.ViewModel
     public class UserViewModel
     {
         [Required]
-        [Display(Name = "E-mail")]
+        [Display(Name = "Email")]
         public string Email { get; set; }
 
         [Required]
