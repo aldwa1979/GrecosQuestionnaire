@@ -37,15 +37,21 @@
             }
             else
             {
-                <a class="btn btn-default" href="@Url.Action("Back", new { page = page, hotel = hotel })" style="background-color:#005EA8 ; color:white">
+                <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="back">
                     Back
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                </a>
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </button>
             }
-            <button type="submit" class="btn btn-primary" style="background-color:#005EA8" value="Save">
+            <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="next">
                 Next Page
                 <span class="glyphicon glyphicon-chevron-right"></span>
             </button>
+
+            <button type="submit" class="btn btn-primary alert-danger" name="action" value="save">
+                Save and Exit
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </button>
+            <br />
         </div>
 
         /*Zliczabie petli*/
@@ -764,13 +770,19 @@
             }
             else
             {
-                <a class="btn btn-default" href="@Url.Action("Back", new { page = page, hotel = hotel })" style="background-color:#005EA8 ; color:white">
+                <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="back">
                     Back
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                </a>
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </button>
             }
-            <button type="submit" class="btn btn-primary" style="background-color:#005EA8" value="Save">
+
+            <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="next">
                 Next Page
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </button>
+
+            <button type="submit" class="btn btn-primary alert-danger" name="action" value="save">
+                Save and Exit
                 <span class="glyphicon glyphicon-chevron-right"></span>
             </button>
         </div>
@@ -788,7 +800,13 @@
     <script>
 
         $(function () {
-            $('div.show1').hide();
+            if ('input.show1' == '1') {
+                $('div.show1').show('slow');
+            }
+            else {
+                $('div.show1').hide();
+            }
+            //$('div.show1').hide();
             $('div.show2').hide();
             $('div.show3').hide();
             $('div.show4').hide();

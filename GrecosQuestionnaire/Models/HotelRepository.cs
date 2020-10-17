@@ -27,7 +27,7 @@ namespace GrecosQuestionnaire.Models
             return _context.Partners.ToList();
         }
 
-        //Szukam wszystkich powiązań partnerów i użytkownikó
+        //Szukam wszystkich powiązań partnerów i użytkowników
         public List<UserPartnerModel> GetUsersPartners()
         {
             return _context.UsersPartners.ToList();

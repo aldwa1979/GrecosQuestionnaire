@@ -15,15 +15,6 @@
 }
 
 <div class="col-md-8" style="margin-top: 40px;">
-    @*<div style="text-align: center; ">
-
-            <span class="badge @(page != 1 ? "gray": string.Empty)">1</span>
-            <span class="badge @(page != 2 ? "gray": string.Empty)">2</span>
-            <span class="badge @(page != 3 ? "gray": string.Empty)">3</span>
-            <span class="badge @(page != 4 ? "gray": string.Empty)">4</span>
-            <span class="badge @(page != 5 ? "gray": string.Empty)">5</span>
-            <span class="badge @(page != 6 ? "gray": string.Empty)">6</span>
-        </div>*@
 
     @using (Html.BeginForm("Edit", "Survey", FormMethod.Post, new { role = "form", @style = "color: #005EA8" }))
     {
@@ -37,15 +28,21 @@
             }
             else
             {
-                <a class="btn btn-default" href="@Url.Action("BackEdit", new { page = page, hotel = hotel })" style="background-color:#005EA8 ; color:white">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
+                <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="back">
                     Back
-                </a>
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </button>
             }
-            <button type="submit" class="btn btn-primary" style="background-color:#005EA8" value="Save">
+            <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="next">
                 Next Page
                 <span class="glyphicon glyphicon-chevron-right"></span>
             </button>
+
+            <button type="submit" class="btn btn-primary alert-danger" name="action" value="save">
+                Save and Exit
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </button>
+            <br />
         </div>
 
         /*Zliczabie petli*/
@@ -764,13 +761,19 @@
             }
             else
             {
-                <a class="btn btn-default" href="@Url.Action("BackEdit", new { page = page, hotel = hotel })" style="background-color:#005EA8 ; color:white">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
+                <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="back">
                     Back
-                </a>
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </button>
             }
-            <button type="submit" class="btn btn-primary" style="background-color:#005EA8" value="Save">
+
+            <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="next">
                 Next Page
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </button>
+
+            <button type="submit" class="btn btn-primary alert-danger" name="action" value="save">
+                Save and Exit
                 <span class="glyphicon glyphicon-chevron-right"></span>
             </button>
         </div>
@@ -780,8 +783,6 @@
 <div class="col-md-3"></div>
 <div class="clearfix"></div>
 
-
-@*</div>*@
 
 @section Scripts {
 

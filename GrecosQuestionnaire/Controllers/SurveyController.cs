@@ -226,7 +226,7 @@ namespace GrecosQuestionnaire.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(IFormCollection formCollection, bool back = false)
+        public IActionResult Index(IFormCollection formCollection, string action, bool back = false)
         {
             int page = int.Parse(formCollection["page"]);
 
@@ -252,202 +252,258 @@ namespace GrecosQuestionnaire.Controllers
                 }
             }
 
-            if (page == 1)
+            if (action == "next")
             {
-                
-                page = 2;
-            }
-
-            else if (page == 2)
-            {
-                page = 3;
-            }
-
-            else if (page == 3)
-            {
-                page = 4;
-            }
-
-            else if (page == 4)
-            {
-                page = 5;
-            }
-
-            else if (page == 5)
-            {
-                page = 6;
-            }
-
-            else if (page == 6)
-            {
-                page = 7;
-            }
-
-            else if (page == 7)
-            {
-                page = 8;
-            }
-
-            else if (page == 8)
-            {
-                page = 9;
-            }
-
-            else if (page == 9)
-            {
-                page = 10;
-            }
-
-            else if (page == 10)
-            {
-                page = 11;
-            }
-
-            else
-            {
-                if (response == null)
+                if (page == 1)
                 {
-                    var updateHotel = _hotelRepository.GetHotelId(hotel);
-                    HotelModel hotelModel = updateHotel;
-                    hotelModel.Response = true;
-                    _hotelRepository.UploadHotels(hotelModel);
-
-
-                    ResponseModel responseModel = new ResponseModel();
-                    responseModel.ResponseDate = DateTime.Now;
-                    responseModel.HotelId = hotel;
-                    responseModel.UserName = User.Identity.Name;
-
-                    _hotelRepository.UploadResponses(responseModel);
-
-                    foreach (var key in HttpContext.Session.Keys)
-                    {
-                        string stringkey = key.ToString();
-                        string replaced = stringkey.Replace("t", string.Empty);
-
-                        var responseId = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
-                        int itemId;
-
-                        if (int.TryParse(replaced, out itemId))
-                        {
-                            var questionItem = _hotelRepository.GetQuestionItem(itemId);
-                            ResponseItemModel responseItem = new ResponseItemModel();
-                            responseItem.QuestionItem = questionItem;
-                            responseItem.RawValue = HttpContext.Session.GetString(key);
-                            responseItem.Value = key.ToString();
-                            responseItem.Response = responseId;
-
-                            _hotelRepository.UploadResponseItems(responseItem);
-                        }
-                    }
-
-                    return View("Submit");
+                    page = 2;
+                }
+                else if (page == 2)
+                {
+                    page = 3;
+                }
+                else if (page == 3)
+                {
+                    page = 4;
+                }
+                else if (page == 4)
+                {
+                    page = 5;
+                }
+                else if (page == 5)
+                {
+                    page = 6;
+                }
+                else if (page == 6)
+                {
+                    page = 7;
+                }
+                else if (page == 7)
+                {
+                    page = 8;
+                }
+                else if (page == 8)
+                {
+                    page = 9;
+                }
+                else if (page == 9)
+                {
+                    page = 10;
+                }
+                else if (page == 10)
+                {
+                    page = 11;
                 }
                 else
                 {
-                    return View("Index");
+                    return UpdateDatabase(hotel, response);
                 }
             }
-            return RedirectToAction("Index", new { page , hotel});
-        }
+            else if (action == "save")
+            {
+                if (page == 1)
+                {
+                    return UpdateDatabase(hotel, response);
+                }
 
-        public IActionResult Back(int page, int hotel)
-        {
-            if (page == 1)
-            {
-                page = 1;
+                else if (page == 2)
+                {
+                    return UpdateDatabase(hotel, response);
+                }
+
+                else if (page == 3)
+                {
+                    return UpdateDatabase(hotel, response);
+                }
+
+                else if (page == 4)
+                {
+                    return UpdateDatabase(hotel, response);
+                }
+
+                else if (page == 5)
+                {
+                    return UpdateDatabase(hotel, response);
+                }
+
+                else if (page == 6)
+                {
+                    return UpdateDatabase(hotel, response);
+                }
+
+                else if (page == 7)
+                {
+                    return UpdateDatabase(hotel, response);
+                }
+
+                else if (page == 8)
+                {
+                    return UpdateDatabase(hotel, response);
+                }
+
+                else if (page == 9)
+                {
+                    return UpdateDatabase(hotel, response);
+                }
+
+                else if (page == 10)
+                {
+                    return UpdateDatabase(hotel, response);
+                }
+                else
+                {
+                    return UpdateDatabase(hotel, response);
+                }
             }
-            else if (page == 2)
+            else if (action == "back")
             {
-                page = 1;
+                if (page == 1)
+                {
+                    page = 1;
+                }
+                else if (page == 2)
+                {
+                    page = 1;
+                }
+                else if (page == 3)
+                {
+                    page = 2;
+                }
+                else if (page == 4)
+                {
+                    page = 3;
+                }
+                else if (page == 5)
+                {
+                    page = 4;
+                }
+                else if (page == 6)
+                {
+                    page = 5;
+                }
+                else if (page == 7)
+                {
+                    page = 6;
+                }
+                else if (page == 8)
+                {
+                    page = 7;
+                }
+                else if (page == 9)
+                {
+                    page = 8;
+                }
+                else if (page == 10)
+                {
+                    page = 9;
+                }
+                else if (page == 11)
+                {
+                    page = 10;
+                }
             }
-            else if (page == 3)
-            {
-                page = 2;
-            }
-            else if (page == 4)
-            {
-                page = 3;
-            }
-            else if (page == 5)
-            {
-                page = 4;
-            }
-            else if (page == 6)
-            {
-                page = 5;
-            }
-            else if (page == 7)
-            {
-                page = 6;
-            }
-            else if (page == 8)
-            {
-                page = 7;
-            }
-            else if (page == 9)
-            {
-                page = 8;
-            }
-            else if (page == 10)
-            {
-                page = 9;
-            }
-            else if (page == 11)
-            {
-                page = 10;
-            }
+
+          
             return RedirectToAction("Index", new { page, hotel });
         }
 
-        public IActionResult BackEdit(int page, int hotel)
-        {
-            if (page == 1)
-            {
-                page = 1;
-            }
-            else if (page == 2)
-            {
-                page = 1;
-            }
-            else if (page == 3)
-            {
-                page = 2;
-            }
-            else if (page == 4)
-            {
-                page = 3;
-            }
-            else if (page == 5)
-            {
-                page = 4;
-            }
-            else if (page == 6)
-            {
-                page = 5;
-            }
-            else if (page == 7)
-            {
-                page = 6;
-            }
-            else if (page == 8)
-            {
-                page = 7;
-            }
-            else if (page == 9)
-            {
-                page = 8;
-            }
-            else if (page == 10)
-            {
-                page = 9;
-            }
-            else if (page == 11)
-            {
-                page = 10;
-            }
-            return RedirectToAction("Edit", new { page , hotel});
-        }
+        //public IActionResult Back(int page, int hotel)
+        //{
+        //    if (page == 1)
+        //    {
+        //        page = 1;
+        //    }
+        //    else if (page == 2)
+        //    {
+        //        page = 1;
+        //    }
+        //    else if (page == 3)
+        //    {
+        //        page = 2;
+        //    }
+        //    else if (page == 4)
+        //    {
+        //        page = 3;
+        //    }
+        //    else if (page == 5)
+        //    {
+        //        page = 4;
+        //    }
+        //    else if (page == 6)
+        //    {
+        //        page = 5;
+        //    }
+        //    else if (page == 7)
+        //    {
+        //        page = 6;
+        //    }
+        //    else if (page == 8)
+        //    {
+        //        page = 7;
+        //    }
+        //    else if (page == 9)
+        //    {
+        //        page = 8;
+        //    }
+        //    else if (page == 10)
+        //    {
+        //        page = 9;
+        //    }
+        //    else if (page == 11)
+        //    {
+        //        page = 10;
+        //    }
+        //    return RedirectToAction("Index", new { page, hotel });
+        //}
+
+        //public IActionResult BackEdit(int page, int hotel)
+        //{
+        //    if (page == 1)
+        //    {
+        //        page = 1;
+        //    }
+        //    else if (page == 2)
+        //    {
+        //        page = 1;
+        //    }
+        //    else if (page == 3)
+        //    {
+        //        page = 2;
+        //    }
+        //    else if (page == 4)
+        //    {
+        //        page = 3;
+        //    }
+        //    else if (page == 5)
+        //    {
+        //        page = 4;
+        //    }
+        //    else if (page == 6)
+        //    {
+        //        page = 5;
+        //    }
+        //    else if (page == 7)
+        //    {
+        //        page = 6;
+        //    }
+        //    else if (page == 8)
+        //    {
+        //        page = 7;
+        //    }
+        //    else if (page == 9)
+        //    {
+        //        page = 8;
+        //    }
+        //    else if (page == 10)
+        //    {
+        //        page = 9;
+        //    }
+        //    else if (page == 11)
+        //    {
+        //        page = 10;
+        //    }
+        //    return RedirectToAction("Edit", new { page, hotel });
+        //}
 
         public IActionResult Edit(int? page, int hotel)
         {
@@ -587,14 +643,14 @@ namespace GrecosQuestionnaire.Controllers
                 }
 
                 //pobieram ID odpowiedzi powiązanej z hotelem
-                    var response = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
+                var response = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
 
                 //pobieram listę odpowiedzi powiązanych z odpowiedzią
                 var responseitems = _hotelRepository.GetResponseItem().Where(r => r.Response.Id == response.Id).ToList();
 
                 //pobieram listę pytań
-                var items2 =  _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
-                var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).Where(s=>lista.Contains(s.Id)).OrderBy(x => x.ItemOrder);
+                var items2 = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
+                var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).Where(s => lista.Contains(s.Id)).OrderBy(x => x.ItemOrder);
 
                 foreach (var item in responseitems)
                 {
@@ -708,7 +764,7 @@ namespace GrecosQuestionnaire.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(IFormCollection formCollection, bool back = false)
+        public IActionResult Edit(IFormCollection formCollection, string action, bool back = false)
         {
             int page = int.Parse(formCollection["page"]);
             int hotel = formCollection["hotel"].ToString().Length;
@@ -722,6 +778,7 @@ namespace GrecosQuestionnaire.Controllers
             }
 
             //TempData["hotel"] = hotel;
+            var response = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
 
             foreach (var formData in formCollection)
             {
@@ -733,65 +790,207 @@ namespace GrecosQuestionnaire.Controllers
                 }
             }
 
-            if (page == 1)
+            if (action == "next")
             {
-                page = 2;
+                if (page == 1)
+                {
+                    page = 2;
+                }
+                else if (page == 2)
+                {
+                    page = 3;
+                }
+                else if (page == 3)
+                {
+                    page = 4;
+                }
+                else if (page == 4)
+                {
+                    page = 5;
+                }
+                else if (page == 5)
+                {
+                    page = 6;
+                }
+                else if (page == 6)
+                {
+                    page = 7;
+                }
+                else if (page == 7)
+                {
+                    page = 8;
+                }
+                else if (page == 8)
+                {
+                    page = 9;
+                }
+                else if (page == 9)
+                {
+                    page = 10;
+                }
+                else if (page == 10)
+                {
+                    page = 11;
+                }
+                else
+                {
+                    return UpdateDatabase(hotel, response);
+                }
             }
-
-            else if (page == 2)
+            else if (action == "save")
             {
-                page = 3;
-            }
+                if (page == 1)
+                {
+                    return UpdateDatabase(hotel, response);
+                }
 
-            else if (page == 3)
+                else if (page == 2)
+                {
+                    return UpdateDatabase(hotel, response);
+                }
+
+                else if (page == 3)
+                {
+                    return UpdateDatabase(hotel, response);
+                }
+
+                else if (page == 4)
+                {
+                    return UpdateDatabase(hotel, response);
+                }
+
+                else if (page == 5)
+                {
+                    return UpdateDatabase(hotel, response);
+                }
+
+                else if (page == 6)
+                {
+                    return UpdateDatabase(hotel, response);
+                }
+
+                else if (page == 7)
+                {
+                    return UpdateDatabase(hotel, response);
+                }
+
+                else if (page == 8)
+                {
+                    return UpdateDatabase(hotel, response);
+                }
+
+                else if (page == 9)
+                {
+                    return UpdateDatabase(hotel, response);
+                }
+
+                else if (page == 10)
+                {
+                    return UpdateDatabase(hotel, response);
+                }
+                else
+                {
+                    return UpdateDatabase(hotel, response);
+                }
+            }
+            else if (action == "back")
             {
-                page = 4;
+                if (page == 1)
+                {
+                    page = 1;
+                }
+                else if (page == 2)
+                {
+                    page = 1;
+                }
+                else if (page == 3)
+                {
+                    page = 2;
+                }
+                else if (page == 4)
+                {
+                    page = 3;
+                }
+                else if (page == 5)
+                {
+                    page = 4;
+                }
+                else if (page == 6)
+                {
+                    page = 5;
+                }
+                else if (page == 7)
+                {
+                    page = 6;
+                }
+                else if (page == 8)
+                {
+                    page = 7;
+                }
+                else if (page == 9)
+                {
+                    page = 8;
+                }
+                else if (page == 10)
+                {
+                    page = 9;
+                }
+                else if (page == 11)
+                {
+                    page = 10;
+                }
             }
+            
+            return RedirectToAction("Edit", new { page, hotel });
+        }
 
-            else if (page == 4)
+        private IActionResult UpdateDatabase(int hotel, ResponseModel response)
+        {
+            if (response == null)
             {
-                page = 5;
-            }
+                var updateHotel = _hotelRepository.GetHotelId(hotel);
+                HotelModel hotelModel = updateHotel;
+                hotelModel.Response = true;
+                _hotelRepository.UploadHotels(hotelModel);
 
-            else if (page == 5)
-            {
-                page = 6;
-            }
+                ResponseModel responseModel = new ResponseModel();
+                responseModel.ResponseDate = DateTime.Now;
+                responseModel.HotelId = hotel;
+                responseModel.UserName = User.Identity.Name;
 
-            else if (page == 6)
-            {
-                page = 7;
-            }
+                _hotelRepository.UploadResponses(responseModel);
 
-            else if (page == 7)
-            {
-                page = 8;
-            }
+                foreach (var key in HttpContext.Session.Keys)
+                {
+                    string stringkey = key.ToString();
+                    string replaced = stringkey.Replace("t", string.Empty);
 
-            else if (page == 8)
-            {
-                page = 9;
-            }
+                    var responseId = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
+                    int itemId;
 
-            else if (page == 9)
-            {
-                page = 10;
-            }
+                    if (int.TryParse(replaced, out itemId))
+                    {
+                        var questionItem = _hotelRepository.GetQuestionItem(itemId);
+                        ResponseItemModel responseItem = new ResponseItemModel();
+                        responseItem.QuestionItem = questionItem;
+                        responseItem.RawValue = HttpContext.Session.GetString(key);
+                        responseItem.Value = key.ToString();
+                        responseItem.Response = responseId;
 
-            else if (page == 10)
-            {
-                page = 11;
-            }
+                        _hotelRepository.UploadResponseItems(responseItem);
+                    }
+                }
+                return View("Submit");
 
-            else
+            }
+            else if (response != null)
             {
                 foreach (var key in HttpContext.Session.Keys)
                 {
                     string stringkey = key.ToString();
                     string replaced = stringkey.Replace("t", string.Empty);
 
-                    var response = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
-                    var responseId = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).Select(x=>x.Id).SingleOrDefault();
+                    var responseId = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).Select(x => x.Id).SingleOrDefault();
                     int itemId;
 
                     if (int.TryParse(replaced, out itemId))
@@ -801,7 +1000,7 @@ namespace GrecosQuestionnaire.Controllers
 
                         ResponseItemModel responseItem = new ResponseItemModel();
 
-                        var responseItemId = _hotelRepository.GetResponseItem().Where(p => p.Response.Id == responseId && p.QuestionItem.Id == questionItemId && p.Value == key.ToString()).Select(id=>id.Id).SingleOrDefault();
+                        var responseItemId = _hotelRepository.GetResponseItem().Where(p => p.Response.Id == responseId && p.QuestionItem.Id == questionItemId && p.Value == key.ToString()).Select(id => id.Id).SingleOrDefault();
 
                         responseItem.Id = responseItemId;
                         responseItem.QuestionItem = questionItem;
@@ -814,7 +1013,8 @@ namespace GrecosQuestionnaire.Controllers
                 }
                 return View("Submit");
             }
-            return RedirectToAction("Edit", new { page , hotel });
+            else
+                return View("Index");
         }
     }
 }
