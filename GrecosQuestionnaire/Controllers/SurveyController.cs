@@ -544,6 +544,11 @@ namespace GrecosQuestionnaire.Controllers
 
                 foreach (var item in responseitems)
                 {
+                    if (item.QuestionItem.Id==26)
+                    {
+                        var dana = item.RawValue;
+                        ViewBag.Number = Int32.Parse(dana);
+                    }
                     ViewData[item.Value] = item.RawValue;
                 }
 
