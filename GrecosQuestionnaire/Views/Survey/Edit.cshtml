@@ -72,8 +72,6 @@
                     @Html.Label(question.Title, question.Title, new { @class = "control-label", @style = "font-weight: bold ;color: #005EA8; margin-bottom: 0; font-size: 1.1em;" })
                 </div>
 
-
-
                 <div id="@panelValue">
                     @if (!string.IsNullOrEmpty(question.Subtitle))
                     {
@@ -805,8 +803,6 @@
 
     <script>
 
-
-
         $(function () {
             $('div.show1').hide();
             $('div.show2').hide();
@@ -836,11 +832,51 @@
                 }
             });
         });
+    </script>
+
+    @if (dana == 1)
+    {
+        <script>
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 2)
+    {
+        <script>
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show2').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 3)
+    {
+        <script>
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show2').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show3').show('slow')
+            });
+        </script>
+    }
 
 
-        $(document).ready(function () {
-            $('div.show3').show('slow');
-        });
+    <script>
+
+        //$(document).ready(function () {
+        //    $('div.show3').show('slow');
+        //});
 
 
         $(document).on("change", "input.show1", function () {

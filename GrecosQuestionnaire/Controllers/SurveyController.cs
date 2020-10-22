@@ -221,6 +221,10 @@ namespace GrecosQuestionnaire.Controllers
                 ViewBag.Hotel = hotel;
                 ViewData["page"] = page;
 
+                int number = 0;
+                int zmienna26 = (Int32.TryParse(HttpContext.Session.GetString("26"), out number)) ? Int32.Parse(HttpContext.Session.GetString("26")) : number;
+                ViewBag.Number = zmienna26;
+
                 return View(items);
             }
         }
@@ -542,12 +546,14 @@ namespace GrecosQuestionnaire.Controllers
                 //pobieram listę pytań
                 var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
 
+                int zmienna26zBazy = 0;
+
                 foreach (var item in responseitems)
                 {
-                    if (item.QuestionItem.Id==26)
+                    if (item.QuestionItem.Id == 26)
                     {
-                        var dana = item.RawValue;
-                        ViewBag.Number = Int32.Parse(dana);
+                        zmienna26zBazy = Int32.Parse(item.RawValue);
+                        //ViewBag.Number = Int32.Parse(dana);
                     }
                     ViewData[item.Value] = item.RawValue;
                 }
@@ -559,6 +565,18 @@ namespace GrecosQuestionnaire.Controllers
 
                 ViewBag.Hotel = hotel;
                 ViewData["page"] = page;
+
+                int number = 0;
+                int zmienna26 = (Int32.TryParse(HttpContext.Session.GetString("26"), out number)) ? Int32.Parse(HttpContext.Session.GetString("26")) : number;
+
+                if (zmienna26 == 0)
+                {
+                    ViewBag.Number = zmienna26zBazy;
+                }
+                else
+                {
+                    ViewBag.Number = zmienna26;
+                }
 
                 return View(items);
             }
