@@ -17,15 +17,6 @@
 }
 
 <div class="col-md-8" style="margin-top: 40px;">
-    @*<div style="text-align: center; ">
-
-            <span class="badge @(page != 1 ? "gray": string.Empty)">1</span>
-            <span class="badge @(page != 2 ? "gray": string.Empty)">2</span>
-            <span class="badge @(page != 3 ? "gray": string.Empty)">3</span>
-            <span class="badge @(page != 4 ? "gray": string.Empty)">4</span>
-            <span class="badge @(page != 5 ? "gray": string.Empty)">5</span>
-            <span class="badge @(page != 6 ? "gray": string.Empty)">6</span>
-        </div>*@
 
     @using (Html.BeginForm("Index", "Survey", FormMethod.Post, new { role = "form", @style = "color: #005EA8" }))
     {
@@ -44,15 +35,28 @@
                     <span class="glyphicon glyphicon-chevron-right"></span>
                 </button>
             }
-            <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="next">
-                Next Page
-                <span class="glyphicon glyphicon-chevron-right"></span>
-            </button>
 
-            <button type="submit" class="btn btn-primary alert-danger" name="action" value="save">
-                Save and Exit
-                <span class="glyphicon glyphicon-chevron-right"></span>
-            </button>
+            @if (page == 11)
+            {
+                <button type="submit" class="btn btn-primary alert-danger" name="action" value="save">
+                    Save and Exit
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </button>
+            }
+
+            else
+            {
+                <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="next">
+                    Next Page
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </button>
+
+                <button type="submit" class="btn btn-primary alert-danger" name="action" value="save">
+                    Save and Exit
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </button>
+            }
+
             <br />
         </div>
 
@@ -791,15 +795,26 @@
                 </button>
             }
 
-            <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="next">
-                Next Page
-                <span class="glyphicon glyphicon-chevron-right"></span>
-            </button>
+            @if (page == 11)
+            {
+                <button type="submit" class="btn btn-primary alert-danger" name="action" value="save">
+                    Save and Exit
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </button>
+            }
 
-            <button type="submit" class="btn btn-primary alert-danger" name="action" value="save">
-                Save and Exit
-                <span class="glyphicon glyphicon-chevron-right"></span>
-            </button>
+            else
+            {
+                <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="next">
+                    Next Page
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </button>
+
+                <button type="submit" class="btn btn-primary alert-danger" name="action" value="save">
+                    Save and Exit
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </button>
+            }
         </div>
     }
 
@@ -849,6 +864,10 @@
     {
         <script>
             $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
                 $('div.show1').show('slow')
             });
         </script>
@@ -856,6 +875,10 @@
     else if (dana == 2)
     {
         <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
             $(document).ready(function () {
                 $('div.show1').show('slow')
             });
@@ -869,6 +892,10 @@
     {
         <script>
             $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
                 $('div.show1').show('slow')
             });
 
@@ -881,11 +908,560 @@
             });
         </script>
     }
+    else if (dana == 4)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
 
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show2').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show3').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show4').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 5)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show2').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show3').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show4').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show5').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 6)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show2').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show3').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show4').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show5').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show6').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 7)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show2').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show3').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show4').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show5').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show6').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show7').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 8)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show2').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show3').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show4').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show5').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show6').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show7').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show8').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 9)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show2').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show3').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show4').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show5').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show6').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show7').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show8').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show9').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 10)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show2').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show3').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show4').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show5').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show6').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show7').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show8').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show9').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show10').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 11)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show2').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show3').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show4').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show5').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show6').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show7').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show8').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show9').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show10').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show11').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 12)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show2').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show3').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show4').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show5').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show6').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show7').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show8').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show9').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show10').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show11').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show12').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 13)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show2').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show3').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show4').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show5').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show6').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show7').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show8').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show9').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show10').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show11').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show12').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show13').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 14)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show2').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show3').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show4').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show5').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show6').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show7').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show8').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show9').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show10').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show11').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show12').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show13').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show14').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 15)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show2').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show3').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show4').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show5').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show6').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show7').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show8').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show9').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show10').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show11').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show12').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show13').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show14').show('slow')
+            });
+
+            $(document).ready(function () {
+                $('div.show15').show('slow')
+            });
+        </script>
+    }
 
     <script>
-
-
 
         $(document).on("change", "input.show1", function () {
             $('div.show1').show('slow');
@@ -1098,6 +1674,11 @@
             });
         });
 
+        $(document).ready(function () {
+            $("#flip16").click(function () {
+                $("#panel16").slideToggle("slow");
+            });
+        });
 
         (function ($) {
             // http://itmeze.com/2010/12/checkbox-has-to-be-checked-with-unobtrusive-jquery-validation-and-asp-net-mvc-3/
@@ -1116,14 +1697,14 @@
     </script>
 
     <style>
-        #panel1, #flip1, #panel2, #flip2, #panel3, #flip3, #panel4, #flip4, #panel5, #flip5, #panel6, #flip6, #panel7, #flip7, #panel8, #flip8, #panel9, #flip9, #panel10, #flip10, #panel11, #flip11, #panel12, #flip12, #panel13, #flip13, #panel14, #flip14, #panel15, #flip15 {
+        #panel1, #flip1, #panel2, #flip2, #panel3, #flip3, #panel4, #flip4, #panel5, #flip5, #panel6, #flip6, #panel7, #flip7, #panel8, #flip8, #panel9, #flip9, #panel10, #flip10, #panel11, #flip11, #panel12, #flip12, #panel13, #flip13, #panel14, #flip14, #panel15, #flip15, #panel16, #flip16 {
             padding: 5px;
             text-align: center;
             background-color: #e5eecc;
             border: solid 1px #c3c3c3;
         }
 
-        #panel1, #panel2, #panel3, #panel4, #panel5, #panel6, #panel7, #panel8, #panel9, #panel10, #panel11, #panel12, #panel13, #panel14, #panel15 {
+        #panel1, #panel2, #panel3, #panel4, #panel5, #panel6, #panel7, #panel8, #panel9, #panel10, #panel11, #panel12, #panel13, #panel14, #panel15, #panel16 {
             display: none;
             user-select: none;
         }

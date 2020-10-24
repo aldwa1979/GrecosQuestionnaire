@@ -213,6 +213,9 @@ namespace GrecosQuestionnaire.Controllers
             {
                 var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
 
+                //wyszukuję pytania z grupy ComboList aby na automacie w widoku pokazywać wszystkie wybrane part1
+                var comboListQuestions = _hotelRepository.GetQuestionItems().Where(z => z.QuestionItemType.ToString() == "ComboList").Select(z => z.Id).ToArray();
+
                 foreach (var key in HttpContext.Session.Keys)
                 {
                     ViewData[key.ToString()] = HttpContext.Session.GetString(key);
@@ -221,9 +224,22 @@ namespace GrecosQuestionnaire.Controllers
                 ViewBag.Hotel = hotel;
                 ViewData["page"] = page;
 
-                int number = 0;
-                int zmienna26 = (Int32.TryParse(HttpContext.Session.GetString("26"), out number)) ? Int32.Parse(HttpContext.Session.GetString("26")) : number;
-                ViewBag.Number = zmienna26;
+
+                        //wyszukuję pytania z grupy ComboList aby na automacie w widoku pokazywać wszystkie wybrane part2
+                        int number = 0;
+                        int comboQuestionPerPageToView = 0;
+
+                        foreach (var item in comboListQuestions)
+                        {
+                            foreach (var item2 in items)
+                            {
+                                if (item2.Items != null && item2.ItemPage == page && item2.Items.Where(x => x.Id == item).Any())
+                                {
+                                    comboQuestionPerPageToView = (Int32.TryParse(HttpContext.Session.GetString(item.ToString()), out number)) ? Int32.Parse(HttpContext.Session.GetString(item.ToString())) : number;
+                                }
+                            }
+                        }
+                        ViewBag.Number = comboQuestionPerPageToView;
 
                 return View(items);
             }
@@ -407,107 +423,9 @@ namespace GrecosQuestionnaire.Controllers
                 }
             }
 
-          
+
             return RedirectToAction("Index", new { page, hotel });
         }
-
-        //public IActionResult Back(int page, int hotel)
-        //{
-        //    if (page == 1)
-        //    {
-        //        page = 1;
-        //    }
-        //    else if (page == 2)
-        //    {
-        //        page = 1;
-        //    }
-        //    else if (page == 3)
-        //    {
-        //        page = 2;
-        //    }
-        //    else if (page == 4)
-        //    {
-        //        page = 3;
-        //    }
-        //    else if (page == 5)
-        //    {
-        //        page = 4;
-        //    }
-        //    else if (page == 6)
-        //    {
-        //        page = 5;
-        //    }
-        //    else if (page == 7)
-        //    {
-        //        page = 6;
-        //    }
-        //    else if (page == 8)
-        //    {
-        //        page = 7;
-        //    }
-        //    else if (page == 9)
-        //    {
-        //        page = 8;
-        //    }
-        //    else if (page == 10)
-        //    {
-        //        page = 9;
-        //    }
-        //    else if (page == 11)
-        //    {
-        //        page = 10;
-        //    }
-        //    return RedirectToAction("Index", new { page, hotel });
-        //}
-
-        //public IActionResult BackEdit(int page, int hotel)
-        //{
-        //    if (page == 1)
-        //    {
-        //        page = 1;
-        //    }
-        //    else if (page == 2)
-        //    {
-        //        page = 1;
-        //    }
-        //    else if (page == 3)
-        //    {
-        //        page = 2;
-        //    }
-        //    else if (page == 4)
-        //    {
-        //        page = 3;
-        //    }
-        //    else if (page == 5)
-        //    {
-        //        page = 4;
-        //    }
-        //    else if (page == 6)
-        //    {
-        //        page = 5;
-        //    }
-        //    else if (page == 7)
-        //    {
-        //        page = 6;
-        //    }
-        //    else if (page == 8)
-        //    {
-        //        page = 7;
-        //    }
-        //    else if (page == 9)
-        //    {
-        //        page = 8;
-        //    }
-        //    else if (page == 10)
-        //    {
-        //        page = 9;
-        //    }
-        //    else if (page == 11)
-        //    {
-        //        page = 10;
-        //    }
-        //    return RedirectToAction("Edit", new { page, hotel });
-        //}
 
         public IActionResult Edit(int? page, int hotel)
         {
@@ -546,14 +464,24 @@ namespace GrecosQuestionnaire.Controllers
                 //pobieram listę pytań
                 var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
 
-                int zmienna26zBazy = 0;
+                //wyszukuję pytania z grupy ComboList aby na automacie w widoku pokazywać wszystkie wybrane part1
+                var comboListQuestions = _hotelRepository.GetQuestionItems().Where(z => z.QuestionItemType.ToString() == "ComboList").Select(z => z.Id).ToArray();
+
+                int comboQuestionPerPageToViewFromSession = 0;
+                int comboQuestionPerPageToViewFromDB = 0;
+                int number = 0;
 
                 foreach (var item in responseitems)
                 {
-                    if (item.QuestionItem.Id == 26)
+                    foreach (var item2 in comboListQuestions)
                     {
-                        zmienna26zBazy = Int32.Parse(item.RawValue);
-                        //ViewBag.Number = Int32.Parse(dana);
+                        foreach (var item3 in items)
+                        {
+                            if (item3.Items != null && item3.ItemPage == page && item3.Items.Where(x => x.Id == item.QuestionItem.Id).Any() && item.QuestionItem.Id == item2)
+                            {
+                                comboQuestionPerPageToViewFromDB = Int32.Parse(item.RawValue);
+                            }
+                        }
                     }
                     ViewData[item.Value] = item.RawValue;
                 }
@@ -566,17 +494,26 @@ namespace GrecosQuestionnaire.Controllers
                 ViewBag.Hotel = hotel;
                 ViewData["page"] = page;
 
-                int number = 0;
-                int zmienna26 = (Int32.TryParse(HttpContext.Session.GetString("26"), out number)) ? Int32.Parse(HttpContext.Session.GetString("26")) : number;
+                        //wyszukuję pytania z grupy ComboList aby na automacie w widoku pokazywać wszystkie wybrane part2
+                        foreach (var item in comboListQuestions)
+                        {
+                            foreach (var item2 in items)
+                            {
+                                if (item2.Items != null && item2.ItemPage == page && item2.Items.Where(x => x.Id == item).Any())
+                                {
+                                    comboQuestionPerPageToViewFromSession = (Int32.TryParse(HttpContext.Session.GetString(item.ToString()), out number)) ? Int32.Parse(HttpContext.Session.GetString(item.ToString())) : number;
+                                }
+                            }
+                        }
 
-                if (zmienna26 == 0)
-                {
-                    ViewBag.Number = zmienna26zBazy;
-                }
-                else
-                {
-                    ViewBag.Number = zmienna26;
-                }
+                        if (comboQuestionPerPageToViewFromSession == 0)
+                        {
+                            ViewBag.Number = comboQuestionPerPageToViewFromDB;
+                        }
+                        else
+                        {
+                            ViewBag.Number = comboQuestionPerPageToViewFromSession;
+                        }
 
                 return View(items);
             }
@@ -963,7 +900,7 @@ namespace GrecosQuestionnaire.Controllers
                     page = 10;
                 }
             }
-            
+
             return RedirectToAction("Edit", new { page, hotel });
         }
 
