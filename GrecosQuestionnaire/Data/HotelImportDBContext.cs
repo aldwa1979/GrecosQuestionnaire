@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using GrecosQuestionnaire.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GrecosQuestionnaire.Models
+namespace GrecosQuestionnaire.Data
 {
     public class HotelImportDBContext : DbContext
     {
@@ -14,8 +15,6 @@ namespace GrecosQuestionnaire.Models
         }
 
         public DbSet<HotelImportModel> RoomTypes { get; set; }
-        //public DbSet<HotelImportTest> RoomTypesTest { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -24,10 +23,6 @@ namespace GrecosQuestionnaire.Models
                 entity.HasNoKey();
             });
 
-            //modelBuilder.Entity<HotelImportTest>(entity =>
-            //{
-            //    entity.HasNoKey();
-            //});
         }
     }
 }

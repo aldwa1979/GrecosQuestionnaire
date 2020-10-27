@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GrecosQuestionnaire.Logic.Hotels;
 using GrecosQuestionnaire.Models;
 using GrecosQuestionnaire.ViewModel;
 using Microsoft.AspNetCore.Authorization;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GrecosQuestionnaire.Logic.Hotels;
 using GrecosQuestionnaire.Models;
 using Microsoft.AspNetCore.Mvc;
 using X.PagedList;
@@ -22,7 +23,6 @@ namespace GrecosQuestionnaire.Controllers
             var question = _hotelRepository.GetQuestions().Where(p => p.Id == questionId).FirstOrDefault();
 
             var items = _hotelRepository.GetQuestionItems().Where(x => x.Question.Id == questionId);
-            //items = ApplyFilters(items, f);
 
             ViewBag.Count = items.Count();
             ViewBag.QuestionId = questionId;

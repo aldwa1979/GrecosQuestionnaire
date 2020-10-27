@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using GrecosQuestionnaire.Data;
+using GrecosQuestionnaire.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GrecosQuestionnaire.Models
+namespace GrecosQuestionnaire.Logic.Hotels
 {
     public class HotelRepository : IHotelRepository
     {
@@ -48,7 +50,7 @@ namespace GrecosQuestionnaire.Models
         //Szukam hotel w bazie hoteli
         public HotelModel GetHotel(string hotelCode, int season)
         {
-            return _context.Hotels.Where(p => p.HotelCode == hotelCode && p.Season==season).FirstOrDefault();
+            return _context.Hotels.Where(p => p.HotelCode == hotelCode && p.Season == season).FirstOrDefault();
         }
 
         //Szukam id głównego pokoju w bazie hoteli
@@ -105,7 +107,7 @@ namespace GrecosQuestionnaire.Models
         public List<ResponseItemModel> GetResponseItem()
         {
             //var responses = _context.ResponseItems.ToList();
-            var responses = _context.ResponseItems.AsQueryable().Include(p => p.Response).Include(p=>p.QuestionItem).AsNoTracking().ToList();
+            var responses = _context.ResponseItems.AsQueryable().Include(p => p.Response).Include(p => p.QuestionItem).AsNoTracking().ToList();
             return responses;
         }
 

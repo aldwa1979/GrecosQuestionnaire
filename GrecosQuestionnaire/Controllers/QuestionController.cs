@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using GrecosQuestionnaire.Logic.Hotels;
 using GrecosQuestionnaire.Models;
 using Microsoft.AspNetCore.Mvc;
 using X.PagedList;
@@ -17,7 +18,6 @@ namespace GrecosQuestionnaire.Controllers
         public IActionResult Index(int? page, string f = null)
         {
             var items = _hotelRepository.GetQuestions().OrderBy(x => x.ItemPage).ThenBy(x => x.ItemOrder).AsQueryable();
-            //items = ApplyFilters(items, f);
 
             ViewBag.Count = items.Count();
 

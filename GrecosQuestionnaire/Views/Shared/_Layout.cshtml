@@ -9,15 +9,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Grecos Questionnaire for Hotelier</title>
     <link href="~/css/col.css" rel="stylesheet" />
-    @*<link href="~/lib/bootstrap_old/bootstrap.css" rel="stylesheet" />*@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-
-    @*<nav class="navbar fixed-top navbar-light bg-light">
-        <a class="navbar-brand" href="#">Fixed top</a>
-    </nav>*@
 
     <header>
         <nav class="navbar fixed-top navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -28,7 +23,6 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    @*<partial name="_LoginPartial" />*@
                     <ul class="navbar-nav flex-grow-1">
                         @if (signInManager.IsSignedIn(User))
                         {

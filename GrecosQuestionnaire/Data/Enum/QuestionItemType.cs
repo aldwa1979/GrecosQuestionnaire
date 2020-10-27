@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GrecosQuestionnaire.Models
+namespace GrecosQuestionnaire.Data.Enum
 {
     public enum QuestionItemType
     {

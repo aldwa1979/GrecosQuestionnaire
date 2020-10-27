@@ -1,9 +1,11 @@
-﻿using System;
+﻿using GrecosQuestionnaire.Data;
+using GrecosQuestionnaire.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GrecosQuestionnaire.Models
+namespace GrecosQuestionnaire.Logic.ImportMagic
 {
     public class HotelImportRepository : IHotelImportRepository
     {
@@ -19,7 +21,7 @@ namespace GrecosQuestionnaire.Models
         {
             var x = _context.RoomTypes.ToList();
 
-            return _context.RoomTypes.Where(p=>p.HotelCode != null && p.RoomAllocCode !=null && p.RoomCode != null && p.DestinationSeasonName != null &&
+            return _context.RoomTypes.Where(p => p.HotelCode != null && p.RoomAllocCode != null && p.RoomCode != null && p.DestinationSeasonName != null &&
                                                 p.HotelCode != "" && p.RoomAllocCode != "" && p.RoomCode != "" && p.DestinationSeasonName != "").Distinct().ToList();
         }
 

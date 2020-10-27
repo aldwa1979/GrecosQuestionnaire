@@ -12,7 +12,8 @@ using GrecosQuestionnaire.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using GrecosQuestionnaire.Models;
+using GrecosQuestionnaire.Logic.ImportMagic;
+using GrecosQuestionnaire.Logic.Hotels;
 
 namespace GrecosQuestionnaire
 {

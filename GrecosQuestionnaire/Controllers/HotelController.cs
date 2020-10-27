@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GrecosQuestionnaire.Logic.Hotels;
+using GrecosQuestionnaire.Logic.ImportMagic;
 using GrecosQuestionnaire.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
