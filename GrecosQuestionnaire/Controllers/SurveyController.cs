@@ -23,6 +23,9 @@ namespace GrecosQuestionnaire.Controllers
 
         public IActionResult Index(int? page, int hotel)
         {
+            var hotelCodeNameBase = _hotelRepository.GetHotelId(hotel);
+            var hotelCodeName = hotelCodeNameBase.HotelCode + " " + hotelCodeNameBase.Name;
+
             if (!page.HasValue)
             {
                 page = 1;
@@ -125,8 +128,7 @@ namespace GrecosQuestionnaire.Controllers
                     ViewData[key.ToString()] = HttpContext.Session.GetString(key);
                 }
 
-                ViewBag.Hotel = hotel;
-                ViewData["page"] = page;
+                PassToView(page, hotel, hotelCodeName);
 
                 return View(items);
             }
@@ -222,12 +224,11 @@ namespace GrecosQuestionnaire.Controllers
                     ViewData[key.ToString()] = HttpContext.Session.GetString(key);
                 }
 
-                ViewBag.Hotel = hotel;
-                ViewData["page"] = page;
+                PassToView(page, hotel, hotelCodeName);
 
 
-                        //wyszukuję pytania z grupy ComboList aby na automacie w widoku pokazywać wszystkie wybrane part2
-                        int number = 0;
+                //wyszukuję pytania z grupy ComboList aby na automacie w widoku pokazywać wszystkie wybrane part2
+                int number = 0;
                         int comboQuestionPerPageToView = 0;
 
                         foreach (var item in comboListQuestions)
@@ -430,6 +431,9 @@ namespace GrecosQuestionnaire.Controllers
 
         public IActionResult Edit(int? page, int hotel)
         {
+            var hotelCodeNameBase = _hotelRepository.GetHotelId(hotel);
+            var hotelCodeName = hotelCodeNameBase.HotelCode + " " + hotelCodeNameBase.Name;
+
             if (!page.HasValue || page == 0)
             {
                 page = 1;
@@ -448,8 +452,7 @@ namespace GrecosQuestionnaire.Controllers
                     ViewData[item.Value] = item.RawValue;
                 }
 
-                ViewBag.Hotel = hotel;
-                ViewData["page"] = page;
+                PassToView(page, hotel, hotelCodeName);
 
                 return View(items);
             }
@@ -492,11 +495,10 @@ namespace GrecosQuestionnaire.Controllers
                     ViewData[key.ToString()] = HttpContext.Session.GetString(key);
                 }
 
-                ViewBag.Hotel = hotel;
-                ViewData["page"] = page;
+                PassToView(page, hotel, hotelCodeName);
 
-                        //wyszukuję pytania z grupy ComboList aby na automacie w widoku pokazywać wszystkie wybrane part2
-                        foreach (var item in comboListQuestions)
+                //wyszukuję pytania z grupy ComboList aby na automacie w widoku pokazywać wszystkie wybrane part2
+                foreach (var item in comboListQuestions)
                         {
                             foreach (var item2 in items)
                             {
@@ -623,8 +625,7 @@ namespace GrecosQuestionnaire.Controllers
                     ViewData[key.ToString()] = HttpContext.Session.GetString(key);
                 }
 
-                ViewBag.Hotel = hotel;
-                ViewData["page"] = page;
+                PassToView(page, hotel, hotelCodeName);
 
                 return View(items);
 
@@ -714,14 +715,20 @@ namespace GrecosQuestionnaire.Controllers
                     ViewData[key.ToString()] = HttpContext.Session.GetString(key);
                 }
 
-                ViewBag.Hotel = hotel;
-                ViewData["page"] = page;
+                PassToView(page, hotel, hotelCodeName);
 
                 return View(items);
 
             }
 
             return View();
+        }
+
+        private void PassToView(int? page, int hotel, string hotelCodeName)
+        {
+            ViewBag.Hotel = hotel;
+            ViewBag.HotelCodeName = hotelCodeName;
+            ViewData["page"] = page;
         }
 
         [HttpPost]
