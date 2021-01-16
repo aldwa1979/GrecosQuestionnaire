@@ -23,10 +23,9 @@
         @Html.Hidden("page", ViewData["page"])
         @Html.Hidden("hotel", new { hotel })
 
-        <div style="text-align: center; font-size: 24px; font-weight: 700">@ViewBag.HotelCodeName</div>
-        <div style="text-align: center; font-weight: 700">Step @ViewBag.Page / 11</div>
+        <div style="text-align: center; color:black; font-size : 24px; font-weight: 700">@ViewBag.HotelCodeName</div>
+        <div style="text-align: center; color:black; font-weight: 700">Step @ViewBag.Page / 11</div>
         <br />
-
 
         <div style="text-align: center">
             @if (page == 1)
@@ -37,7 +36,7 @@
             {
                 <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="back">
                     Back
-                    <span class="glyphicon glyphicon-chevron-back"></span>
+                    <span class="glyphicon glyphicon-chevron-left"></span>
                 </button>
             }
 
@@ -88,7 +87,7 @@
 
                 <div id="@flipValue">
                     @Html.Label(question.Title, question.Title, new { @class = "control-label", @style = "font-weight: bold ;color: #005EA8; margin-bottom: 0; font-size: 1.1em;" })
-                    <spam class="glyphicon-arrow-down"></spam>
+                    <spam class="glyphicon glyphicon-chevron-down"></spam>
                 </div>
 
                 <div id="@panelValue">
@@ -797,7 +796,7 @@
             {
                 <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="back">
                     Back
-                    <span class="glyphicon glyphicon-chevron-back"></span>
+                    <span class="glyphicon glyphicon-chevron-left"></span>
                 </button>
             }
 

@@ -206,8 +206,7 @@ namespace GrecosQuestionnaire.Controllers
                     ViewData[key.ToString()] = HttpContext.Session.GetString(key);
                 }
 
-                ViewBag.Hotel = hotel;
-                ViewData["page"] = page;
+                PassToView(page, hotel, hotelCodeName);
 
                 return View(items);
             }
