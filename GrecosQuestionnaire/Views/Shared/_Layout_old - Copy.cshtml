@@ -11,23 +11,18 @@
     <link href="~/css/col.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/grecos.css" />
 </head>
 <body>
 
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container position-relative">
-                <a class="navbar-brand position-absolute navbar-grecos" href="https://www.grecos.pl">
-                    <img src="/images/logo.png" class="logo" alt="Grecos logo" loading="lazy">
-                </a>
-                <span class="invisible">x</span>
+        <nav class="navbar fixed-top navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                @*<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">GrecosQuestionnaire</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse nav-items">
-                    <partial name="_LoginPartial" />
+                </button>*@
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         @if (signInManager.IsSignedIn(User))
                         {
@@ -62,35 +57,21 @@
                         }
 
                         @*else
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
-                                </li>
-                            }*@
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+                            </li>
+                        }*@
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container-fluid">
-        <main role="main" class="nmt-1 pb-3">
-            <div class="row">
-                <picture class="top-banner">
-                    <source media="(max-width: 676px)"
-                            srcset="/images/grecos_katalog2021_teaser_toper_mobile.jpg">
-                    <source media="(max-width: 991px)"
-                            srcset="/images/grecos_katalog2021_teaser_toper_tablet.jpg">
-                    <source media="(min-width: 992px)"
-                            srcset="/images/grecos_katalog2021_teaser_toper_www.jpg">
-                    <img src="/images/grecos_katalog2021_teaser_toper_www.jpg"
-                         alt="Grecos baner"
-                         class="top-banner" />
-                </picture>
-            </div>
+    <div class="container">
+        <main role="main" class="body-content" style="margin-top: 100px">
+            @RenderBody()
         </main>
     </div>
-
-    @RenderBody()
 
     <footer class="border-top footer text-muted">
         <div class="container">

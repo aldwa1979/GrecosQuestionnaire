@@ -1,0 +1,216 @@
+﻿:root {
+    --primary: #535353;
+    --secondary: #058ECE;
+    --light-secondary: #d3e5ec;
+    --danger: #FF0000;
+    --white: #FFFFFF;
+    --gray: #afafaf;
+    --light-gray: #e5e5e5;
+    --dark-gray: #6c757d;
+}
+
+a,
+a:hover {
+    color: var(--secondary);
+}
+
+.logo {
+    width: 90px;
+    height: 90px;
+}
+
+@media (max-width: 575px) {
+    .logo {
+        width: 75px;
+        height: 75px;
+    }
+}
+
+.top-banner {
+    width: 100%;
+    max-height: 420px;
+    object-fit: cover;
+}
+
+.navbar-grecos {
+    top: 0;
+}
+
+.nav-items {
+    margin-left: 100px;
+}
+
+.user-data {
+}
+
+    .user-data .user-data_title {
+        font-family: Georgia, Roboto, arial, sans-serif;
+        font-weight: 700;
+        font-size: 50px;
+        color: var(--secondary);
+    }
+
+    .user-data .user-data_welcome {
+        font-family: Georgia, Roboto, arial, sans-serif;
+        font-style: italic;
+        font-size: 30px;
+        color: var(--secondary);
+    }
+
+    .user-data .user-data_text {
+        font-family: Georgia, Roboto, arial, sans-serif;
+        font-size: 16px;
+    }
+
+        .user-data .user-data_text.-primary {
+            color: var(--primary);
+        }
+
+        .user-data .user-data_text.-secondary {
+            color: var(--secondary);
+        }
+
+        .user-data .user-data_text.-danger {
+            color: var(--danger);
+        }
+
+        .user-data .user-data_text.-bolded {
+            font-weight: 700;
+        }
+
+        .user-data .user-data_text.-uppercase {
+            text-transform: uppercase;
+        }
+
+    .user-data .field-validation-error {
+        color: var(--secondary) !important;
+    }
+
+    .user-data .btn-success {
+        color: var(--white);
+        background-color: var(--secondary);
+        border-color: var(--secondary);
+    }
+
+/*    .user-data .btn-danger {
+        color: var(--secondary);
+        background-color: var(--white);
+        border-color: var(--secondary);
+    }*/
+
+    .user-data .btn-warning {
+        color: var(--dark-gray);
+        background-color: var(--light-gray);
+        border-color: var(--light-gray);
+    }
+
+    .user-data .link-secondary {
+        font-size: 12px;
+        text-decoration: underline;
+        color: var(--gray);
+    }
+
+    .user-data .btn-success.btn:hover,
+    .user-data .btn-success.btn:focus,
+    .user-data .btn-success.btn:active {
+        color: var(--white) !important;
+        background-color: var(--secondary) !important;
+        border-color: var(--secondary) !important;
+        box-shadow: none !important;
+        opacity: 0.6 !important;
+    }
+
+    .user-data .btn-danger.btn:hover,
+    .user-data .btn-danger.btn:focus,
+    .user-data .btn-danger.btn:active {
+        color: var(--secondary);
+        background-color: var(--white);
+        border-color: var(--secondary);
+        box-shadow: none !important;
+        opacity: 0.6 !important;
+    }
+
+    .user-data .btn-warning.btn:hover,
+    .user-data .btn-warning.btn:focus,
+    .user-data .btn-warning.btn:active {
+        color: var(--dark-gray);
+        background-color: var(--light-gray);
+        border-color: var(--light-gray);
+        box-shadow: none !important;
+        opacity: 0.6 !important;
+    }
+
+    .user-data .link-secondary:hover,
+    .user-data .link-secondary:focus,
+    .user-data .link-secondary:active {
+        opacity: 0.6 !important;
+    }
+
+    .user-data .alert-success {
+        color: var(--secondary);
+        border-color: var(--secondary);
+        background-color: var(--light-secondary);
+    }
+
+        .user-data .alert-success .close:hover {
+            color: var(--secondary);
+            text-decoration: none;
+        }
+
+    .user-data .user-data_form.-readonly label,
+    .user-data .user-data_form.-readonly input,
+    .user-data .user-data_form.-readonly textarea,
+    .user-data .user-data_form.-readonly p {
+        color: var(--gray);
+    }
+
+    .user-data .user-data_form.-readonly .btn-success,
+    .user-data .user-data_form.-readonly .btn-success.btn:hover,
+    .user-data .user-data_form.-readonly .btn-success.btn:focus,
+    .user-data .user-data_form.-readonly .btn-success.btn:active {
+        color: var(--white) !important;
+        background-color: var(--gray) !important;
+        border-color: var(--gray) !important;
+        opacity: 1 !important;
+    }
+
+    .user-data .user-data_form.-readonly .btn-danger,
+    .user-data .user-data_form.-readonly .btn-danger.btn:hover,
+    .user-data .user-data_form.-readonly .btn-danger.btn:focus,
+    .user-data .user-data_form.-readonly .btn-danger.btn:active {
+        color: var(--white) !important;
+        border-color: var(--gray) !important;
+        background-color: var(--gray) !important;
+        opacity: 1 !important;
+    }
+
+    .user-data .user-data_form.-readonly .btn-warning,
+    .user-data .user-data_form.-readonly .btn-warning.btn:hover,
+    .user-data .user-data_form.-readonly .btn-warning.btn:focus,
+    .user-data .user-data_form.-readonly .btn-warning.btn:active {
+        color: var(--white) !important;
+        border-color: var(--gray) !important;
+        background-color: var(--gray) !important;
+        opacity: 1 !important;
+    }
+
+    .user-data .user-data_form.-readonly .link-secondary,
+    .user-data .user-data_form.-readonly .link-secondary.btn:hover,
+    .user-data .user-data_form.-readonly .link-secondary.btn:focus,
+    .user-data .user-data_form.-readonly .link-secondary.btn:active {
+        color: var(--gray) !important;
+        opacity: 1 !important;
+    }
+
+        .user-data .user-data_form.-readonly .link-secondary.disabled {
+            pointer-events: none;
+        }
+
+    .user-data .page-link {
+        color: var(--secondary);
+    }
+
+    .user-data .page-item.active .page-link {
+        background-color: var(--secondary);
+        border-color: var(--secondary);
+    }

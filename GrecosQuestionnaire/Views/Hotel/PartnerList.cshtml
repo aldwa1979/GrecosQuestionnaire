@@ -4,34 +4,37 @@
     ViewData["Title"] = "Partners";
 }
 
-@if (Model.Any())
-{
-    <a class="btn btn-primary mb-3" style="width:auto" asp-controller="Hotel" asp-action="addpartner">Add new partner</a>
+    <div class="container">
 
-    foreach (var role in Model)
-    {
-        <div class="card mb-3">
-            <div class="card-body">
-                @role.Name
+        @if (Model.Any())
+        {
+            <a class="btn btn-primary mb-3" style="width:auto" asp-controller="Hotel" asp-action="addpartner">Add new partner</a>
+
+            foreach (var role in Model)
+            {
+                <div class="card mb-3">
+                    <div class="card-body">
+                        @role.Name
+                    </div>
+                </div>
+            }
+        }
+
+        else
+
+        {
+            <div class="card">
+                <div class="card-header">
+                    No roles created yet
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Use the button below to create a partner
+                    </h5>
+                    <a class="btn btn-primary" style="width:auto" asp-controller="hotel" asp-action="addpartner">
+                        Create Role
+                    </a>
+                </div>
             </div>
-        </div>
-    }
-}
-
-else
-
-{
-    <div class="card">
-        <div class="card-header">
-            No roles created yet
-        </div>
-        <div class="card-body">
-            <h5 class="card-title">
-                Use the button below to create a partner
-            </h5>
-            <a class="btn btn-primary" style="width:auto" asp-controller="hotel" asp-action="addpartner">
-                Create Role
-            </a>
-        </div>
+        }
     </div>
-}

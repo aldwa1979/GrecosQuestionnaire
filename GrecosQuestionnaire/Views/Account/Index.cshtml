@@ -4,38 +4,41 @@
     ViewData["Title"] = "Users";
 }
 
-@if (Model.Any())
-{
-    <a class="btn btn-primary mb-3" style="width:auto" asp-controller="account" asp-action="register">Add new user</a>
+    <div class="container">
 
-    foreach (var user in Model)
-    {
-        <div class="card mb-3">
-            <div class="card-body">
-                <form asp-action="Delete" asp-controller="Administration" asp-route-id="@user.Id" method="post">
-                    <a class="card-title">@user.Email </a>
-                    <a class="btn btn-primary" asp-action="Edit" asp-controller="Account" asp-route-id="@user.Id">Edit</a>
-                </form>
+        @if (Model.Any())
+        {
+            <a class="btn btn-primary mb-3" style="width:auto" asp-controller="account" asp-action="register">Add new user</a>
+
+            foreach (var user in Model)
+            {
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <form asp-action="Delete" asp-controller="Administration" asp-route-id="@user.Id" method="post">
+                            <a class="card-title">@user.Email </a>
+                            <a class="btn btn-primary" asp-action="Edit" asp-controller="Account" asp-route-id="@user.Id">Edit</a>
+                        </form>
+                    </div>
+                </div>
+            }
+        }
+
+        else
+
+        {
+            <div class="card">
+                <div class="card-header">
+                    No roles created yet
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Use the button below to create a user
+                    </h5>
+                    <a class="btn btn-primary" style="width:auto" asp-controller="account" asp-action="register">
+                        Create User
+                    </a>
+                </div>
             </div>
-        </div>
-    }
-}
+        }
 
-else
-
-{
-    <div class="card">
-        <div class="card-header">
-            No roles created yet
-        </div>
-        <div class="card-body">
-            <h5 class="card-title">
-                Use the button below to create a user
-            </h5>
-            <a class="btn btn-primary" style="width:auto" asp-controller="account" asp-action="register">
-                Create User
-            </a>
-        </div>
     </div>
-}
-

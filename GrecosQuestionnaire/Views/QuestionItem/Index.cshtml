@@ -5,58 +5,62 @@
     ViewBag.Title = "Elements of the question";
 }
 
-<div class="row">
-    <div class="col-md-8"><h2>Pytania</h2></div>
-    <div class="col-md-4" style="padding-top: 22px;">
-        <a href="@Url.Action("Create", "QuestionItem", new { questionId = ViewBag.QuestionId })" role="button" class="btn btn-primary pull-right">
-            <span class="glyphicon glyphicon-plus"></span>
-            Add a new question item
-        </a>
-    </div>
-</div>
+    <div class="container">
 
-@Html.ActionLink("Return to the question list", "Index", "Question")
+        <div class="row">
+            <div class="col-md-8"><h2>Pytania</h2></div>
+            <div class="col-md-4" style="padding-top: 22px;">
+                <a href="@Url.Action("Create", "QuestionItem", new { questionId = ViewBag.QuestionId })" role="button" class="btn btn-primary pull-right">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    Add a new question item
+                </a>
+            </div>
+        </div>
 
-@{
-    var questionId = ViewBag.QuestionId;
-}
-<table class="table table-striped table-hover">
-    <thead>
-        <tr>
-            <th>Type</th>
-            <th>Order</th>
-            <th>Title</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @item.QuestionItemType
-                </td>
-                <td>
-                    @item.ItemOrder
-                </td>
-                <td>
-                    @item.Title
-                </td>
-                <td>
-                    <a class="btn btn-primary" href="@Url.Action("Edit", "QuestionItem", new { id = item.Id }, null)" title="Edit">
-                        Edit
-                        <span class="glyphicon glyphicon-edit"></span>
-                    </a>
-                    <a class="btn btn-primary" href="@Url.Action("Delete", "QuestionItem", new { id = item.Id }, null)" title="Delete">
-                        Delete
-                        <span class="glyphicon glyphicon-remove"></span>
-                    </a>
-                </td>
-            </tr>
+        @Html.ActionLink("Return to the question list", "Index", "Question")
+
+        @{
+            var questionId = ViewBag.QuestionId;
         }
-    </tbody>
-</table>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Order</th>
+                    <th>Title</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @item.QuestionItemType
+                        </td>
+                        <td>
+                            @item.ItemOrder
+                        </td>
+                        <td>
+                            @item.Title
+                        </td>
+                        <td>
+                            <a class="btn btn-primary" href="@Url.Action("Edit", "QuestionItem", new { id = item.Id }, null)" title="Edit">
+                                Edit
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </a>
+                            <a class="btn btn-primary" href="@Url.Action("Delete", "QuestionItem", new { id = item.Id }, null)" title="Delete">
+                                Delete
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page, questionId, f = ViewBag.f }))
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, questionId, f = ViewBag.f }))
 
-Elementów: @ViewBag.Count
+        Elementów: @ViewBag.Count
+
+    </div>
