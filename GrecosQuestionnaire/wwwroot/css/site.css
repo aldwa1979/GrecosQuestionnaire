@@ -1014,3 +1014,33 @@ input[type="checkbox"].input-validation-error {
 .glyphicon-tree-deciduous:before {
     content: "\e200";
 }
+
+.input-symbol-euro {
+    position: relative;
+}
+
+    .input-symbol-euro input {
+        padding-right: 18px;
+    }
+
+    .input-symbol-euro:after {
+        position: absolute;
+        top: 8px;
+        content: "€";
+        left: 100px;
+    }
+
+.input-symbol-m {
+    position: relative;
+}
+
+    .input-symbol-m input {
+        padding-right: 18px;
+    }
+
+    .input-symbol-m:after {
+        position: absolute;
+        top: 8px;
+        content: "m";
+        left: 100px;
+    }

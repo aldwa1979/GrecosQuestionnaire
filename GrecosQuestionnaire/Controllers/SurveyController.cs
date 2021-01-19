@@ -249,6 +249,46 @@ namespace GrecosQuestionnaire.Controllers
         [HttpPost]
         public IActionResult Index(IFormCollection formCollection, string action, bool back = false)
         {
+
+
+
+            ////walidacja skopiowana z ankiety
+            //bool errorExist = false;
+            //foreach (var source in Entity.Query<QuestionItem>().Where(x => x.Required && x.Question.ItemPage == page && !x.Question.Removed))
+            //{
+            //    if (Session[source.Id.ToString()] == null || string.IsNullOrEmpty(Session[source.Id.ToString()].ToString()))
+            //    {
+            //        if (Session[source.Id.ToString() + "t"] == null || string.IsNullOrEmpty(Session[source.Id.ToString() + "t"].ToString()))
+            //        {
+            //            errorExist = true;
+            //            ModelState.AddModelError(source.Id.ToString(), "*Pole jest wymagane");
+            //        }
+            //    }
+            //}
+            //if (errorExist)
+            //{
+            //    var items = Entity.Query<Question>().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
+
+            //    foreach (var key in Session.Keys)
+            //    {
+            //        ViewData[key.ToString()] = Session[key.ToString()];
+            //    }
+
+            //    ViewData["page"] = page;
+
+            //    return View(items);
+            //}
+
+
+
+
+
+
+
+
+
+
+
             int page = int.Parse(formCollection["page"]);
 
             int hotel = formCollection["hotel"].ToString().Length;

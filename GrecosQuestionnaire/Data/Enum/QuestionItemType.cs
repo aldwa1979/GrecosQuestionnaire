@@ -33,6 +33,12 @@ namespace GrecosQuestionnaire.Data.Enum
 
         Time = 13,
 
-        Rate7 = 14
+        Rate7 = 14,
+
+        CostBox = 15,
+
+        NumberBox = 16,
+
+        DistanceBox = 17
     }
 }
