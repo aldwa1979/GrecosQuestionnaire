@@ -283,9 +283,8 @@ namespace GrecosQuestionnaire.Controllers
                     if (HttpContext.Session.GetString(source.Id.ToString()) + "t" == null || string.IsNullOrEmpty(HttpContext.Session.GetString(source.Id.ToString() + "t".ToString())))
                     {
                         errorExist = true;
-                        ModelState.AddModelError(source.Id.ToString(), "*Pole jest wymagane");
+                        ModelState.AddModelError(source.Id.ToString(), source.Question.Title + " - " + source.Title + " is required");
                     }
-
                 }
 
             }
@@ -788,6 +787,40 @@ namespace GrecosQuestionnaire.Controllers
                     HttpContext.Session.SetString(formData.Key, formData.Value);
                 }
             }
+
+
+            //walidacja ankiety
+            bool errorExist = false;
+
+            foreach (var source in _hotelRepository.GetQuestionItems().Where(x => x.Required && x.Question.ItemPage == page && !x.Question.Removed))
+            {
+                if (HttpContext.Session.GetString(source.Id.ToString()) == null || string.IsNullOrEmpty(HttpContext.Session.GetString(source.Id.ToString())))
+                {
+                    if (HttpContext.Session.GetString(source.Id.ToString()) + "t" == null || string.IsNullOrEmpty(HttpContext.Session.GetString(source.Id.ToString() + "t".ToString())))
+                    {
+                        errorExist = true;
+                        //ModelState.AddModelError(source.Id.ToString(), "*Field is required");
+                        ModelState.AddModelError(source.Id.ToString(), source.Question.Title + " - " + source.Title + " is required");
+                    }
+
+                }
+
+            }
+            if (errorExist)
+            {
+                var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
+
+                foreach (var key in (HttpContext.Session.Keys))
+                {
+                    ViewData[key.ToString()] = HttpContext.Session.GetString(key);
+                }
+
+                ViewData["page"] = page;
+                ViewBag.Hotel = hotel;
+
+                return View(items);
+            }
+            //koniec walidacji
 
             if (action == "next")
             {
