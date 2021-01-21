@@ -86,7 +86,9 @@ namespace GrecosQuestionnaire.Logic.Hotels
         //Pobieram listę wszystkich podpytań
         public List<QuestionItem> GetQuestionItems()
         {
-            return _context.QuestionItems.ToList();
+            var model1 = _context.Questions.ToList();
+            var model = _context.QuestionItems.ToList();
+            return model;
         }
 
         //Szukam podpytanie po id

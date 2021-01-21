@@ -228,19 +228,19 @@ namespace GrecosQuestionnaire.Controllers
 
                 //wyszukuję pytania z grupy ComboList aby na automacie w widoku pokazywać wszystkie wybrane part2
                 int number = 0;
-                        int comboQuestionPerPageToView = 0;
+                int comboQuestionPerPageToView = 0;
 
-                        foreach (var item in comboListQuestions)
+                foreach (var item in comboListQuestions)
+                {
+                    foreach (var item2 in items)
+                    {
+                        if (item2.Items != null && item2.ItemPage == page && item2.Items.Where(x => x.Id == item).Any())
                         {
-                            foreach (var item2 in items)
-                            {
-                                if (item2.Items != null && item2.ItemPage == page && item2.Items.Where(x => x.Id == item).Any())
-                                {
-                                    comboQuestionPerPageToView = (Int32.TryParse(HttpContext.Session.GetString(item.ToString()), out number)) ? Int32.Parse(HttpContext.Session.GetString(item.ToString())) : number;
-                                }
-                            }
+                            comboQuestionPerPageToView = (Int32.TryParse(HttpContext.Session.GetString(item.ToString()), out number)) ? Int32.Parse(HttpContext.Session.GetString(item.ToString())) : number;
                         }
-                        ViewBag.Number = comboQuestionPerPageToView;
+                    }
+                }
+                ViewBag.Number = comboQuestionPerPageToView;
 
                 return View(items);
             }
@@ -249,46 +249,6 @@ namespace GrecosQuestionnaire.Controllers
         [HttpPost]
         public IActionResult Index(IFormCollection formCollection, string action, bool back = false)
         {
-
-
-
-            ////walidacja skopiowana z ankiety
-            //bool errorExist = false;
-            //foreach (var source in Entity.Query<QuestionItem>().Where(x => x.Required && x.Question.ItemPage == page && !x.Question.Removed))
-            //{
-            //    if (Session[source.Id.ToString()] == null || string.IsNullOrEmpty(Session[source.Id.ToString()].ToString()))
-            //    {
-            //        if (Session[source.Id.ToString() + "t"] == null || string.IsNullOrEmpty(Session[source.Id.ToString() + "t"].ToString()))
-            //        {
-            //            errorExist = true;
-            //            ModelState.AddModelError(source.Id.ToString(), "*Pole jest wymagane");
-            //        }
-            //    }
-            //}
-            //if (errorExist)
-            //{
-            //    var items = Entity.Query<Question>().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
-
-            //    foreach (var key in Session.Keys)
-            //    {
-            //        ViewData[key.ToString()] = Session[key.ToString()];
-            //    }
-
-            //    ViewData["page"] = page;
-
-            //    return View(items);
-            //}
-
-
-
-
-
-
-
-
-
-
-
             int page = int.Parse(formCollection["page"]);
 
             int hotel = formCollection["hotel"].ToString().Length;
@@ -312,6 +272,38 @@ namespace GrecosQuestionnaire.Controllers
                     HttpContext.Session.SetString(formData.Key, formData.Value);
                 }
             }
+
+            //walidacja ankiety
+            bool errorExist = false;
+
+            foreach (var source in _hotelRepository.GetQuestionItems().Where(x => x.Required && x.Question.ItemPage == page && !x.Question.Removed))
+            {
+                if (HttpContext.Session.GetString(source.Id.ToString()) == null || string.IsNullOrEmpty(HttpContext.Session.GetString(source.Id.ToString())))
+                {
+                    if (HttpContext.Session.GetString(source.Id.ToString()) + "t" == null || string.IsNullOrEmpty(HttpContext.Session.GetString(source.Id.ToString() + "t".ToString())))
+                    {
+                        errorExist = true;
+                        ModelState.AddModelError(source.Id.ToString(), "*Pole jest wymagane");
+                    }
+
+                }
+
+            }
+            if (errorExist)
+            {
+                var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
+
+                foreach (var key in (HttpContext.Session.Keys))
+                {
+                    ViewData[key.ToString()] = HttpContext.Session.GetString(key);
+                }
+
+                ViewData["page"] = page;
+                ViewBag.Hotel = hotel;
+
+                return View(items);
+            }
+            //koniec walidacji
 
             if (action == "next")
             {
@@ -538,24 +530,24 @@ namespace GrecosQuestionnaire.Controllers
 
                 //wyszukuję pytania z grupy ComboList aby na automacie w widoku pokazywać wszystkie wybrane part2
                 foreach (var item in comboListQuestions)
+                {
+                    foreach (var item2 in items)
+                    {
+                        if (item2.Items != null && item2.ItemPage == page && item2.Items.Where(x => x.Id == item).Any())
                         {
-                            foreach (var item2 in items)
-                            {
-                                if (item2.Items != null && item2.ItemPage == page && item2.Items.Where(x => x.Id == item).Any())
-                                {
-                                    comboQuestionPerPageToViewFromSession = (Int32.TryParse(HttpContext.Session.GetString(item.ToString()), out number)) ? Int32.Parse(HttpContext.Session.GetString(item.ToString())) : number;
-                                }
-                            }
+                            comboQuestionPerPageToViewFromSession = (Int32.TryParse(HttpContext.Session.GetString(item.ToString()), out number)) ? Int32.Parse(HttpContext.Session.GetString(item.ToString())) : number;
                         }
+                    }
+                }
 
-                        if (comboQuestionPerPageToViewFromSession == 0)
-                        {
-                            ViewBag.Number = comboQuestionPerPageToViewFromDB;
-                        }
-                        else
-                        {
-                            ViewBag.Number = comboQuestionPerPageToViewFromSession;
-                        }
+                if (comboQuestionPerPageToViewFromSession == 0)
+                {
+                    ViewBag.Number = comboQuestionPerPageToViewFromDB;
+                }
+                else
+                {
+                    ViewBag.Number = comboQuestionPerPageToViewFromSession;
+                }
 
                 return View(items);
             }
