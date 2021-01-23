@@ -1,8 +1,4 @@
 ﻿using GrecosQuestionnaire.Data.Enum;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace GrecosQuestionnaire.Models
 {
@@ -23,6 +19,8 @@ namespace GrecosQuestionnaire.Models
         public virtual int Parts { get; set; }
 
         public virtual int SingleSpace { get; set; }
+
+        public string Class { get; set; }
 
         public virtual bool Required { get; set; }
     }

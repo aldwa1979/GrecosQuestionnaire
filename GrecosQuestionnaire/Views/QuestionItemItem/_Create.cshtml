@@ -1,10 +1,10 @@
-﻿@model GrecosQuestionnaire.Models.QuestionItemModel
+﻿@model GrecosQuestionnaire.Models.QuestionItemItemModel
 
 @{
     Layout = null;
 }
 
-@Html.HiddenFor(x => x.QuestionId)
+@Html.HiddenFor(x => x.QuestionItemId)
 
 <div class="form-group">
     @Html.LabelFor(m => m.QuestionItemType, new { @class = "col-md-2 control-label" })
@@ -49,14 +49,6 @@
     <div class="col-md-10">
         @Html.TextBoxFor(m => m.SingleSpace, new { @class = "form-control" })
         @Html.ValidationMessageFor(x => x.SingleSpace)
-    </div>
-</div>
-
-<div class="form-group">
-    @Html.LabelFor(m => m.Class, new { @class = "col-md-2 control-label" })
-    <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Class, new { @class = "form-control" })
-        @Html.ValidationMessageFor(x => x.Class)
     </div>
 </div>
 

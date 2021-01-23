@@ -252,9 +252,14 @@ namespace GrecosQuestionnaire.Controllers
             int page = int.Parse(formCollection["page"]);
 
             int hotel = formCollection["hotel"].ToString().Length;
+            string hotelCodeName = null;
+
             if (hotel == 4)
             {
                 hotel = int.Parse(formCollection["hotel"]);
+                var hotelCodeNameBase = _hotelRepository.GetHotelId(hotel);
+                hotelCodeName = hotelCodeNameBase.HotelCode + " " + hotelCodeNameBase.Name;
+
             }
             else
             {
@@ -297,8 +302,7 @@ namespace GrecosQuestionnaire.Controllers
                     ViewData[key.ToString()] = HttpContext.Session.GetString(key);
                 }
 
-                ViewData["page"] = page;
-                ViewBag.Hotel = hotel;
+                PassToView(page, hotel, hotelCodeName);
 
                 return View(items);
             }
@@ -766,9 +770,13 @@ namespace GrecosQuestionnaire.Controllers
         {
             int page = int.Parse(formCollection["page"]);
             int hotel = formCollection["hotel"].ToString().Length;
+            string hotelCodeName = null;
+
             if (hotel == 4)
             {
                 hotel = int.Parse(formCollection["hotel"]);
+                var hotelCodeNameBase = _hotelRepository.GetHotelId(hotel);
+                hotelCodeName = hotelCodeNameBase.HotelCode + " " + hotelCodeNameBase.Name;
             }
             else
             {
@@ -815,8 +823,7 @@ namespace GrecosQuestionnaire.Controllers
                     ViewData[key.ToString()] = HttpContext.Session.GetString(key);
                 }
 
-                ViewData["page"] = page;
-                ViewBag.Hotel = hotel;
+                PassToView(page, hotel, hotelCodeName);
 
                 return View(items);
             }

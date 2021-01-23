@@ -1,0 +1,17 @@
+﻿@model GrecosQuestionnaire.Models.QuestionItemItemModel
+
+@{
+    ViewBag.Title = "Edit the item question";
+}
+
+    <h2>Edit the question</h2>
+@Html.ActionLink("Return to the item question list", "Index", "ItemQuestion")
+
+@using (Html.BeginForm("Edit", "QuestionItemItem", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <hr />
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(x => x.Id)
+    @Html.Partial("_Create", Model)
+}

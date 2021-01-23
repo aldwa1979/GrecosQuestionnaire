@@ -1,0 +1,16 @@
+﻿@model GrecosQuestionnaire.Models.QuestionItemItemModel
+
+@{
+    ViewBag.Title = "Adding a item question";
+}
+
+    <h2>Adding a question</h2>
+@Html.ActionLink("Return to the list of question item items", "Index", "QuestionItemItem")
+
+@using (Html.BeginForm("Create", "QuestionItemItem", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <hr />
+    @Html.ValidationSummary(true)
+    @Html.Partial("_Create", Model)
+}

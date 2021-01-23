@@ -77,9 +77,9 @@ namespace GrecosQuestionnaire.Logic.Hotels
         //Pobieram listę wszystkich pytań wraz z podpytaniami
         public List<Question> GetQuestions()
         {
+            var questions_items_items = _context.Questions.Select(p => p.Items.Select(s=>s.ItemItems)).ToList();
             var questions_items = _context.Questions.Select(p => p.Items).ToList();
             var model = _context.Questions.ToList();
-
             return model;
         }
 
@@ -91,11 +91,29 @@ namespace GrecosQuestionnaire.Logic.Hotels
             return model;
         }
 
+        //Pobieram listę wszystkich podpodpodpytań
+        public List<QuestionItemItem> GetQuestionItemItems()
+        {
+            var model2 = _context.Questions.ToList();
+            var model1 = _context.QuestionItems.ToList();
+            var model = _context.QuestionItemItems.ToList();
+            return model;
+        }
+
         //Szukam podpytanie po id
         public QuestionItem GetQuestionItem(int id)
         {
             var model = _context.QuestionItems.Where(p => p.Id == id).SingleOrDefault();
             model.Question = _context.QuestionItems.Where(p => p.Id == id).Select(a => a.Question).FirstOrDefault();
+            return model;
+        }
+
+        //Szukam podpodpytanie po id
+        public QuestionItemItem GetQuestionItemItem(int id)
+        {
+            var model = _context.QuestionItemItems.Where(p => p.Id == id).SingleOrDefault();
+            model.QuestionItem = _context.QuestionItemItems.Where(p => p.Id == id).Select(a => a.QuestionItem).FirstOrDefault();
+            model.QuestionItem.Question = _context.QuestionItems.Where(p => p.Id == id).Select(a => a.Question).FirstOrDefault();
             return model;
         }
 
@@ -188,6 +206,20 @@ namespace GrecosQuestionnaire.Logic.Hotels
         public void RemoveQuestionItems(QuestionItem questionsItems)
         {
             _context.Remove(questionsItems);
+            _context.SaveChanges();
+        }
+
+        //Zapisuję do bazy powiązanie między podpodpytaniem a podpytaniem
+        public void UploadQuestionItemItems(QuestionItemItem questionsItemItems)
+        {
+            _context.Update(questionsItemItems);
+            _context.SaveChanges();
+        }
+
+        //Usuwam z bazy powiązanie między podpodpytaniem a podpytaniem
+        public void RemoveQuestionItemItems(QuestionItemItem questionsItemItems)
+        {
+            _context.Remove(questionsItemItems);
             _context.SaveChanges();
         }
 

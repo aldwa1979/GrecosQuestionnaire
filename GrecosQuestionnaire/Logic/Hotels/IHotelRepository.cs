@@ -24,13 +24,21 @@ namespace GrecosQuestionnaire.Logic.Hotels
         void UploadNewSeason(SeasonModel season);
         void UploadMatchUserPartner(UserPartnerModel userPartner);
         void RemoveMatchUserPartner(int id);
+
         List<Question> GetQuestions();
         List<QuestionItem> GetQuestionItems();
+        List<QuestionItemItem> GetQuestionItemItems();
+
+        void UploadQuestionItemItems(QuestionItemItem questionsItemItems);
+        void RemoveQuestionItemItems(QuestionItemItem questionsItemItems);
         void UploadQuestionItems(QuestionItem questionsItems);
         void RemoveQuestionItems(QuestionItem questionsItems);
         void UploadQuestions(Question questions);
         void RemoveQuestion(Question questions);
+
         QuestionItem GetQuestionItem(int id);
+        QuestionItemItem GetQuestionItemItem(int id);
+
         List<ResponseModel> GetResponses();
         List<ResponseItemModel> GetResponseItem();
         void UploadResponses(ResponseModel response);

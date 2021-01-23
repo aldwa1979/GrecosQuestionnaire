@@ -75,7 +75,7 @@ namespace GrecosQuestionnaire
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=MyHotels}/{action=Index}/{id?}");
+                    pattern: "{controller=Account}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }
