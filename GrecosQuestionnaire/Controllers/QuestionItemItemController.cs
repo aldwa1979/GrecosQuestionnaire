@@ -58,6 +58,7 @@ namespace GrecosQuestionnaire.Controllers
                     QuestionItem = _hotelRepository.GetQuestionItems().Where(p => p.Id == model.QuestionItemId).FirstOrDefault(),  
                     Parts = model.Parts,
                     SingleSpace = model.SingleSpace,
+                    SubClass = model.SubClass,
                     Required = model.Required
                 };
                 _hotelRepository.UploadQuestionItemItems(questionItemItem);
@@ -82,6 +83,7 @@ namespace GrecosQuestionnaire.Controllers
                 QuestionItemType = item.QuestionItemType,
                 Parts = item.Parts,
                 SingleSpace = item.SingleSpace,
+                SubClass = item.SubClass,
                 Required = item.Required
             };
 
@@ -102,6 +104,7 @@ namespace GrecosQuestionnaire.Controllers
                 questionItemItem.QuestionItem = _hotelRepository.GetQuestionItems().Where(p => p.Id == model.QuestionItemId).FirstOrDefault();
                 questionItemItem.Parts = model.Parts;
                 questionItemItem.SingleSpace = model.SingleSpace;
+                questionItemItem.SubClass = model.SubClass;
                 questionItemItem.Required = model.Required;
 
                 _hotelRepository.UploadQuestionItemItems(questionItemItem);

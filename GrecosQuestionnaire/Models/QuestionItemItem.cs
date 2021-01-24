@@ -20,6 +20,8 @@ namespace GrecosQuestionnaire.Models
 
         public virtual int SingleSpace { get; set; }
 
+        public virtual string SubClass { get; set; }
+
         public virtual bool Required { get; set; }
     }
 }

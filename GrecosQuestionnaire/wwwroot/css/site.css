@@ -1027,7 +1027,7 @@ input[type="checkbox"].input-validation-error {
         position: absolute;
         top: 8px;
         content: "€";
-        left: 50px;
+        left: 180px;
     }
 
 .input-symbol-m {
@@ -1042,5 +1042,5 @@ input[type="checkbox"].input-validation-error {
         position: absolute;
         top: 8px;
         content: "m";
-        left: 50px;
+        left: 180px;
     }
