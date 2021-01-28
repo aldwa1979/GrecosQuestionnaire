@@ -268,6 +268,11 @@ namespace GrecosQuestionnaire.Controllers
 
             var response = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).FirstOrDefault();
 
+            int walidacja = 100;
+            int number = 0;
+            int numberOfCheck = 0;
+            var listOfComboQuestionItems = _hotelRepository.GetQuestionItems().Where(x => x.ItemOrder == 1 && x.QuestionItemType == Data.Enum.QuestionItemType.ComboList).Select(p => p.Id).ToArray();
+
             foreach (var formData in formCollection)
             {
                 if (formData.Key == "hotel" || formData.Key == "page")
@@ -275,8 +280,21 @@ namespace GrecosQuestionnaire.Controllers
                 else
                 {
                     HttpContext.Session.SetString(formData.Key, formData.Value);
+
+                    bool success = Int32.TryParse(formData.Key, out number);
+
+                    foreach (var item in listOfComboQuestionItems)
+                    {
+                        if (success && int.Parse(formData.Key) == item)
+                        {
+                            numberOfCheck = int.Parse(formData.Value);
+                        }
+                    }
                 }
             }
+
+            int walidacja1 = numberOfCheck != 0 ? numberOfCheck : walidacja;
+            walidacja1++;
 
             //walidacja ankiety
             bool errorExist = false;
@@ -287,15 +305,18 @@ namespace GrecosQuestionnaire.Controllers
                 {
                     if (HttpContext.Session.GetString(source.Id.ToString()) + "t" == null || string.IsNullOrEmpty(HttpContext.Session.GetString(source.Id.ToString() + "t".ToString())))
                     {
-                        errorExist = true;
-                        ModelState.AddModelError(source.Id.ToString(), source.Question.Title + " - " + source.Title + " is required");
+                        if (source.Question.ItemOrder <= walidacja1)
+                        {
+                            errorExist = true;
+                            ModelState.AddModelError(source.Id.ToString(), source.Question.Title + " - " + source.Title + " is required");
+                        }
                     }
                 }
 
             }
             if (errorExist)
             {
-                var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
+                var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed && x.ItemOrder <= walidacja1).OrderBy(x => x.ItemOrder);
 
                 foreach (var key in (HttpContext.Session.Keys))
                 {
