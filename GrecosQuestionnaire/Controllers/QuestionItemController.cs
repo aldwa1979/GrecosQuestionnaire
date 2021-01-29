@@ -29,7 +29,7 @@ namespace GrecosQuestionnaire.Controllers
             ViewBag.Title = question.Title;
 
             var pageNumber = page ?? 1;
-            var onePage = items.OrderBy(p=>p.ItemOrder).ToPagedList(pageNumber, 10);
+            var onePage = items.OrderBy(p=>p.ItemOrder).ToPagedList(pageNumber, 100);
 
             return View(onePage);
         }
