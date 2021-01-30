@@ -41,7 +41,9 @@ namespace GrecosQuestionnaire.Logic.Hotels
 
         List<ResponseModel> GetResponses();
         List<ResponseItemModel> GetResponseItem();
+        List<ResponseItemItemModel> GetResponseItemItem();
         void UploadResponses(ResponseModel response);
         void UploadResponseItems(ResponseItemModel responseItem);
+        void UploadResponseItemItems(ResponseItemItemModel responseItemItem);
     }
 }

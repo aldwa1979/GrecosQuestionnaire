@@ -27,5 +27,6 @@ namespace GrecosQuestionnaire.Data
         public DbSet<QuestionItemItem> QuestionItemItems { get; set; }
         public DbSet<ResponseModel> Responses { get; set; }
         public DbSet<ResponseItemModel> ResponseItems { get; set; }
+        public DbSet<ResponseItemItemModel> ResponseItemItems { get; set; }
     }
 }

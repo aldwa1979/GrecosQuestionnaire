@@ -131,6 +131,14 @@ namespace GrecosQuestionnaire.Logic.Hotels
             return responses;
         }
 
+        //Pobieram listę wszystkich items odpowiedzi
+        public List<ResponseItemItemModel> GetResponseItemItem()
+        {
+            //var responses = _context.ResponseItems.ToList();
+            var responses = _context.ResponseItemItems.AsQueryable().Include(p => p.ResponseItem).Include(p => p.QuestionItemItem).AsNoTracking().ToList();
+            return responses;
+        }
+
         //Zapisuje do bazy nowe hotele wraz z pokojami
         public void UploadHotels(HotelModel hotel)
         {
@@ -234,6 +242,13 @@ namespace GrecosQuestionnaire.Logic.Hotels
         public void UploadResponseItems(ResponseItemModel responseItem)
         {
             _context.ResponseItems.Update(responseItem);
+            _context.SaveChanges();
+        }
+
+        //Zapisuję do bazy powiązanie między użytkowiniem a partnerem
+        public void UploadResponseItemItems(ResponseItemItemModel responseItemItem)
+        {
+            _context.ResponseItemItems.Update(responseItemItem);
             _context.SaveChanges();
         }
 
