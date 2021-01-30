@@ -281,11 +281,12 @@ namespace GrecosQuestionnaire.Controllers
                 {
                     HttpContext.Session.SetString(formData.Key, formData.Value);
 
-                    bool success = Int32.TryParse(formData.Key, out number);
+                    bool success1 = Int32.TryParse(formData.Key, out number);
+                    bool success2 = Int32.TryParse(formData.Value, out number);
 
                     foreach (var item in listOfComboQuestionItems)
                     {
-                        if (success && int.Parse(formData.Key) == item)
+                        if (success1 && success2 && int.Parse(formData.Value) != 0 && int.Parse(formData.Key) == item)
                         {
                             numberOfCheck = int.Parse(formData.Value);
                         }
@@ -296,38 +297,41 @@ namespace GrecosQuestionnaire.Controllers
             int walidacja1 = numberOfCheck != 0 ? numberOfCheck : walidacja;
             walidacja1++;
 
-            //walidacja ankiety
-            bool errorExist = false;
-
-            foreach (var source in _hotelRepository.GetQuestionItems().Where(x => x.Required && x.Question.ItemPage == page && !x.Question.Removed))
+            if (action == "save" || action == "next")
             {
-                if (HttpContext.Session.GetString(source.Id.ToString()) == null || string.IsNullOrEmpty(HttpContext.Session.GetString(source.Id.ToString())))
+                //walidacja ankiety
+                bool errorExist = false;
+
+                foreach (var source in _hotelRepository.GetQuestionItems().Where(x => x.Required && x.Question.ItemPage == page && !x.Question.Removed))
                 {
-                    if (HttpContext.Session.GetString(source.Id.ToString()) + "t" == null || string.IsNullOrEmpty(HttpContext.Session.GetString(source.Id.ToString() + "t".ToString())))
+                    if (HttpContext.Session.GetString(source.Id.ToString()) == null || string.IsNullOrEmpty(HttpContext.Session.GetString(source.Id.ToString())))
                     {
-                        if (source.Question.ItemOrder <= walidacja1)
+                        if (HttpContext.Session.GetString(source.Id.ToString()) + "t" == null || string.IsNullOrEmpty(HttpContext.Session.GetString(source.Id.ToString() + "t".ToString())))
                         {
-                            errorExist = true;
-                            ModelState.AddModelError(source.Id.ToString(), source.Question.Title + " - " + source.Title + " is required");
+                            if (source.Question.ItemOrder <= walidacja1)
+                            {
+                                errorExist = true;
+                                ModelState.AddModelError(source.Id.ToString(), source.Question.Title + " - " + source.Title + " is required");
+                            }
                         }
                     }
+
                 }
-
-            }
-            if (errorExist)
-            {
-                var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed && x.ItemOrder <= walidacja1).OrderBy(x => x.ItemOrder);
-
-                foreach (var key in (HttpContext.Session.Keys))
+                if (errorExist)
                 {
-                    ViewData[key.ToString()] = HttpContext.Session.GetString(key);
+                    var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed && x.ItemOrder <= walidacja1).OrderBy(x => x.ItemOrder);
+
+                    foreach (var key in (HttpContext.Session.Keys))
+                    {
+                        ViewData[key.ToString()] = HttpContext.Session.GetString(key);
+                    }
+
+                    PassToView(page, hotel, hotelCodeName);
+
+                    return View(items);
                 }
-
-                PassToView(page, hotel, hotelCodeName);
-
-                return View(items);
+                //koniec walidacji
             }
-            //koniec walidacji
 
             if (action == "next")
             {
@@ -1024,11 +1028,30 @@ namespace GrecosQuestionnaire.Controllers
                 {
                     string stringkey = key.ToString();
                     string replaced = stringkey.Replace("t", string.Empty);
+                    string replacedItem = stringkey.Replace("q", string.Empty);
 
                     var responseId = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
-                    int itemId;
+                    var responseItemId = _hotelRepository.GetResponseItem().Where(p => p.Response.HotelId == hotel).SingleOrDefault();
 
-                    if (int.TryParse(replaced, out itemId))
+                    int itemId;
+                    int itemItemId;
+
+                    if (stringkey.Contains('q'))
+                    {
+                        if (int.TryParse(replacedItem, out itemItemId))
+                        {
+                            var questionItemItem = _hotelRepository.GetQuestionItemItem(itemItemId);
+                            ResponseItemItemModel responseItemItem = new ResponseItemItemModel();
+                            responseItemItem.QuestionItemItem = questionItemItem;
+                            responseItemItem.RawValue = HttpContext.Session.GetString(key);
+                            responseItemItem.Value = key.ToString();
+                            responseItemItem.ResponseItem = responseItemId;
+
+                            _hotelRepository.UploadResponseItemItems(responseItemItem);
+                        }
+                    }
+
+                    else if (int.TryParse(replaced, out itemId))
                     {
                         var questionItem = _hotelRepository.GetQuestionItem(itemId);
                         ResponseItemModel responseItem = new ResponseItemModel();
