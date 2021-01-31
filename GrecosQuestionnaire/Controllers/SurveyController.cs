@@ -1031,13 +1031,16 @@ namespace GrecosQuestionnaire.Controllers
                     string replacedItem = stringkey.Replace("q", string.Empty);
 
                     var responseId = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
-                    var responseItemId = _hotelRepository.GetResponseItem().Where(p => p.Response.HotelId == hotel).SingleOrDefault();
 
                     int itemId;
                     int itemItemId;
 
                     if (stringkey.Contains('q'))
                     {
+                        int replacedItemInt = int.Parse(replacedItem);
+                        var questionItemId = _hotelRepository.GetQuestionItemItems().Where(p => p.Id == replacedItemInt).Select(p => p.QuestionItem.Id).FirstOrDefault();
+                        var responseItemId = _hotelRepository.GetResponseItem().Where(p => p.Response.HotelId == hotel && p.QuestionItem.Id == questionItemId).SingleOrDefault();
+
                         if (int.TryParse(replacedItem, out itemItemId))
                         {
                             var questionItemItem = _hotelRepository.GetQuestionItemItem(itemItemId);
