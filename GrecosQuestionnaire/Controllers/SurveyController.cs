@@ -1035,23 +1035,24 @@ namespace GrecosQuestionnaire.Controllers
                     int itemId;
                     int itemItemId;
 
-                    if (stringkey.Contains('q'))
+                    if (stringkey.Contains('q') && stringkey.Length < 7 && int.TryParse(replacedItem, out itemItemId))
                     {
                         int replacedItemInt = int.Parse(replacedItem);
-                        var questionItemId = _hotelRepository.GetQuestionItemItems().Where(p => p.Id == replacedItemInt).Select(p => p.QuestionItem.Id).FirstOrDefault();
-                        var responseItemId = _hotelRepository.GetResponseItem().Where(p => p.Response.HotelId == hotel && p.QuestionItem.Id == questionItemId).SingleOrDefault();
 
-                        if (int.TryParse(replacedItem, out itemItemId))
-                        {
-                            var questionItemItem = _hotelRepository.GetQuestionItemItem(itemItemId);
+                        var questionItemItem = _hotelRepository.GetQuestionItemItem(itemItemId);
+                        //var questionItem = _hotelRepository.GetQuestionItemItems().Where(p => p.Id == replacedItemInt).FirstOrDefault().QuestionItem.Id;
+                        var responseItem = _hotelRepository.GetResponseItem().Where(p => p.Response.HotelId == hotel && p.QuestionItem.Id == questionItemItem.QuestionItem.Id).FirstOrDefault();
+
+                        //var questionItem = _hotelRepository.GetQuestionItemItems().Where(p => p.Id == replacedItemInt).FirstOrDefault();
+                        //var responseItem = _hotelRepository.GetResponseItem().Where(p => p.Response.HotelId == hotel && p.QuestionItem.Id == questionItem.QuestionItem.Id).SingleOrDefault();
+
                             ResponseItemItemModel responseItemItem = new ResponseItemItemModel();
                             responseItemItem.QuestionItemItem = questionItemItem;
                             responseItemItem.RawValue = HttpContext.Session.GetString(key);
                             responseItemItem.Value = key.ToString();
-                            responseItemItem.ResponseItem = responseItemId;
+                            responseItemItem.ResponseItem = responseItem;
 
                             _hotelRepository.UploadResponseItemItems(responseItemItem);
-                        }
                     }
 
                     else if (int.TryParse(replaced, out itemId))

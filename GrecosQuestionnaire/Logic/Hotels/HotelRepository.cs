@@ -94,8 +94,8 @@ namespace GrecosQuestionnaire.Logic.Hotels
         //Pobieram listę wszystkich podpodpodpytań
         public List<QuestionItemItem> GetQuestionItemItems()
         {
-            var model2 = _context.Questions.ToList();
-            var model1 = _context.QuestionItems.ToList();
+            //var model2 = _context.Questions.ToList();
+            //var model1 = _context.QuestionItems.ToList();
             var model = _context.QuestionItemItems.ToList();
             return model;
         }
@@ -111,9 +111,13 @@ namespace GrecosQuestionnaire.Logic.Hotels
         //Szukam podpodpytanie po id
         public QuestionItemItem GetQuestionItemItem(int id)
         {
+            var question = _context.Questions.ToList();
+            var questionItems = _context.QuestionItems.ToList();
+            var questionItemsItems = _context.QuestionItemItems.ToList();
+
             var model = _context.QuestionItemItems.Where(p => p.Id == id).SingleOrDefault();
-            model.QuestionItem = _context.QuestionItemItems.Where(p => p.Id == id).Select(a => a.QuestionItem).FirstOrDefault();
-            model.QuestionItem.Question = _context.QuestionItems.Where(p => p.Id == id).Select(a => a.Question).FirstOrDefault();
+            //model.QuestionItem = _context.QuestionItemItems.Where(p => p.Id == id).Select(a => a.QuestionItem).FirstOrDefault();
+            //model.QuestionItem.Question = _context.QuestionItems.Where(p => p.Id == id).Select(a => a.Question).FirstOrDefault();
             return model;
         }
 

@@ -22,7 +22,7 @@ namespace GrecosQuestionnaire.Controllers
         {
             var question = _hotelRepository.GetQuestions().Where(p => p.Id == questionId).FirstOrDefault();
 
-            var items = _hotelRepository.GetQuestionItems().Where(x => x.Question.Id == questionId);
+            var items = _hotelRepository.GetQuestionItems().Where(x => x.Question.Id == questionId).ToList();
 
             ViewBag.Count = items.Count();
             ViewBag.QuestionId = questionId;
