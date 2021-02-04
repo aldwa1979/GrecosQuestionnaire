@@ -22,7 +22,7 @@ namespace GrecosQuestionnaire.Controllers
             ViewBag.Count = items.Count();
 
             var pageNumber = page ?? 1;
-            var onePage = items.ToPagedList(pageNumber, 10);
+            var onePage = items.ToPagedList(pageNumber, 50);
 
             return View(onePage);
         }

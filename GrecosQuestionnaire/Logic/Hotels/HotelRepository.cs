@@ -131,7 +131,9 @@ namespace GrecosQuestionnaire.Logic.Hotels
         public List<ResponseItemModel> GetResponseItem()
         {
             //var responses = _context.ResponseItems.ToList();
-            var responses = _context.ResponseItems.AsQueryable().Include(p => p.Response).Include(p => p.QuestionItem).AsNoTracking().ToList();
+            //var responses = _context.ResponseItems.AsQueryable().Include(p => p.Response).Include(p => p.QuestionItem).AsNoTracking().ToList();
+           // var responses1 = _context.ResponseItems.AsQueryable().ToList();
+            var responses = _context.ResponseItems.AsQueryable().Include(p => p.Response).Include(p => p.QuestionItem).ToList();
             return responses;
         }
 
@@ -139,7 +141,8 @@ namespace GrecosQuestionnaire.Logic.Hotels
         public List<ResponseItemItemModel> GetResponseItemItem()
         {
             //var responses = _context.ResponseItems.ToList();
-            var responses = _context.ResponseItemItems.AsQueryable().Include(p => p.ResponseItem).Include(p => p.QuestionItemItem).AsNoTracking().ToList();
+            //var responses = _context.ResponseItemItems.AsQueryable().Include(p => p.ResponseItem).Include(p => p.QuestionItemItem).AsNoTracking().ToList();
+            var responses = _context.ResponseItemItems.AsQueryable().Include(p => p.ResponseItem).Include(p => p.QuestionItemItem).ToList();
             return responses;
         }
 

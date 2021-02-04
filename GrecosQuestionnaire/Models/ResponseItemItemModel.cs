@@ -9,7 +9,7 @@ namespace GrecosQuestionnaire.Models
     {
         public int Id { get; set; }
 
-        public virtual QuestionItemItem QuestionItemItem { get; set; }
+        public virtual int QuestionItemItem { get; set; }
 
         public virtual ResponseItemModel ResponseItem { get; set; }
 

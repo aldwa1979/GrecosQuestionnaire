@@ -1039,9 +1039,9 @@ namespace GrecosQuestionnaire.Controllers
                     {
                         int replacedItemInt = int.Parse(replacedItem);
 
-                        var questionItemItem = _hotelRepository.GetQuestionItemItem(itemItemId);
+                        var questionItemItem = _hotelRepository.GetQuestionItemItem(itemItemId).QuestionItem.Id;
                         //var questionItem = _hotelRepository.GetQuestionItemItems().Where(p => p.Id == replacedItemInt).FirstOrDefault().QuestionItem.Id;
-                        var responseItem = _hotelRepository.GetResponseItem().Where(p => p.Response.HotelId == hotel && p.QuestionItem.Id == questionItemItem.QuestionItem.Id).FirstOrDefault();
+                        var responseItem = _hotelRepository.GetResponseItem().Where(p => p.Response.HotelId == hotel && p.QuestionItem.Id == questionItemItem).FirstOrDefault();
 
                         //var questionItem = _hotelRepository.GetQuestionItemItems().Where(p => p.Id == replacedItemInt).FirstOrDefault();
                         //var responseItem = _hotelRepository.GetResponseItem().Where(p => p.Response.HotelId == hotel && p.QuestionItem.Id == questionItem.QuestionItem.Id).SingleOrDefault();
