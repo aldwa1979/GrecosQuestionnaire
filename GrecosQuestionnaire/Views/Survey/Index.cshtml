@@ -523,7 +523,7 @@
                                                         @foreach (var line in item.Items.Split('\n'))
                                                         {
                                                             <li>
-                                                                <div class="checkbox" style="margin-top: 4px; padding-left: 50px;">
+                                                                <div class="checkbox" style="margin-top: 4px; padding-left: 50px; padding-right: 50px;">
                                                                     @if (line.Contains("[]"))
                                                                     {
                                                                         string newline = line.Replace("[]", "");
@@ -1161,14 +1161,6 @@
             $('div.showSubClass68').hide();
             $('div.showSubClass69').hide();
             $('div.showSubClass70').hide();
-
-
-
-
-
-
-
-
 
             $('div.show1').hide();
             $('div.show2').hide();
