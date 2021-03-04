@@ -236,7 +236,10 @@ namespace GrecosQuestionnaire.Controllers
                     {
                         if (item2.Items != null && item2.ItemPage == page && item2.Items.Where(x => x.Id == item).Any())
                         {
-                            comboQuestionPerPageToView = (Int32.TryParse(HttpContext.Session.GetString(item.ToString()), out number)) ? Int32.Parse(HttpContext.Session.GetString(item.ToString())) : number;
+                            if (comboQuestionPerPageToView == 0)
+                            {
+                                comboQuestionPerPageToView = (Int32.TryParse(HttpContext.Session.GetString(item.ToString()), out number)) ? Int32.Parse(HttpContext.Session.GetString(item.ToString())) : number;
+                            }
                         }
                     }
                 }
