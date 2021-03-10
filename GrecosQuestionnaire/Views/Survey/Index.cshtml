@@ -19,6 +19,7 @@
     int hotel = ViewBag.Hotel;
     int numberOfQuestion = 0;
     int? dana = ViewBag.Number;
+    List<string> danaSubClass = ViewBag.NumberSubClass;
 }
 
 <br />
@@ -849,7 +850,7 @@
                                                 item1.SingleSpace = 2;
                                             }
 
-                                            string itemValue1 = ViewData[@item1.Id.ToString(CultureInfo.InvariantCulture)] != null ? ViewData[@item1.Id.ToString(CultureInfo.InvariantCulture)].ToString() : string.Empty;
+                                            string itemValue1 = ViewData[(item1.Id + "q").ToString(CultureInfo.InvariantCulture)] != null ? ViewData[(item1.Id + "q").ToString(CultureInfo.InvariantCulture)].ToString() : string.Empty;
 
                                             <div class="form-group @item1.SubClass" style="margin-top: 10px;">
 
@@ -859,7 +860,7 @@
                                                         <label for="costbox" class="col-sm-5 col-form-label" style="padding-left:20px">@item1.Title</label>
                                                         <div class="col-sm-6">
                                                             <span class="input-symbol-euro">
-                                                                <input type="number" step="0.01" min="0" class="form-control" id="costbox" placeholder="0,00" name="@item1.Id" value="@ViewData[@item1.Id.ToString(CultureInfo.InvariantCulture)]" />
+                                                                <input type="number" step="0.01" min="0" class="form-control" id="costbox" placeholder="0,00" name="@(item1.Id + "q")" value="@ViewData[(item1.Id + "q").ToString(CultureInfo.InvariantCulture)]" />
                                                             </span>
                                                         </div>
                                                     </div>
@@ -900,16 +901,16 @@
                                                                                     string newline = line.Replace("[]", "");
 
                                                                                     <label>
-                                                                                        <input type="checkbox" name="@item1.Id" value="@newline"
+                                                                                        <input type="checkbox" name="@(item1.Id + "q")" value="@newline"
                                                                                                @(itemValue.Contains(newline) ? "checked='checked'" : string.Empty) />
                                                                                         newline
                                                                                     </label>
-                                                                                    <input type="text" name="@(item1.Id + "t")" value="@ViewData[(item1.Id + "t").ToString(CultureInfo.InvariantCulture)]" />
+                                                                                    <input type="text" name="@(item1.Id + "qt")" value="@ViewData[(item1.Id + "qt").ToString(CultureInfo.InvariantCulture)]" />
                                                                                 }
                                                                                 else
                                                                                 {
                                                                                     <label>
-                                                                                        <input type="checkbox" name="@item1.Id" value="@line"
+                                                                                        <input type="checkbox" name="@(item1.Id + "q")" value="@line"
                                                                                                @(itemValue.Contains(line) ? "checked='checked'" : string.Empty) />
                                                                                         @line
                                                                                     </label>
@@ -947,12 +948,12 @@
                                                         </div>
                                                         <div class="row" style="text-align: center; padding-left: 5px;">
                                                             <div class="col-md-@item1.SingleSpace col-xs-@item1.SingleSpace" style="padding: 0;">
-                                                                <input type="radio" name="@item1.Id" id="test1" value="1"
+                                                                <input type="radio" name="@(item1.Id + "q")" id="test1" value="1"
                                                                        @(itemValue1 == "1" ? "checked='checked'" : string.Empty) />
 
                                                             </div>
                                                             <div class="col-md-@item1.SingleSpace col-xs-@item1.SingleSpace" style="padding: 0;">
-                                                                <input type="radio" name="@item1.Id" id="test2" value="2"
+                                                                <input type="radio" name="@(item1.Id + "q")" id="test2" value="2"
                                                                        @(itemValue1 == "2" ? "checked='checked'" : string.Empty) />
                                                             </div>
                                                         </div>
@@ -994,38 +995,38 @@
                                                         </div>
                                                         <div class="row" style="text-align: center; padding-left: 5px;">
                                                             <div class="col-md-1 col-xs-1" style="padding: 0;">
-                                                                <input type="radio" name="@item1.Id" id="test1" value="1"
-                                                                       @(itemValue == "1" ? "checked='checked'" : string.Empty) />
+                                                                <input type="radio" name="@(item1.Id + "q")" id="test1" value="1"
+                                                                       @(itemValue1 == "1" ? "checked='checked'" : string.Empty) />
 
                                                             </div>
                                                             <div class="col-md-1 col-xs-1" style="padding: 0;">
-                                                                <input type="radio" name="@item1.Id" id="test2" value="2"
-                                                                       @(itemValue == "2" ? "checked='checked'" : string.Empty) />
+                                                                <input type="radio" name="@(item1.Id + "q")" id="test2" value="2"
+                                                                       @(itemValue1 == "2" ? "checked='checked'" : string.Empty) />
 
                                                             </div>
                                                             <div class="col-md-1 col-xs-1" style="padding: 0;">
-                                                                <input type="radio" name="@item1.Id" id="test3" value="3"
-                                                                       @(itemValue == "3" ? "checked='checked'" : string.Empty) />
+                                                                <input type="radio" name="@(item1.Id + "q")" id="test3" value="3"
+                                                                       @(itemValue1 == "3" ? "checked='checked'" : string.Empty) />
 
                                                             </div>
                                                             <div class="col-md-1 col-xs-1" style="padding: 0;">
-                                                                <input type="radio" name="@item1.Id" id="test4" value="4"
-                                                                       @(itemValue == "4" ? "checked='checked'" : string.Empty) />
+                                                                <input type="radio" name="@(item1.Id + "q")" id="test4" value="4"
+                                                                       @(itemValue1 == "4" ? "checked='checked'" : string.Empty) />
 
                                                             </div>
                                                             <div class="col-md-1 col-xs-1" style="padding: 0;">
-                                                                <input type="radio" name="@item1.Id" id="test5" value="5"
-                                                                       @(itemValue == "5" ? "checked='checked'" : string.Empty) />
+                                                                <input type="radio" name="@(item1.Id + "q")" id="test5" value="5"
+                                                                       @(itemValue1 == "5" ? "checked='checked'" : string.Empty) />
 
                                                             </div>
                                                             <div class="col-md-1 col-xs-1" style="padding: 0;">
-                                                                <input type="radio" name="@item1.Id" id="test6" value="6"
-                                                                       @(itemValue == "6" ? "checked='checked'" : string.Empty) />
+                                                                <input type="radio" name="@(item1.Id + "q")" id="test6" value="6"
+                                                                       @(itemValue1 == "6" ? "checked='checked'" : string.Empty) />
 
                                                             </div>
                                                             <div class="col-md-1 col-xs-1" style="padding: 0;">
-                                                                <input type="radio" name="@item1.Id" id="test7" value="7"
-                                                                       @(itemValue == "7" ? "checked='checked'" : string.Empty) />
+                                                                <input type="radio" name="@(item1.Id + "q")" id="test7" value="7"
+                                                                       @(itemValue1 == "7" ? "checked='checked'" : string.Empty) />
 
                                                             </div>
                                                         </div>
@@ -1046,7 +1047,7 @@
                                                                 from:
                                                             </label>
                                                             <div class="col-sm-1" style="padding-top: 5px">
-                                                                <input type="date" name="@item1.Id" id="from" value="@ViewData[@item1.Id.ToString(CultureInfo.InvariantCulture)]" />
+                                                                <input type="date" name="@(item1.Id + "q")" id="from" value="@ViewData[(item1.Id + "q").ToString(CultureInfo.InvariantCulture)]" />
                                                             </div>
                                                         </div>
 
@@ -1055,7 +1056,7 @@
                                                                 to:
                                                             </label>
                                                             <div class="col-sm-1" style="padding-top: 5px; padding-left: 25px">
-                                                                <input type="date" name="@(item1.Id + "t")" id="to" value="@ViewData[(item1.Id + "t").ToString(CultureInfo.InvariantCulture)]" />
+                                                                <input type="date" name="@(item1.Id + "qt")" id="to" value="@ViewData[(item1.Id + "qt").ToString(CultureInfo.InvariantCulture)]" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1074,7 +1075,7 @@
                                                                 from:
                                                             </label>
                                                             <div class="col-sm-1" style="padding-top: 5px">
-                                                                <input type="time" name="@item1.Id" id="from" value="@ViewData[@item1.Id.ToString(CultureInfo.InvariantCulture)]" />
+                                                                <input type="time" name="@(item1.Id + "q")" id="from" value="@ViewData[(item1.Id + "q").ToString(CultureInfo.InvariantCulture)]" />
                                                             </div>
                                                         </div>
 
@@ -1083,7 +1084,7 @@
                                                                 to:
                                                             </label>
                                                             <div class="col-sm-1" style="padding-top: 5px; padding-left: 25px">
-                                                                <input type="time" name="@(item1.Id + "t")" id="to" value="@ViewData[(item1.Id + "t").ToString(CultureInfo.InvariantCulture)]" />
+                                                                <input type="time" name="@(item1.Id + "qt")" id="to" value="@ViewData[(item1.Id + "qt").ToString(CultureInfo.InvariantCulture)]" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1094,7 +1095,7 @@
                                                         <label for="distancebox" class="col-sm-5 col-form-label" style="padding-left:20px">@item1.Title</label>
                                                         <div class="col-sm-6">
                                                             <span class="input-symbol-m">
-                                                                <input type="number" step="1" min="0" class="form-control" id="distancebox" placeholder="0" name="@item1.Id" value="@ViewData[@item1.Id.ToString(CultureInfo.InvariantCulture)]" />
+                                                                <input type="number" step="1" min="0" class="form-control" id="distancebox" placeholder="0" name="@(item1.Id + "q")" value="@ViewData[(item1.Id + "q").ToString(CultureInfo.InvariantCulture)]" />
                                                             </span>
                                                         </div>
                                                     </div>
@@ -1104,7 +1105,7 @@
                                                     <div class="form-group row">
                                                         <label for="numberbox" class="col-sm-5 col-form-label" style="padding-left:20px">@item1.Title</label>
                                                         <div class="col-sm-7">
-                                                            <input type="number" step="0.01" min="0" class="form-control" id="numberbox" placeholder="0,00" name="@item1.Id" value="@ViewData[@item1.Id.ToString(CultureInfo.InvariantCulture)]" />
+                                                            <input type="number" step="0.01" min="0" class="form-control" id="numberbox" placeholder="0,00" name="@(item1.Id + "q")" value="@ViewData[(item1.Id + "q").ToString(CultureInfo.InvariantCulture)]" />
                                                         </div>
                                                     </div>
                                                 }
@@ -1312,9 +1313,6 @@
 
             $(document).ready(function () {
                 $('div.show1').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show2').show('slow')
             });
         </script>
@@ -1328,13 +1326,7 @@
 
             $(document).ready(function () {
                 $('div.show1').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show2').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show3').show('slow')
             });
         </script>
@@ -1348,17 +1340,8 @@
 
             $(document).ready(function () {
                 $('div.show1').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show2').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show3').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show4').show('slow')
             });
         </script>
@@ -1372,21 +1355,9 @@
 
             $(document).ready(function () {
                 $('div.show1').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show2').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show3').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show4').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show5').show('slow')
             });
         </script>
@@ -1400,25 +1371,10 @@
 
             $(document).ready(function () {
                 $('div.show1').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show2').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show3').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show4').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show5').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show6').show('slow')
             });
         </script>
@@ -1432,29 +1388,11 @@
 
             $(document).ready(function () {
                 $('div.show1').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show2').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show3').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show4').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show5').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show6').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show7').show('slow')
             });
         </script>
@@ -1468,33 +1406,12 @@
 
             $(document).ready(function () {
                 $('div.show1').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show2').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show3').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show4').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show5').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show6').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show7').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show8').show('slow')
             });
         </script>
@@ -1508,37 +1425,13 @@
 
             $(document).ready(function () {
                 $('div.show1').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show2').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show3').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show4').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show5').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show6').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show7').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show8').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show9').show('slow')
             });
         </script>
@@ -1552,41 +1445,14 @@
 
             $(document).ready(function () {
                 $('div.show1').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show2').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show3').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show4').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show5').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show6').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show7').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show8').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show9').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show10').show('slow')
             });
         </script>
@@ -1600,45 +1466,15 @@
 
             $(document).ready(function () {
                 $('div.show1').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show2').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show3').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show4').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show5').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show6').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show7').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show8').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show9').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show10').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show11').show('slow')
             });
         </script>
@@ -1652,49 +1488,16 @@
 
             $(document).ready(function () {
                 $('div.show1').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show2').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show3').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show4').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show5').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show6').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show7').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show8').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show9').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show10').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show11').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show12').show('slow')
             });
         </script>
@@ -1708,53 +1511,17 @@
 
             $(document).ready(function () {
                 $('div.show1').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show2').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show3').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show4').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show5').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show6').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show7').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show8').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show9').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show10').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show11').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show12').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show13').show('slow')
             });
         </script>
@@ -1768,57 +1535,18 @@
 
             $(document).ready(function () {
                 $('div.show1').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show2').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show3').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show4').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show5').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show6').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show7').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show8').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show9').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show10').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show11').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show12').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show13').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show14').show('slow')
             });
         </script>
@@ -1832,61 +1560,19 @@
 
             $(document).ready(function () {
                 $('div.show1').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show2').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show3').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show4').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show5').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show6').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show7').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show8').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show9').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show10').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show11').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show12').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show13').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show14').show('slow')
-            });
-
-            $(document).ready(function () {
                 $('div.show15').show('slow')
             });
         </script>
@@ -2843,6 +2529,16 @@
         }(jQuery));
 
     </script>
+
+    @foreach (var item in danaSubClass)
+    {
+        <script>
+            $(document).ready(function () {
+                $('div.@item').show('slow')
+            });
+        </script>
+    }
+
 
     <style>
         #panel1, #flip1, #panel2, #flip2, #panel3, #flip3, #panel4, #flip4, #panel5, #flip5, #panel6, #flip6, #panel7, #flip7, #panel8, #flip8, #panel9, #flip9, #panel10, #flip10, #panel11, #flip11, #panel12, #flip12, #panel13, #flip13, #panel14, #flip14, #panel15, #flip15, #panel16, #flip16 {

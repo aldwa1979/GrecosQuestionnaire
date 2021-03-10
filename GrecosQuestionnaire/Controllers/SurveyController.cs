@@ -217,6 +217,9 @@ namespace GrecosQuestionnaire.Controllers
 
                 //wyszukuję pytania z grupy ComboList aby na automacie w widoku pokazywać wszystkie wybrane part1
                 var comboListQuestions = _hotelRepository.GetQuestionItems().Where(z => z.QuestionItemType.ToString() == "ComboList").Select(z => z.Id).ToArray();
+                var comboListQuestionsSubClass = _hotelRepository.GetQuestionItems().
+                    Where(z => z.QuestionItemType.ToString() == "ComboList").
+                    Select(z => new { z.Id, V = z.Items.Split($"\r\n") }).ToArray();
 
                 foreach (var key in HttpContext.Session.Keys)
                 {
@@ -243,6 +246,30 @@ namespace GrecosQuestionnaire.Controllers
                         }
                     }
                 }
+
+                //wyszukuję pytania z grupy ComboList dla SubClass aby na automacie w widoku pokazywać wszystkie wybrane 
+                List<string> listOfSubClass = new List<string>();
+
+                foreach (var item in comboListQuestionsSubClass)
+                {
+                    foreach (var item2 in items)
+                    {
+                        if (item2.Items != null && item2.ItemPage == page && item2.Items.Where(x => x.Id == item.Id).Any())
+                        {
+                            var idSubClass = HttpContext.Session.GetString(item.Id.ToString());
+
+                            foreach (var subClass in item.V)
+                            {
+                                if (subClass.Split('$')[0] == idSubClass && subClass.Split('$')[1].Contains("showSubClass"))
+                                {
+                                    listOfSubClass.Add(subClass.Split('$')[1]);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                ViewBag.NumberSubClass = listOfSubClass;
                 ViewBag.Number = comboQuestionPerPageToView;
 
                 return View(items);
@@ -1049,13 +1076,13 @@ namespace GrecosQuestionnaire.Controllers
                         //var questionItem = _hotelRepository.GetQuestionItemItems().Where(p => p.Id == replacedItemInt).FirstOrDefault();
                         //var responseItem = _hotelRepository.GetResponseItem().Where(p => p.Response.HotelId == hotel && p.QuestionItem.Id == questionItem.QuestionItem.Id).SingleOrDefault();
 
-                            ResponseItemItemModel responseItemItem = new ResponseItemItemModel();
-                            responseItemItem.QuestionItemItem = questionItemItem;
-                            responseItemItem.RawValue = HttpContext.Session.GetString(key);
-                            responseItemItem.Value = key.ToString();
-                            responseItemItem.ResponseItem = responseItem;
+                        ResponseItemItemModel responseItemItem = new ResponseItemItemModel();
+                        responseItemItem.QuestionItemItem = questionItemItem;
+                        responseItemItem.RawValue = HttpContext.Session.GetString(key);
+                        responseItemItem.Value = key.ToString();
+                        responseItemItem.ResponseItem = responseItem;
 
-                            _hotelRepository.UploadResponseItemItems(responseItemItem);
+                        _hotelRepository.UploadResponseItemItems(responseItemItem);
                     }
 
                     else if (int.TryParse(replaced, out itemId))
