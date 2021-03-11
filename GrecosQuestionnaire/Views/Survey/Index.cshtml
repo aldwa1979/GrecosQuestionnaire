@@ -52,7 +52,7 @@
                     }
                     else
                     {
-                        <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="back">
+                        <button type="submit" class="btn btn-primary" style="background-color: #1b6ec2" name="action" value="back">
                             Back
                             <span class="glyphicon glyphicon-chevron-left"></span>
                         </button>
@@ -68,7 +68,7 @@
 
                     else
                     {
-                        <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="next">
+                        <button type="submit" class="btn btn-primary" style="background-color: #1b6ec2" name="action" value="next">
                             Next Page
                             <span class="glyphicon glyphicon-chevron-right"></span>
                         </button>
@@ -91,7 +91,7 @@
                     if (question.IsHeader)
                     {
                         <br />
-                        <h3><span class="custom-control-label">@question.Title</span></h3>
+                        <h3><span class="custom-control">@question.Title</span></h3>
                         continue;
                     }
 
@@ -104,12 +104,13 @@
                             string panelValue = "panel" + numberOfQuestion;
                         }
 
-                        <div id="@flipValue">
-                            @Html.Label(question.Title, question.Title, new { @class = "control-label", @style = "font-weight: bold ;color: #005EA8; margin-bottom: 0; font-size: 1.1em;" })
-                            <spam class="glyphicon glyphicon-chevron-down"></spam>
+                        <div id="@flipValue" style="background-color: #1b6ec2">
+
+                            @Html.Label(question.Title, question.Title, new { @class = "control-label", @style = "font-weight: bold ;color: white; margin-bottom: 0; font-size: 1.1em;" })
+                            <span class="glyphicon glyphicon-chevron-down" style="color: white"></span>
                         </div>
 
-                        <div id="@panelValue">
+                        <div id="@panelValue" style="background-color: #b5dbff">
                             @if (!string.IsNullOrEmpty(question.Subtitle))
                             {
                                 <br />
@@ -1129,7 +1130,7 @@
                     }
                     else
                     {
-                        <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="back">
+                        <button type="submit" class="btn btn-primary" style="background-color: #1b6ec2" name="action" value="back">
                             Back
                             <span class="glyphicon glyphicon-chevron-left"></span>
                         </button>
@@ -1145,7 +1146,7 @@
 
                     else
                     {
-                        <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="next">
+                        <button type="submit" class="btn btn-primary" style="background-color: #1b6ec2" name="action" value="next">
                             Next Page
                             <span class="glyphicon glyphicon-chevron-right"></span>
                         </button>

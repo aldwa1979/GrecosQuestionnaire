@@ -130,6 +130,8 @@ namespace GrecosQuestionnaire.Controllers
 
                 PassToView(page, hotel, hotelCodeName);
 
+                SubClassMethod(page, items);
+
                 return View(items);
             }
 
@@ -208,18 +210,14 @@ namespace GrecosQuestionnaire.Controllers
 
                 PassToView(page, hotel, hotelCodeName);
 
+                SubClassMethod(page, items);
+
                 return View(items);
             }
 
             else
             {
                 var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
-
-                //wyszukuję pytania z grupy ComboList aby na automacie w widoku pokazywać wszystkie wybrane part1
-                var comboListQuestions = _hotelRepository.GetQuestionItems().Where(z => z.QuestionItemType.ToString() == "ComboList").Select(z => z.Id).ToArray();
-                var comboListQuestionsSubClass = _hotelRepository.GetQuestionItems().
-                    Where(z => z.QuestionItemType.ToString() == "ComboList").
-                    Select(z => new { z.Id, V = z.Items.Split($"\r\n") }).ToArray();
 
                 foreach (var key in HttpContext.Session.Keys)
                 {
@@ -228,52 +226,62 @@ namespace GrecosQuestionnaire.Controllers
 
                 PassToView(page, hotel, hotelCodeName);
 
-
-                //wyszukuję pytania z grupy ComboList aby na automacie w widoku pokazywać wszystkie wybrane part2
-                int number = 0;
-                int comboQuestionPerPageToView = 0;
-
-                foreach (var item in comboListQuestions)
-                {
-                    foreach (var item2 in items)
-                    {
-                        if (item2.Items != null && item2.ItemPage == page && item2.Items.Where(x => x.Id == item).Any())
-                        {
-                            if (comboQuestionPerPageToView == 0)
-                            {
-                                comboQuestionPerPageToView = (Int32.TryParse(HttpContext.Session.GetString(item.ToString()), out number)) ? Int32.Parse(HttpContext.Session.GetString(item.ToString())) : number;
-                            }
-                        }
-                    }
-                }
-
-                //wyszukuję pytania z grupy ComboList dla SubClass aby na automacie w widoku pokazywać wszystkie wybrane 
-                List<string> listOfSubClass = new List<string>();
-
-                foreach (var item in comboListQuestionsSubClass)
-                {
-                    foreach (var item2 in items)
-                    {
-                        if (item2.Items != null && item2.ItemPage == page && item2.Items.Where(x => x.Id == item.Id).Any())
-                        {
-                            var idSubClass = HttpContext.Session.GetString(item.Id.ToString());
-
-                            foreach (var subClass in item.V)
-                            {
-                                if (subClass.Split('$')[0] == idSubClass && subClass.Split('$')[1].Contains("showSubClass"))
-                                {
-                                    listOfSubClass.Add(subClass.Split('$')[1]);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                ViewBag.NumberSubClass = listOfSubClass;
-                ViewBag.Number = comboQuestionPerPageToView;
+                SubClassMethod(page, items);
 
                 return View(items);
             }
+        }
+
+        private void SubClassMethod(int? page, IOrderedEnumerable<Question> items)
+        {
+            //wyszukuję pytania z grupy ComboList aby na automacie w widoku pokazywać wszystkie wybrane part1
+            var comboListQuestions = _hotelRepository.GetQuestionItems().Where(z => z.QuestionItemType.ToString() == "ComboList").Select(z => z.Id).ToArray();
+            var comboListQuestionsSubClass = _hotelRepository.GetQuestionItems().
+                Where(z => z.QuestionItemType.ToString() == "ComboList").
+                Select(z => new { z.Id, V = z.Items.Split($"\r\n") }).ToArray();
+
+            //wyszukuję pytania z grupy ComboList aby na automacie w widoku pokazywać wszystkie wybrane part2
+            int number = 0;
+            int comboQuestionPerPageToView = 0;
+
+            foreach (var item in comboListQuestions)
+            {
+                foreach (var item2 in items)
+                {
+                    if (item2.Items != null && item2.ItemPage == page && item2.Items.Where(x => x.Id == item).Any())
+                    {
+                        if (comboQuestionPerPageToView == 0)
+                        {
+                            comboQuestionPerPageToView = (Int32.TryParse(HttpContext.Session.GetString(item.ToString()), out number)) ? Int32.Parse(HttpContext.Session.GetString(item.ToString())) : number;
+                        }
+                    }
+                }
+            }
+
+            //wyszukuję pytania z grupy ComboList dla SubClass aby na automacie w widoku pokazywać wszystkie wybrane 
+            List<string> listOfSubClass = new List<string>();
+
+            foreach (var item in comboListQuestionsSubClass)
+            {
+                foreach (var item2 in items)
+                {
+                    if (item2.Items != null && item2.ItemPage == page && item2.Items.Where(x => x.Id == item.Id).Any())
+                    {
+                        var idSubClass = HttpContext.Session.GetString(item.Id.ToString());
+
+                        foreach (var subClass in item.V)
+                        {
+                            if (subClass.Split('$')[0] == idSubClass && subClass.Split('$')[1].Contains("showSubClass"))
+                            {
+                                listOfSubClass.Add(subClass.Split('$')[1]);
+                            }
+                        }
+                    }
+                }
+            }
+
+            ViewBag.NumberSubClass = listOfSubClass;
+            ViewBag.Number = comboQuestionPerPageToView;
         }
 
         [HttpPost]
@@ -300,7 +308,7 @@ namespace GrecosQuestionnaire.Controllers
 
             int walidacja = 100;
             int number = 0;
-            int numberOfCheck = 0;
+            int numberOfCheck = 100;
             var listOfComboQuestionItems = _hotelRepository.GetQuestionItems().Where(x => x.ItemOrder == 1 && x.QuestionItemType == Data.Enum.QuestionItemType.ComboList).Select(p => p.Id).ToArray();
 
             foreach (var formData in formCollection)
@@ -316,7 +324,8 @@ namespace GrecosQuestionnaire.Controllers
 
                     foreach (var item in listOfComboQuestionItems)
                     {
-                        if (success1 && success2 && int.Parse(formData.Value) != 0 && int.Parse(formData.Key) == item)
+                        //if (success1 && success2 && int.Parse(formData.Value) != 0 && int.Parse(formData.Key) == item)
+                        if (success1 && success2 && int.Parse(formData.Key) == item)
                         {
                             numberOfCheck = int.Parse(formData.Value);
                         }
@@ -324,7 +333,8 @@ namespace GrecosQuestionnaire.Controllers
                 }
             }
 
-            int walidacja1 = numberOfCheck != 0 ? numberOfCheck : walidacja;
+            //int walidacja1 = numberOfCheck != 0 ? numberOfCheck : walidacja;
+            int walidacja1 = numberOfCheck;
             walidacja1++;
 
             if (action == "save" || action == "next")
@@ -357,6 +367,8 @@ namespace GrecosQuestionnaire.Controllers
                     }
 
                     PassToView(page, hotel, hotelCodeName);
+
+                    SubClassMethod(page, items);
 
                     return View(items);
                 }
