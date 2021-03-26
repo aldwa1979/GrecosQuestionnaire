@@ -78,7 +78,9 @@ namespace GrecosQuestionnaire.Logic.Hotels
         public List<Question> GetQuestions()
         {
             var questions_items_items = _context.Questions.Select(p => p.Items.Select(s=>s.ItemItems)).ToList();
-            var questions_items = _context.Questions.Select(p => p.Items).ToList();
+            //var questions_items_items = _context.Questions.Select(p => new { Items = p.Items.Select(s => s.ItemItems.) });
+            //var questions_items = _context.Questions.Select(p => p.Items).ToList();
+            var questions_items = _context.Questions.Select(p => new { Items = p.Items.OrderBy(s => s.ItemOrder).ToList() }).ToList();
             var model = _context.Questions.ToList();
             return model;
         }
