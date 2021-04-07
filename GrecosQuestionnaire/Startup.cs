@@ -32,7 +32,12 @@ namespace GrecosQuestionnaire
             services.AddDbContext<HotelDBContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("Hotels")));
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<HotelDBContext>();
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            {
+                options.Password.RequiredLength = 5;
+                options.Password.RequiredUniqueChars = 2;
+                options.SignIn.RequireConfirmedEmail = true;
+            }).AddEntityFrameworkStores<HotelDBContext>();
             services.AddTransient<IHotelRepository, HotelRepository>();
 
             services.AddDbContext<HotelImportDBContext>(options =>

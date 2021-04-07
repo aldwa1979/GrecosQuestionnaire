@@ -27,6 +27,71 @@ namespace GrecosQuestionnaire.Controllers
             _hotelRepository = hotelRepository;
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResetPassword(string token, string email)
+        {
+            if (token == null || email == null)
+            {
+                ModelState.AddModelError("", "Invalid password reset token");
+            }
+            return View();
+        }
+
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user != null)
+                {
+                    var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
+                    if (result.Succeeded)
+                    {
+                        return View("ResetPasswordConfirmation");
+                    }
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+
+                    return View(model);
+                }
+                return View("ResetPasswordConfirmation");
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user != null )//&& await _userManager.IsEmailConfirmedAsync(user))
+                {
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                    var passwordResetLink = Url.Action("ResetPassword","Account", 
+                        new {email = model.Email, token = token}, Request.Scheme);
+
+                    //logger.Log(LogLevel.Warning, passwordResetLink);
+
+                    return View("ForgotPasswordConfirmation");
+                }
+                return View("ForgotPasswordConfirmation");
+            }
+            return View(model);
+        }
+
         public IActionResult Index()
         {
             var users = _userManager.Users;
@@ -52,6 +117,16 @@ namespace GrecosQuestionnaire.Controllers
         {
             if (ModelState.IsValid)
             {
+
+                var user = await _userManager.FindByEmailAsync(model.Email);
+
+                if ( user != null && !user.EmailConfirmed && 
+                                    (await _userManager.CheckPasswordAsync(user, model.Password)))
+                {
+                    ModelState.AddModelError(string.Empty, "Email not confirmed yet");
+                    return View(model);
+                }
+
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
 
                 if (result.Succeeded)

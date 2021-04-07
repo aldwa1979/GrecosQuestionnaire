@@ -19,7 +19,9 @@
     int hotel = ViewBag.Hotel;
     int numberOfQuestion = 0;
     int? dana = ViewBag.Number;
-    List<string> danaSubClass = ViewBag.NumberSubClass;
+
+#nullable enable
+    List<string?> danaSubClass = ViewBag.NumberSubClass;
 }
 
 <br />
@@ -470,39 +472,39 @@
                                     else if (item.QuestionItemType == QuestionItemType.ComboList)
                                     {
                                         <div class="form-group row align-items-center">
-                                        @if (!string.IsNullOrEmpty(item.Title))
-                                        {
-                                            <div class="col-md-5 col-xs-5 col-form-label" >
-                                                @item.Title
-                                            </div>
-                                        }
-
-                                        <div class="col-md-7 col-xs-7" style="text-align: left; font-size:small; padding-left:25px; padding-top:15px">
-
-                                            @foreach (var line in item.Items.Split('\n'))
+                                            @if (!string.IsNullOrEmpty(item.Title))
                                             {
-                                                if (line.Contains("$"))
-                                                {
-                                                    var newLine = line.Split('$')[0];
-                                                    var cssClass = line.Split('$')[1];
-
-                                                    <label class="radio-inline">
-                                                        <input class="@cssClass" type="radio" name="@item.Id" value="@newLine"
-                                                               @(itemValue.Contains(newLine) ? "checked='checked'" : string.Empty) />
-                                                        @newLine
-                                                    </label>
-                                                }
-                                                else
-                                                {
-                                                    <label class="radio-inline">
-                                                        <input type="radio" name="@item.Id" value="@line"
-                                                               @(itemValue.Contains(line) ? "checked='checked'" : string.Empty) />
-                                                        @line
-                                                    </label>
-                                                }
+                                                <div class="col-md-5 col-xs-5 col-form-label">
+                                                    @item.Title
+                                                </div>
                                             }
+
+                                            <div class="col-md-7 col-xs-7" style="text-align: left; font-size:small; padding-left:25px; padding-top:15px">
+
+                                                @foreach (var line in item.Items.Split('\n'))
+                                                {
+                                                    if (line.Contains("$"))
+                                                    {
+                                                        var newLine = line.Split('$')[0];
+                                                        var cssClass = line.Split('$')[1];
+
+                                                        <label class="radio-inline">
+                                                            <input class="@cssClass" type="radio" name="@item.Id" value="@newLine"
+                                                                   @(itemValue.Contains(newLine) ? "checked='checked'" : string.Empty) />
+                                                            @newLine
+                                                        </label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="@item.Id" value="@line"
+                                                                   @(itemValue.Contains(line) ? "checked='checked'" : string.Empty) />
+                                                            @line
+                                                        </label>
+                                                    }
+                                                }
+                                            </div>
                                         </div>
-                                      </div>
                                     }
                                     else if (item.QuestionItemType == QuestionItemType.CheckList)
                                     {
@@ -591,7 +593,7 @@
                                         <div class="form-group row">
                                             <label for="distancebox" class="col-sm-5 col-form-label" style="padding-left:20px ; ">@item.Title</label>
                                             <div class="col-sm-6">
-                                                <span class="input-symbol-m" >
+                                                <span class="input-symbol-m">
                                                     <input type="number" step="0.01" min="0" class="form-control" id="distancebox" placeholder="0,00" name="@item.Id" value="@ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)]" />
                                                 </span>
                                             </div>
@@ -2531,15 +2533,20 @@
 
     </script>
 
-    @foreach (var item in danaSubClass)
+
+    @if (page == 7)
+    { }
+    else
     {
-        <script>
+        foreach (var item in danaSubClass)
+        {
+            <script>
             $(document).ready(function () {
                 $('div.@item').show('slow')
             });
-        </script>
+            </script>
+        }
     }
-
 
     <style>
         #panel1, #flip1, #panel2, #flip2, #panel3, #flip3, #panel4, #flip4, #panel5, #flip5, #panel6, #flip6, #panel7, #flip7, #panel8, #flip8, #panel9, #flip9, #panel10, #flip10, #panel11, #flip11, #panel12, #flip12, #panel13, #flip13, #panel14, #flip14, #panel15, #flip15, #panel16, #flip16 {
