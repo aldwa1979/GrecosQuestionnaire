@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Internal;
+using NETCore.MailKit.Core;
 
 namespace GrecosQuestionnaire.Controllers
 {
@@ -19,12 +20,14 @@ namespace GrecosQuestionnaire.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IHotelRepository _hotelRepository;
+        private readonly IEmailService _emailService;
 
-        public AccountController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IHotelRepository hotelRepository)
+        public AccountController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IHotelRepository hotelRepository, IEmailService emailService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _hotelRepository = hotelRepository;
+            _emailService = emailService;
         }
 
         [HttpGet]
@@ -153,25 +156,68 @@ namespace GrecosQuestionnaire.Controllers
 
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { Email = model.Email, UserName = model.Email };
+                var user = new IdentityUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
 
-                userpartner.PartnerModelID = model.PartnersId.FirstOrDefault();
-                userpartner.UserID = user.Id;
-                _hotelRepository.UploadMatchUserPartner(userpartner);
+                //userpartner.PartnerModelID = model.PartnersId.FirstOrDefault();
+                //userpartner.UserID = user.Id;
+                //_hotelRepository.UploadMatchUserPartner(userpartner);
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("index");
+                    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                    var confirmationLink = Url.Action("ConfirmEmail", "Account",
+                        new { userId = user.Id, token = token }, Request.Scheme, "www.grecos.pl");
+
+                    await _emailService.SendAsync(model.Email, "email test", $"<a href=\"{confirmationLink}\">Confirm Email</a>", true);
+
+                    if (_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction("Index", "Administration");
+                    }
+
+                    ViewBag.ErrorTitle = "Registration successful";
+                    return View("Error");
+                    //await _signInManager.SignInAsync(user, isPersistent: false);
+                    //return RedirectToAction("Index", "Home");
                 }
 
-                foreach (var item in result.Errors)
+                foreach (var error in result.Errors)
                 {
-                    ModelState.AddModelError("", item.Description);
+                    ModelState.AddModelError("", error.Description);
                 }
             }
             AddViewBag();
             return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail (string userId, string token)
+        {
+            if (userId == null || token == null)
+            {
+                return RedirectToAction("index", "home");
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"The User ID {userId} is invalid";
+                return View("NotFound");
+            }
+
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+
+            if (result.Succeeded)
+            {
+                return View();
+            }
+
+            ViewBag.ErrorTitle = "Email cannot be confirmed";
+            return View("Error");
         }
 
         public async Task<IActionResult> Edit(string id)
@@ -335,7 +381,7 @@ namespace GrecosQuestionnaire.Controllers
             return RedirectToAction("Edit", new { Id = userId });
         }
 
-            private void AddViewBag()
+        private void AddViewBag()
         {
             var partners = _hotelRepository.GetPartners().Select(x => new SelectListItem()
             {

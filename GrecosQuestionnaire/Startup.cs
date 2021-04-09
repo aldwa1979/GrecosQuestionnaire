@@ -14,6 +14,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using GrecosQuestionnaire.Logic.ImportMagic;
 using GrecosQuestionnaire.Logic.Hotels;
+using NETCore.MailKit.Extensions;
+using NETCore.MailKit.Infrastructure.Internal;
 
 namespace GrecosQuestionnaire
 {
@@ -32,18 +34,27 @@ namespace GrecosQuestionnaire
             services.AddDbContext<HotelDBContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("Hotels")));
+
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 5;
                 options.Password.RequiredUniqueChars = 2;
                 options.SignIn.RequireConfirmedEmail = true;
-            }).AddEntityFrameworkStores<HotelDBContext>();
+            })
+                .AddEntityFrameworkStores<HotelDBContext>()
+                .AddDefaultTokenProviders();
+            
             services.AddTransient<IHotelRepository, HotelRepository>();
 
             services.AddDbContext<HotelImportDBContext>(options =>
                options.UseSqlServer(
                    Configuration.GetConnectionString("HotelsImport")));
+            
             services.AddTransient<IHotelImportRepository, HotelImportRepository>();
+
+            var mailKitOptions = Configuration.GetSection("Email").Get<MailKitOptions>();
+
+            services.AddMailKit(config => config.UseMailKit(mailKitOptions));
 
             //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
             //    .AddEntityFrameworkStores<ApplicationDbContext>();

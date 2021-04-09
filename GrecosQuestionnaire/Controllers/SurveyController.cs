@@ -397,6 +397,67 @@ namespace GrecosQuestionnaire.Controllers
                 }
             }
 
+            if (page == 9)
+            {
+
+                foreach (var key in HttpContext.Session.Keys)
+                {
+                    roomList.Add(key.ToString(), HttpContext.Session.GetString(key));
+                }
+
+                var x = roomList.Where(p => p.Key == "3391").Select(s => new { Value = s.Value.Split(',') });
+
+                foreach (var item in x)
+                {
+                    for (int i = 0; i < item.Value.Length; i++)
+                    {
+                        list.Add(item.Value.GetValue(i).ToString().Split("\r\n").GetValue(0).ToString());
+                    }
+                }
+
+                //Mapowanie nazw wyżywnienia na ID pytania z bazy SQL
+
+                foreach (var item in list)
+                {
+                    if (item.Contains("BB"))
+                    {
+                        lista.Add(1039);
+                    }
+                    else if (item.Contains("HB"))
+                    {
+                        lista.Add(1040);
+                    }
+                    else if (item.Contains("FB"))
+                    {
+                        lista.Add(1041);
+                    }
+                    else if (item.Contains("FB PLUS"))
+                    {
+                        lista.Add(1042);
+                    }
+                    else if (item.Contains("LIGHT ALL INCL"))
+                    {
+                        lista.Add(1043);
+                    }
+                    else if (item.Contains("ALL INCL"))
+                    {
+                        lista.Add(1044);
+                    }
+                    else if (item.Contains("ALL INCL CLASSIC"))
+                    {
+                        lista.Add(1045);
+                    }
+                    else if (item.Contains("ALL INCL PLUS"))
+                    {
+                        lista.Add(1046);
+                    }
+                    else if (item.Contains("ALL INCL PREMIUM"))
+                    {
+                        lista.Add(1047);
+                    }
+                }
+            }
+
 
             foreach (var formData in formCollection)
             {
@@ -427,7 +488,7 @@ namespace GrecosQuestionnaire.Controllers
                 //walidacja ankiety
                 bool errorExist = false;
 
-                if (page == 7)
+                if (page == 7 || page == 9)
                 {
                     foreach (var source in _hotelRepository.GetQuestionItems().Where(x => x.Required && x.Question.ItemPage == page && !x.Question.Removed && lista.Contains(x.Question.Id)))
                     {
@@ -459,11 +520,12 @@ namespace GrecosQuestionnaire.Controllers
                         }
                     }
                 }
+
                 if (errorExist)
                 {
                     IOrderedEnumerable<Question> items = null;
   
-                    if (page == 7)
+                    if (page == 7 || page == 9)
                     {
                         items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed && lista.Contains(x.Id)).OrderBy(x => x.ItemOrder);
 
