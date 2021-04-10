@@ -41,6 +41,8 @@ namespace GrecosQuestionnaire.Controllers
             return View();
         }
 
+        [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             if (ModelState.IsValid)
@@ -84,9 +86,9 @@ namespace GrecosQuestionnaire.Controllers
                     var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
                     var passwordResetLink = Url.Action("ResetPassword","Account", 
-                        new {email = model.Email, token = token}, Request.Scheme);
+                        new {email = model.Email, token = token}, Request.Scheme, "ankieta.grecos.pl");
 
-                    //logger.Log(LogLevel.Warning, passwordResetLink);
+                    await _emailService.SendAsync(model.Email, "Reset password", $"<a href=\"{passwordResetLink}\">Reset password</a>", true);
 
                     return View("ForgotPasswordConfirmation");
                 }
@@ -105,7 +107,7 @@ namespace GrecosQuestionnaire.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
 
         [AllowAnonymous]
@@ -168,13 +170,13 @@ namespace GrecosQuestionnaire.Controllers
                     var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
                     var confirmationLink = Url.Action("ConfirmEmail", "Account",
-                        new { userId = user.Id, token = token }, Request.Scheme, "www.grecos.pl");
+                        new { userId = user.Id, token = token }, Request.Scheme, "ankieta.grecos.pl");
 
-                    await _emailService.SendAsync(model.Email, "email test", $"<a href=\"{confirmationLink}\">Confirm Email</a>", true);
+                    await _emailService.SendAsync(model.Email, "Confirm email", $"<a href=\"{confirmationLink}\">Confirm Email</a>", true);
 
                     if (_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                     {
-                        return RedirectToAction("Index", "Administration");
+                        return RedirectToAction("Index", "Account");
                     }
 
                     ViewBag.ErrorTitle = "Registration successful";
@@ -190,6 +192,26 @@ namespace GrecosQuestionnaire.Controllers
             }
             AddViewBag();
             return View();
+        }
+
+        public async Task<IActionResult> ResendRegister(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            var confirmationLink = Url.Action("ConfirmEmail", "Account",
+                        new { userId = user.Id, token = token }, Request.Scheme, "ankieta.grecos.pl");
+
+            await _emailService.SendAsync(user.Email, "Confirm email", $"<a href=\"{confirmationLink}\">Confirm Email</a>", true);
+
+            if (_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+            {
+                return RedirectToAction("Index", "Account");
+            }
+
+                    ViewBag.ErrorTitle = "Registration successful";
+                    return View("Error");
         }
 
         [HttpGet]
