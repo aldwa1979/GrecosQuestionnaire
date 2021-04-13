@@ -735,6 +735,8 @@ namespace GrecosQuestionnaire.Controllers
 
                 PassToView(page, hotel, hotelCodeName);
 
+                SubClassMethod(page, items);
+
                 return View(items);
             }
 

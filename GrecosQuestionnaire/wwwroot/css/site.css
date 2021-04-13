@@ -1044,3 +1044,19 @@ input[type="checkbox"].input-validation-error {
         content: "m";
         left: 180px;
     }
+
+.input-symbol-km {
+    position: relative;
+}
+
+    .input-symbol-km input {
+        padding-right: 18px;
+    }
+
+    .input-symbol-km:after {
+        position: absolute;
+        top: 8px;
+        content: "km";
+        left: 180px;
+    }
+

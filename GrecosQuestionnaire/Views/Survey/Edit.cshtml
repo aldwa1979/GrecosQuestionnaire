@@ -17,6 +17,9 @@
     int hotel = ViewBag.Hotel;
     int numberOfQuestion = 0;
     int? dana = ViewBag.Number;
+
+#nullable enable
+    List<string?> danaSubClass = ViewBag.NumberSubClass;
 }
 
 <br />
@@ -49,7 +52,7 @@
                     }
                     else
                     {
-                        <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="back">
+                        <button type="submit" class="btn btn-primary" style="background-color: #1b6ec2" name="action" value="back">
                             Back
                             <span class="glyphicon glyphicon-chevron-left"></span>
                         </button>
@@ -65,7 +68,7 @@
 
                     else
                     {
-                        <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="next">
+                        <button type="submit" class="btn btn-primary" style="background-color: #1b6ec2" name="action" value="next">
                             Next Page
                             <span class="glyphicon glyphicon-chevron-right"></span>
                         </button>
@@ -75,6 +78,7 @@
                             <span class="glyphicon glyphicon-chevron-right"></span>
                         </button>
                     }
+
                     <br />
                 </div>
 
@@ -87,7 +91,7 @@
                     if (question.IsHeader)
                     {
                         <br />
-                        <h3><span class="custom-control-label">@question.Title</span></h3>
+                        <h3><span class="custom-control">@question.Title</span></h3>
                         continue;
                     }
 
@@ -100,12 +104,13 @@
                             string panelValue = "panel" + numberOfQuestion;
                         }
 
-                        <div id="@flipValue">
-                            @Html.Label(question.Title, question.Title, new { @class = "control-label", @style = "font-weight: bold ;color: #005EA8; margin-bottom: 0; font-size: 1.1em;" })
-                            <spam class="glyphicon glyphicon-chevron-down"></spam>
+                        <div id="@flipValue" style="background-color: #1b6ec2">
+
+                            @Html.Label(question.Title, question.Title, new { @class = "control-label", @style = "font-weight: bold ;color: white; margin-bottom: 0; font-size: 1.1em;" })
+                            <spam class="glyphicon glyphicon-chevron-down" style="color: white"></spam>
                         </div>
 
-                        <div id="@panelValue">
+                        <div id="@panelValue" style="background-color: #b5dbff">
                             @if (!string.IsNullOrEmpty(question.Subtitle))
                             {
                                 <br />
@@ -127,7 +132,6 @@
                                     }
 
                                     string itemValue = ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)] != null ? ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)].ToString() : string.Empty;
-
 
 
                                     if (item.QuestionItemType == QuestionItemType.Rate5)
@@ -329,7 +333,7 @@
                                     {
                                         if (!string.IsNullOrEmpty(item.Title))
                                         {
-                                            <div class="col-md-@(12 - item.Parts) col-xs-@(12 - item.Parts)" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
+                                            <div class="col-md-@(12 - item.Parts) col-xs-@(12 - item.Parts)" style="padding-left: 5px; @(i > 0 ? "margin-top: 4px;" : "padding-top: 4px")">
                                                 @item.Title
                                             </div>
                                         }
@@ -465,40 +469,40 @@
                                     }
                                     else if (item.QuestionItemType == QuestionItemType.ComboList)
                                     {
-                                        if (item.Parts == 0)
-                                        {
-                                            item.Parts = 8;
-                                        }
+                                        <div class="form-group row align-items-center">
+                                            @if (!string.IsNullOrEmpty(item.Title))
+                                            {
+                                                <div class="col-md-5 col-xs-5 col-form-label">
+                                                    @item.Title
+                                                </div>
+                                            }
 
-                                        @if (!string.IsNullOrEmpty(item.Title))
-                                        {
-                                            <div class="col-md-@(12 - item.Parts) col-xs-@(12 - item.Parts)" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
-                                                @item.Title
+                                            <div class="col-md-7 col-xs-7" style="text-align: left; font-size:small; padding-left:25px; padding-top:15px">
+
+                                                @foreach (var line in item.Items.Split('\n'))
+                                                {
+                                                    if (line.Contains("$"))
+                                                    {
+                                                        var newLine = line.Split('$')[0];
+                                                        var cssClass = line.Split('$')[1];
+
+                                                        <label class="radio-inline">
+                                                            <input class="@cssClass" type="radio" name="@item.Id" value="@newLine"
+                                                                   @(itemValue.Contains(newLine) ? "checked='checked'" : string.Empty) />
+                                                            @newLine
+                                                        </label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="@item.Id" value="@line"
+                                                                   @(itemValue.Contains(line) ? "checked='checked'" : string.Empty) />
+                                                            @line
+                                                        </label>
+                                                    }
+                                                }
                                             </div>
-                                        }
-
-                                        foreach (var line in item.Items.Split('\n'))
-                                        {
-                                            if (line.Contains("$"))
-                                            {
-                                                var newLine = line.Split('$')[0];
-                                                var cssClass = line.Split('$')[1];
-
-                                                <label class="radio-inline">
-                                                    <input class="@cssClass" type="radio" name="@item.Id" value="@newLine"
-                                                           @(itemValue.Contains(newLine) ? "checked='checked'" : string.Empty) />
-                                                    @newLine
-                                                </label>
-                                            }
-                                            else
-                                            {
-                                                <label class="radio-inline">
-                                                    <input type="radio" name="@item.Id" value="@line"
-                                                           @(itemValue.Contains(line) ? "checked='checked'" : string.Empty) />
-                                                    @line
-                                                </label>
-                                            }
-                                        }
+                                        </div>
                                     }
                                     else if (item.QuestionItemType == QuestionItemType.CheckList)
                                     {
@@ -510,8 +514,8 @@
                                                     @item.Title
                                                 </div>
                                             }
+                                            <div style="padding-left: 5px; margin-top: 8px;">
 
-                                            <div class="col-sm-7">
                                                 <div class="dropdown">
                                                     <a class="dropdown-toggle" data-toggle="dropdown">
                                                         Select <span class="caret"></span>
@@ -521,17 +525,18 @@
                                                         @foreach (var line in item.Items.Split('\n'))
                                                         {
                                                             <li>
-                                                                <div class="checkbox" style="margin-top: 4px; padding-left: 50px;">
+                                                                <div class="checkbox" style="margin-top: 4px; padding-left: 10px; padding-right: 10px;">
                                                                     @if (line.Contains("[]"))
                                                                     {
                                                                         string newline = line.Replace("[]", "");
 
-                                                                        <label>
+                                                                        <label class="dropdown-item">
                                                                             <input type="checkbox" name="@item.Id" value="@newline"
                                                                                    @(itemValue.Contains(newline) ? "checked='checked'" : string.Empty) />
                                                                             @newline
                                                                         </label>
-                                                                        <input type="text" name="@(item.Id+"t")" value="@ViewData[(item.Id+"t").ToString(CultureInfo.InvariantCulture)]" />
+                                                                        <input type="text" name="@(item.Id + "t")" value="@ViewData[(item.Id + "t").ToString(CultureInfo.InvariantCulture)]" />
+
                                                                     }
                                                                     else
                                                                     {
@@ -541,7 +546,6 @@
                                                                             @line
                                                                         </label>
                                                                     }
-
                                                                 </div>
                                                             </li>
                                                         }
@@ -575,20 +579,31 @@
                                     {
                                         <div class="form-group row">
                                             <label for="costbox" class="col-sm-5 col-form-label" style="padding-left:20px">@item.Title</label>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-6">
                                                 <span class="input-symbol-euro">
                                                     <input type="number" step="0.01" min="0" class="form-control" id="costbox" placeholder="0,00" name="@item.Id" value="@ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)]" />
                                                 </span>
                                             </div>
                                         </div>
                                     }
-                                    else if (item.QuestionItemType == QuestionItemType.DistanceBox)
+                                    else if (item.QuestionItemType == QuestionItemType.DistanceBoxM)
                                     {
                                         <div class="form-group row">
-                                            <label for="distancebox" class="col-sm-5 col-form-label" style="padding-left:20px">@item.Title</label>
-                                            <div class="col-sm-2">
+                                            <label for="distancebox" class="col-sm-5 col-form-label" style="padding-left:20px ; ">@item.Title</label>
+                                            <div class="col-sm-6">
                                                 <span class="input-symbol-m">
-                                                    <input type="number" step="1" min="0" class="form-control" id="distancebox" placeholder="0,00" name="@item.Id" value="@ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)]" />
+                                                    <input type="number" step="0.01" min="0.00" class="form-control" id="distancebox" placeholder="0,00" name="@item.Id" value="@ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)]" />
+                                                </span>
+                                            </div>
+                                        </div>
+                                    }
+                                    else if (item.QuestionItemType == QuestionItemType.DistanceBoxKM)
+                                    {
+                                        <div class="form-group row">
+                                            <label for="distancebox" class="col-sm-5 col-form-label" style="padding-left:20px ; ">@item.Title</label>
+                                            <div class="col-sm-6">
+                                                <span class="input-symbol-km">
+                                                    <input type="number" step="1" min="0" class="form-control" id="distancebox" placeholder="0" name="@item.Id" value="@ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)]" />
                                                 </span>
                                             </div>
                                         </div>
@@ -597,8 +612,8 @@
                                     {
                                         <div class="form-group row">
                                             <label for="numberbox" class="col-sm-5 col-form-label" style="padding-left:20px">@item.Title</label>
-                                            <div class="col-sm-2">
-                                                <input type="number" step="0.01" min="0" class="form-control" id="numberbox" placeholder="0,00" name="@item.Id" value="@ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)]" />
+                                            <div class="col-sm-7">
+                                                <input type="number" step="1" min="0" class="form-control" id="numberbox" placeholder="0" name="@item.Id" value="@ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)]" />
                                             </div>
                                         </div>
                                     }
@@ -791,7 +806,7 @@
                                                     to:
                                                 </label>
                                                 <div class="col-sm-1" style="padding-top: 5px; padding-left: 25px">
-                                                    <input type="date" name="@(item.Id+"t")" id="to" value="@ViewData[(item.Id+"t").ToString(CultureInfo.InvariantCulture)]" />
+                                                    <input type="date" name="@(item.Id + "t")" id="to" value="@ViewData[(item.Id + "t").ToString(CultureInfo.InvariantCulture)]" />
                                                 </div>
                                             </div>
                                         </div>
@@ -819,7 +834,7 @@
                                                     to:
                                                 </label>
                                                 <div class="col-sm-1" style="padding-top: 5px; padding-left: 25px">
-                                                    <input type="time" name="@(item.Id+"t")" id="to" value="@ViewData[(item.Id+"t").ToString(CultureInfo.InvariantCulture)]" />
+                                                    <input type="time" name="@(item.Id + "t")" id="to" value="@ViewData[(item.Id + "t").ToString(CultureInfo.InvariantCulture)]" />
                                                 </div>
                                             </div>
                                         </div>
@@ -829,12 +844,303 @@
                                     <div class="col-sm-4 text-danger text-center" style="font-size: 10px">
                                         @Html.ValidationMessage(item.Id.ToString(), "*Field is required")
                                     </div>
+
+                                    @if (item.ItemItems != null)
+                                    {
+                                        foreach (var item1 in item.ItemItems)
+                                        {
+                                            if (item1.Parts == 0)
+                                            {
+                                                item1.Parts = 7;
+                                            }
+
+                                            if (item1.SingleSpace == 0)
+                                            {
+                                                item1.SingleSpace = 2;
+                                            }
+
+                                            string itemValue1 = ViewData[(item1.Id + "q").ToString(CultureInfo.InvariantCulture)] != null ? ViewData[(item1.Id + "q").ToString(CultureInfo.InvariantCulture)].ToString() : string.Empty;
+
+                                            <div class="form-group @item1.SubClass" style="margin-top: 10px;">
+
+                                                @if (item1.QuestionItemType == QuestionItemType.CostBox)
+                                                {
+                                                    <div class="form-group row">
+                                                        <label for="costbox" class="col-sm-5 col-form-label" style="padding-left:20px">@item1.Title</label>
+                                                        <div class="col-sm-6">
+                                                            <span class="input-symbol-euro">
+                                                                <input type="number" step="0.01" min="0" class="form-control" id="costbox" placeholder="0,00" name="@(item1.Id + "q")" value="@ViewData[(item1.Id + "q").ToString(CultureInfo.InvariantCulture)]" />
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else if (item1.QuestionItemType == QuestionItemType.TextBox)
+                                                {
+                                                    <div class="form-group row">
+                                                        <label for="textbox" class="col-sm-5 col-form-label" style="padding-left:20px">@item1.Title</label>
+                                                        <div class="col-sm-7">
+                                                            <input type="text" class="form-control" id="textbox" name="@(item1.Id + "q")" value="@ViewData[(item1.Id + "q").ToString(CultureInfo.InvariantCulture)]" />
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else if (item1.QuestionItemType == QuestionItemType.CheckList)
+                                                {
+                                                    <div class="form-group row">
+
+                                                        @if (!string.IsNullOrEmpty(item1.Title))
+                                                        {
+                                                            <div class="col-md-@(12 - item1.Parts) col-xs-@(12 - item1.Parts)" style="padding-left: 20px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
+                                                                @item1.Title
+                                                            </div>
+                                                        }
+
+                                                        <div style="padding-left: 5px; margin-top: 8px;">
+                                                            <div class="dropdown">
+                                                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                                                    Select <span class="caret"></span>
+                                                                </a>
+                                                                <ul class="dropdown-menu">
+
+                                                                    @foreach (var line in item1.Items.Split('\n'))
+                                                                    {
+                                                                        <li>
+                                                                            <div class="checkbox" style="margin-top: 4px; padding-left: 10px; padding-right: 10px;">
+                                                                                @if (line.Contains("[]"))
+                                                                                {
+                                                                                    string newline = line.Replace("[]", "");
+
+                                                                                    <label>
+                                                                                        <input type="checkbox" name="@(item1.Id + "q")" value="@newline"
+                                                                                               @(itemValue.Contains(newline) ? "checked='checked'" : string.Empty) />
+                                                                                        newline
+                                                                                    </label>
+                                                                                    <input type="text" name="@(item1.Id + "qt")" value="@ViewData[(item1.Id + "qt").ToString(CultureInfo.InvariantCulture)]" />
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <label>
+                                                                                        <input type="checkbox" name="@(item1.Id + "q")" value="@line"
+                                                                                               @(itemValue.Contains(line) ? "checked='checked'" : string.Empty) />
+                                                                                        @line
+                                                                                    </label>
+                                                                                }
+
+                                                                            </div>
+                                                                        </li>
+                                                                    }
+
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                }
+                                                else if (item1.QuestionItemType == QuestionItemType.Rate2)
+                                                {
+                                                    if (!string.IsNullOrEmpty(item1.Title))
+                                                    {
+                                                        <div class="col-md-@(12 - item1.Parts) col-xs-@(12 - item1.Parts)" style="padding-left: 5px; @(i > 0 ? "margin-top: 4px;" : "padding-top: 4px")">
+                                                            @item1.Title
+                                                        </div>
+                                                    }
+
+                                                    <div class="col-md-@item1.Parts col-xs-@item1.Parts" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "")">
+                                                        <div class="row" style="font-size: 10px; text-align: center; white-space: nowrap;   ">
+                                                            <div class="col-md-@item1.SingleSpace col-xs-@item1.SingleSpace" style="padding: 0; padding-left: 5px;">
+                                                                @((item1.Items != null && item1.Items.Split('\n').Length > 0) ? @item1.Items.Split('\n')[0] : string.Empty)
+                                                            </div>
+                                                            <div class="col-md-@item1.SingleSpace col-xs-@item1.SingleSpace" style="padding: 0; padding-left: 3px;">
+                                                                @((item1.Items != null && item1.Items.Split('\n').Length > 1) ? @item1.Items.Split('\n')[1] : string.Empty)
+                                                            </div>
+
+
+                                                        </div>
+                                                        <div class="row" style="text-align: center; padding-left: 5px;">
+                                                            <div class="col-md-@item1.SingleSpace col-xs-@item1.SingleSpace" style="padding: 0;">
+                                                                <input type="radio" name="@(item1.Id + "q")" id="test1" value="1"
+                                                                       @(itemValue1 == "1" ? "checked='checked'" : string.Empty) />
+
+                                                            </div>
+                                                            <div class="col-md-@item1.SingleSpace col-xs-@item1.SingleSpace" style="padding: 0;">
+                                                                <input type="radio" name="@(item1.Id + "q")" id="test2" value="2"
+                                                                       @(itemValue1 == "2" ? "checked='checked'" : string.Empty) />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                }
+                                                else if (item1.QuestionItemType == QuestionItemType.Rate7)
+                                                {
+                                                    if (!string.IsNullOrEmpty(item1.Title))
+                                                    {
+                                                        <div class="col-md-@(12 - item1.Parts) col-xs-@(12 - item1.Parts)" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
+                                                            @item1.Title
+                                                        </div>
+                                                    }
+
+                                                    <div class="col-md-@item1.Parts col-xs-@item1.Parts" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "")">
+                                                        <div class="row" style="font-size: 10px; text-align: center; white-space: nowrap;">
+                                                            <div class="col-md-1 col-xs-1" style="padding: 0; padding-left: 5px;">
+                                                                @((item1.Items != null && item1.Items.Split('\n').Length > 0) ? item1.Items.Split('\n')[0] : string.Empty)
+                                                            </div>
+                                                            <div class="col-md-1 col-xs-1" style="padding: 0; padding-left: 3px;">
+                                                                @((item1.Items != null && item1.Items.Split('\n').Length > 1) ? @item1.Items.Split('\n')[1] : string.Empty)
+                                                            </div>
+                                                            <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                                @((item1.Items != null && item1.Items.Split('\n').Length > 2) ? @item1.Items.Split('\n')[2] : string.Empty)
+                                                            </div>
+                                                            <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                                @((item1.Items != null && item1.Items.Split('\n').Length > 3) ? @item1.Items.Split('\n')[3] : string.Empty)
+                                                            </div>
+                                                            <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                                @((item1.Items != null && item1.Items.Split('\n').Length > 4) ? @item1.Items.Split('\n')[4] : string.Empty)
+                                                            </div>
+                                                            <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                                @((item1.Items != null && item1.Items.Split('\n').Length > 5) ? @item1.Items.Split('\n')[5] : string.Empty)
+                                                            </div>
+                                                            <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                                @((item1.Items != null && item1.Items.Split('\n').Length > 6) ? @item1.Items.Split('\n')[6] : string.Empty)
+                                                            </div>
+                                                        </div>
+                                                        <div class="row" style="text-align: center; padding-left: 5px;">
+                                                            <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                                <input type="radio" name="@(item1.Id + "q")" id="test1" value="1"
+                                                                       @(itemValue1 == "1" ? "checked='checked'" : string.Empty) />
+
+                                                            </div>
+                                                            <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                                <input type="radio" name="@(item1.Id + "q")" id="test2" value="2"
+                                                                       @(itemValue1 == "2" ? "checked='checked'" : string.Empty) />
+
+                                                            </div>
+                                                            <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                                <input type="radio" name="@(item1.Id + "q")" id="test3" value="3"
+                                                                       @(itemValue1 == "3" ? "checked='checked'" : string.Empty) />
+
+                                                            </div>
+                                                            <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                                <input type="radio" name="@(item1.Id + "q")" id="test4" value="4"
+                                                                       @(itemValue1 == "4" ? "checked='checked'" : string.Empty) />
+
+                                                            </div>
+                                                            <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                                <input type="radio" name="@(item1.Id + "q")" id="test5" value="5"
+                                                                       @(itemValue1 == "5" ? "checked='checked'" : string.Empty) />
+
+                                                            </div>
+                                                            <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                                <input type="radio" name="@(item1.Id + "q")" id="test6" value="6"
+                                                                       @(itemValue1 == "6" ? "checked='checked'" : string.Empty) />
+
+                                                            </div>
+                                                            <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                                <input type="radio" name="@(item1.Id + "q")" id="test7" value="7"
+                                                                       @(itemValue1 == "7" ? "checked='checked'" : string.Empty) />
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                }
+                                                else if (item1.QuestionItemType == QuestionItemType.Date)
+                                                {
+                                                    @if (!string.IsNullOrEmpty(item1.Title))
+                                                    {
+                                                        <div class="col-md-@(12 - item1.Parts) col-xs-@(12 - item1.Parts)" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
+                                                            @item1.Title
+                                                        </div>
+                                                    }
+                                                    <div>
+                                                        <div class="form-group row">
+                                                            <label for="from" class="col-sm-2 col-form-label">
+                                                                from:
+                                                            </label>
+                                                            <div class="col-sm-1" style="padding-top: 5px">
+                                                                <input type="date" name="@(item1.Id + "q")" id="from" value="@ViewData[(item1.Id + "q").ToString(CultureInfo.InvariantCulture)]" />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row">
+                                                            <label for="to" class="col-sm-6 col-form-label" style="text-align:right">
+                                                                to:
+                                                            </label>
+                                                            <div class="col-sm-1" style="padding-top: 5px; padding-left: 25px">
+                                                                <input type="date" name="@(item1.Id + "qt")" id="to" value="@ViewData[(item1.Id + "qt").ToString(CultureInfo.InvariantCulture)]" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else if (item1.QuestionItemType == QuestionItemType.Time)
+                                                {
+                                                    @if (!string.IsNullOrEmpty(item1.Title))
+                                                    {
+                                                        <div class="col-md-@(12 - item1.Parts) col-xs-@(12 - item1.Parts)" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
+                                                            @item1.Title
+                                                        </div>
+                                                    }
+                                                    <div>
+                                                        <div class="form-group row">
+                                                            <label for="from" class="col-sm-2 col-form-label">
+                                                                from:
+                                                            </label>
+                                                            <div class="col-sm-1" style="padding-top: 5px">
+                                                                <input type="time" name="@(item1.Id + "q")" id="from" value="@ViewData[(item1.Id + "q").ToString(CultureInfo.InvariantCulture)]" />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row">
+                                                            <label for="to" class="col-sm-6 col-form-label" style="text-align:right">
+                                                                to:
+                                                            </label>
+                                                            <div class="col-sm-1" style="padding-top: 5px; padding-left: 25px">
+                                                                <input type="time" name="@(item1.Id + "qt")" id="to" value="@ViewData[(item1.Id + "qt").ToString(CultureInfo.InvariantCulture)]" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else if (item1.QuestionItemType == QuestionItemType.DistanceBoxM)
+                                                {
+                                                    <div class="form-group row">
+                                                        <label for="distancebox" class="col-sm-5 col-form-label" style="padding-left:20px">@item1.Title</label>
+                                                        <div class="col-sm-6">
+                                                            <span class="input-symbol-m">
+                                                                <input type="number" step="0.01" min="0.00" class="form-control" id="distancebox" placeholder="0,00" name="@(item1.Id + "q")" value="@ViewData[(item1.Id + "q").ToString(CultureInfo.InvariantCulture)]" />
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else if (item1.QuestionItemType == QuestionItemType.DistanceBoxKM)
+                                                {
+                                                    <div class="form-group row">
+                                                        <label for="distancebox" class="col-sm-5 col-form-label" style="padding-left:20px">@item1.Title</label>
+                                                        <div class="col-sm-6">
+                                                            <span class="input-symbol-km">
+                                                                <input type="number" step="1" min="0" class="form-control" id="distancebox" placeholder="0" name="@(item1.Id + "q")" value="@ViewData[(item1.Id + "q").ToString(CultureInfo.InvariantCulture)]" />
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else if (item1.QuestionItemType == QuestionItemType.NumberBox)
+                                                {
+                                                    <div class="form-group row">
+                                                        <label for="numberbox" class="col-sm-5 col-form-label" style="padding-left:20px">@item1.Title</label>
+                                                        <div class="col-sm-7">
+                                                            <input type="number" step="0.01" min="0" class="form-control" id="numberbox" placeholder="0,00" name="@(item1.Id + "q")" value="@ViewData[(item1.Id + "q").ToString(CultureInfo.InvariantCulture)]" />
+                                                        </div>
+                                                    </div>
+                                                }
+
+                                                <div class="col-sm-4 text-danger text-center" style="font-size: 10px">
+                                                    @Html.ValidationMessage(item1.Id.ToString(), "*Field is required")
+                                                </div>
+                                            </div>
+                                        }
+                                    }
                                 }
                             </div>
                         </div>
                     </div>
                 }
-
 
                 <div style="text-align: center">
                     @if (page == 1)
@@ -843,7 +1149,7 @@
                     }
                     else
                     {
-                        <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="back">
+                        <button type="submit" class="btn btn-primary" style="background-color: #1b6ec2" name="action" value="back">
                             Back
                             <span class="glyphicon glyphicon-chevron-left"></span>
                         </button>
@@ -859,7 +1165,7 @@
 
                     else
                     {
-                        <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="next">
+                        <button type="submit" class="btn btn-primary" style="background-color: #1b6ec2" name="action" value="next">
                             Next Page
                             <span class="glyphicon glyphicon-chevron-right"></span>
                         </button>
@@ -874,893 +1180,1402 @@
         </div>
     </div>
 </div>
-    <div class="col-md-3"></div>
-    <div class="clearfix"></div>
+<div class="col-md-3"></div>
+<div class="clearfix"></div>
 
 
-    @section Scripts {
+@section Scripts {
 
-        <script>
+    <script>
 
-            $(function () {
-                $('div.show1').hide();
-                $('div.show2').hide();
-                $('div.show3').hide();
-                $('div.show4').hide();
-                $('div.show5').hide();
-                $('div.show6').hide();
-                $('div.show7').hide();
-                $('div.show8').hide();
-                $('div.show9').hide();
-                $('div.show10').hide();
-                $('div.show11').hide();
-                $('div.show12').hide();
-                $('div.show13').hide();
-                $('div.show14').hide();
-                $('div.show15').hide();
+        $(function () {
+            $('div.showSubClass1').hide();
+            $('div.showSubClass2').hide();
+            $('div.showSubClass3').hide();
+            $('div.showSubClass4').hide();
+            $('div.showSubClass5').hide();
+            $('div.showSubClass6').hide();
+            $('div.showSubClass7').hide();
+            $('div.showSubClass8').hide();
+            $('div.showSubClass9').hide();
+            $('div.showSubClass10').hide();
+            $('div.showSubClass11').hide();
+            $('div.showSubClass12').hide();
+            $('div.showSubClass13').hide();
+            $('div.showSubClass14').hide();
+            $('div.showSubClass15').hide();
+            $('div.showSubClass16').hide();
+            $('div.showSubClass17').hide();
+            $('div.showSubClass18').hide();
+            $('div.showSubClass19').hide();
+            $('div.showSubClass20').hide();
+            $('div.showSubClass21').hide();
+            $('div.showSubClass22').hide();
+            $('div.showSubClass23').hide();
+            $('div.showSubClass24').hide();
+            $('div.showSubClass25').hide();
+            $('div.showSubClass26').hide();
+            $('div.showSubClass27').hide();
+            $('div.showSubClass28').hide();
+            $('div.showSubClass29').hide();
+            $('div.showSubClass30').hide();
+            $('div.showSubClass31').hide();
+            $('div.showSubClass32').hide();
+            $('div.showSubClass33').hide();
+            $('div.showSubClass34').hide();
+            $('div.showSubClass35').hide();
+            $('div.showSubClass36').hide();
+            $('div.showSubClass37').hide();
+            $('div.showSubClass38').hide();
+            $('div.showSubClass39').hide();
+            $('div.showSubClass40').hide();
+            $('div.showSubClass41').hide();
+            $('div.showSubClass42').hide();
+            $('div.showSubClass43').hide();
+            $('div.showSubClass44').hide();
+            $('div.showSubClass45').hide();
+            $('div.showSubClass46').hide();
+            $('div.showSubClass47').hide();
+            $('div.showSubClass48').hide();
+            $('div.showSubClass49').hide();
+            $('div.showSubClass50').hide();
+            $('div.showSubClass51').hide();
+            $('div.showSubClass52').hide();
+            $('div.showSubClass53').hide();
+            $('div.showSubClass54').hide();
+            $('div.showSubClass55').hide();
+            $('div.showSubClass56').hide();
+            $('div.showSubClass57').hide();
+            $('div.showSubClass58').hide();
+            $('div.showSubClass59').hide();
+            $('div.showSubClass60').hide();
+            $('div.showSubClass61').hide();
+            $('div.showSubClass62').hide();
+            $('div.showSubClass63').hide();
+            $('div.showSubClass64').hide();
+            $('div.showSubClass65').hide();
+            $('div.showSubClass66').hide();
+            $('div.showSubClass67').hide();
+            $('div.showSubClass68').hide();
+            $('div.showSubClass69').hide();
+            $('div.showSubClass70').hide();
+            $('div.showSubClass71').hide();
+            $('div.showSubClass72').hide();
+            $('div.showSubClass73').hide();
+            $('div.showSubClass74').hide();
+            $('div.showSubClass75').hide();
+            $('div.showSubClass76').hide();
+            $('div.showSubClass77').hide();
+            $('div.showSubClass78').hide();
+            $('div.showSubClass79').hide();
+            $('div.showSubClass80').hide();
+            $('div.showSubClass81').hide();
+            $('div.showSubClass82').hide();
+            $('div.showSubClass83').hide();
+            $('div.showSubClass84').hide();
+            $('div.showSubClass85').hide();
+            $('div.showSubClass86').hide();
+            $('div.showSubClass87').hide();
+            $('div.showSubClass88').hide();
+            $('div.showSubClass89').hide();
+            $('div.showSubClass90').hide();
 
-                $('.spinner').spinner({
-                    spin: function (event, ui) {
-                        if (ui.value > 10) {
-                            $(this).spinner("value", 10);
-                            return false;
-                        } else if (ui.value < 0) {
-                            $(this).spinner("value", 0);
-                            return false;
-                        }
+            $('div.show1').hide();
+            $('div.show2').hide();
+            $('div.show3').hide();
+            $('div.show4').hide();
+            $('div.show5').hide();
+            $('div.show6').hide();
+            $('div.show7').hide();
+            $('div.show8').hide();
+            $('div.show9').hide();
+            $('div.show10').hide();
+            $('div.show11').hide();
+            $('div.show12').hide();
+            $('div.show13').hide();
+            $('div.show14').hide();
+            $('div.show15').hide();
+
+            $('.spinner').spinner({
+                spin: function (event, ui) {
+                    if (ui.value > 10) {
+                        $(this).spinner("value", 10);
+                        return false;
+                    } else if (ui.value < 0) {
+                        $(this).spinner("value", 0);
+                        return false;
                     }
-                });
+                }
+            });
+        });
+
+
+    </script>
+
+    @if (dana == 1)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
             });
         </script>
-
-        @if (dana == 1)
-        {
-            <script>
-                $(document).ready(function () {
-                    $("#panel1").slideToggle("slow");
-                });
-
-                $(document).ready(function () {
-                    $('div.show1').show('slow')
-                });
-            </script>
-        }
-        else if (dana == 2)
-        {
-            <script>
-                $(document).ready(function () {
-                    $("#panel1").slideToggle("slow");
-                });
-
-                $(document).ready(function () {
-                    $('div.show1').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show2').show('slow')
-                });
-            </script>
-        }
-        else if (dana == 3)
-        {
-            <script>
-                $(document).ready(function () {
-                    $("#panel1").slideToggle("slow");
-                });
-
-                $(document).ready(function () {
-                    $('div.show1').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show2').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show3').show('slow')
-                });
-            </script>
-        }
-        else if (dana == 4)
-        {
-            <script>
-                $(document).ready(function () {
-                    $("#panel1").slideToggle("slow");
-                });
-
-                $(document).ready(function () {
-                    $('div.show1').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show2').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show3').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show4').show('slow')
-                });
-            </script>
-        }
-        else if (dana == 5)
-        {
-            <script>
-                $(document).ready(function () {
-                    $("#panel1").slideToggle("slow");
-                });
-
-                $(document).ready(function () {
-                    $('div.show1').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show2').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show3').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show4').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show5').show('slow')
-                });
-            </script>
-        }
-        else if (dana == 6)
-        {
-            <script>
-                $(document).ready(function () {
-                    $("#panel1").slideToggle("slow");
-                });
-
-                $(document).ready(function () {
-                    $('div.show1').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show2').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show3').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show4').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show5').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show6').show('slow')
-                });
-            </script>
-        }
-        else if (dana == 7)
-        {
-            <script>
-                $(document).ready(function () {
-                    $("#panel1").slideToggle("slow");
-                });
-
-                $(document).ready(function () {
-                    $('div.show1').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show2').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show3').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show4').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show5').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show6').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show7').show('slow')
-                });
-            </script>
-        }
-        else if (dana == 8)
-        {
-            <script>
-                $(document).ready(function () {
-                    $("#panel1").slideToggle("slow");
-                });
-
-                $(document).ready(function () {
-                    $('div.show1').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show2').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show3').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show4').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show5').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show6').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show7').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show8').show('slow')
-                });
-            </script>
-        }
-        else if (dana == 9)
-        {
-            <script>
-                $(document).ready(function () {
-                    $("#panel1").slideToggle("slow");
-                });
-
-                $(document).ready(function () {
-                    $('div.show1').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show2').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show3').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show4').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show5').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show6').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show7').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show8').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show9').show('slow')
-                });
-            </script>
-        }
-        else if (dana == 10)
-        {
-            <script>
-                $(document).ready(function () {
-                    $("#panel1").slideToggle("slow");
-                });
-
-                $(document).ready(function () {
-                    $('div.show1').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show2').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show3').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show4').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show5').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show6').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show7').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show8').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show9').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show10').show('slow')
-                });
-            </script>
-        }
-        else if (dana == 11)
-        {
-            <script>
-                $(document).ready(function () {
-                    $("#panel1").slideToggle("slow");
-                });
-
-                $(document).ready(function () {
-                    $('div.show1').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show2').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show3').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show4').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show5').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show6').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show7').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show8').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show9').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show10').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show11').show('slow')
-                });
-            </script>
-        }
-        else if (dana == 12)
-        {
-            <script>
-                $(document).ready(function () {
-                    $("#panel1").slideToggle("slow");
-                });
-
-                $(document).ready(function () {
-                    $('div.show1').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show2').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show3').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show4').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show5').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show6').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show7').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show8').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show9').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show10').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show11').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show12').show('slow')
-                });
-            </script>
-        }
-        else if (dana == 13)
-        {
-            <script>
-                $(document).ready(function () {
-                    $("#panel1").slideToggle("slow");
-                });
-
-                $(document).ready(function () {
-                    $('div.show1').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show2').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show3').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show4').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show5').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show6').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show7').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show8').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show9').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show10').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show11').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show12').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show13').show('slow')
-                });
-            </script>
-        }
-        else if (dana == 14)
-        {
-            <script>
-                $(document).ready(function () {
-                    $("#panel1").slideToggle("slow");
-                });
-
-                $(document).ready(function () {
-                    $('div.show1').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show2').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show3').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show4').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show5').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show6').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show7').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show8').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show9').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show10').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show11').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show12').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show13').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show14').show('slow')
-                });
-            </script>
-        }
-        else if (dana == 15)
-        {
-            <script>
-                $(document).ready(function () {
-                    $("#panel1").slideToggle("slow");
-                });
-
-                $(document).ready(function () {
-                    $('div.show1').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show2').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show3').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show4').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show5').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show6').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show7').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show8').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show9').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show10').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show11').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show12').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show13').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show14').show('slow')
-                });
-
-                $(document).ready(function () {
-                    $('div.show15').show('slow')
-                });
-            </script>
-        }
-
-
-        <script>
-
-            $(document).on("change", "input.show1", function () {
-                $('div.show1').show('slow');
-            });
-
-            $(document).on("change", "input.hide1", function () {
-                $('div.show1').hide('slow');
-            });
-
-            $(document).on("change", "input.show2", function () {
-                $('div.show2').show('slow');
-            });
-
-            $(document).on("change", "input.hide2", function () {
-                $('div.show2').hide('slow');
-            });
-
-            $(document).on("change", "input.show3", function () {
-                $('div.show3').show('slow');
-            });
-
-            $(document).on("change", "input.hide3", function () {
-                $('div.show3').hide('slow');
-            });
-
-            $(document).on("change", "input.show4", function () {
-                $('div.show4').show('slow');
-            });
-
-            $(document).on("change", "input.hide4", function () {
-                $('div.show4').hide('slow');
-            });
-
-            $(document).on("change", "input.show5", function () {
-                $('div.show5').show('slow');
-            });
-
-            $(document).on("change", "input.hide5", function () {
-                $('div.show5').hide('slow');
-            });
-
-            $(document).on("change", "input.show6", function () {
-                $('div.show6').show('slow');
-            });
-
-            $(document).on("change", "input.hide6", function () {
-                $('div.show6').hide('slow');
-            });
-
-            $(document).on("change", "input.show7", function () {
-                $('div.show7').show('slow');
-            });
-
-            $(document).on("change", "input.hide7", function () {
-                $('div.show7').hide('slow');
-            });
-
-            $(document).on("change", "input.show8", function () {
-                $('div.show8').show('slow');
-            });
-
-            $(document).on("change", "input.hide8", function () {
-                $('div.show8').hide('slow');
-            });
-
-            $(document).on("change", "input.show9", function () {
-                $('div.show9').show('slow');
-            });
-
-            $(document).on("change", "input.hide9", function () {
-                $('div.show9').hide('slow');
-            });
-
-            $(document).on("change", "input.show10", function () {
-                $('div.show10').show('slow');
-            });
-
-            $(document).on("change", "input.hide10", function () {
-                $('div.show10').hide('slow');
-            });
-
-            $(document).on("change", "input.show11", function () {
-                $('div.show11').show('slow');
-            });
-
-            $(document).on("change", "input.hide11", function () {
-                $('div.show11').hide('slow');
-            });
-
-            $(document).on("change", "input.show12", function () {
-                $('div.show12').show('slow');
-            });
-
-            $(document).on("change", "input.hide12", function () {
-                $('div.show12').hide('slow');
-            });
-
-            $(document).on("change", "input.show13", function () {
-                $('div.show13').show('slow');
-            });
-
-            $(document).on("change", "input.hide13", function () {
-                $('div.show13').hide('slow');
-            });
-
-            $(document).on("change", "input.show14", function () {
-                $('div.show14').show('slow');
-            });
-
-            $(document).on("change", "input.hide14", function () {
-                $('div.show14').hide('slow');
-            });
-
-            $(document).on("change", "input.show15", function () {
-                $('div.show15').show('slow');
-            });
-
-            $(document).on("change", "input.hide15", function () {
-                $('div.show15').hide('slow');
-            });
-
-
-            $(document).ready(function () {
-                $("#flip1").click(function () {
-                    $("#panel1").slideToggle("slow");
-                });
-            });
-
-            $(document).ready(function () {
-                $("#flip2").click(function () {
-                    $("#panel2").slideToggle("slow");
-                });
-            });
-
-            $(document).ready(function () {
-                $("#flip3").click(function () {
-                    $("#panel3").slideToggle("slow");
-                });
-            });
-
-            $(document).ready(function () {
-                $("#flip4").click(function () {
-                    $("#panel4").slideToggle("slow");
-                });
-            });
-
-            $(document).ready(function () {
-                $("#flip5").click(function () {
-                    $("#panel5").slideToggle("slow");
-                });
-            });
-
-            $(document).ready(function () {
-                $("#flip6").click(function () {
-                    $("#panel6").slideToggle("slow");
-                });
-            });
-
-            $(document).ready(function () {
-                $("#flip7").click(function () {
-                    $("#panel7").slideToggle("slow");
-                });
-            });
-
-            $(document).ready(function () {
-                $("#flip8").click(function () {
-                    $("#panel8").slideToggle("slow");
-                });
-            });
-
-            $(document).ready(function () {
-                $("#flip9").click(function () {
-                    $("#panel9").slideToggle("slow");
-                });
-            });
-
-            $(document).ready(function () {
-                $("#flip10").click(function () {
-                    $("#panel10").slideToggle("slow");
-                });
-            });
-
-            $(document).ready(function () {
-                $("#flip11").click(function () {
-                    $("#panel11").slideToggle("slow");
-                });
-            });
-
-            $(document).ready(function () {
-                $("#flip12").click(function () {
-                    $("#panel12").slideToggle("slow");
-                });
-            });
-
-            $(document).ready(function () {
-                $("#flip13").click(function () {
-                    $("#panel13").slideToggle("slow");
-                });
-            });
-
-            $(document).ready(function () {
-                $("#flip14").click(function () {
-                    $("#panel14").slideToggle("slow");
-                });
-            });
-
-            $(document).ready(function () {
-                $("#flip15").click(function () {
-                    $("#panel15").slideToggle("slow");
-                });
-            });
-
-            $(document).ready(function () {
-                $("#flip16").click(function () {
-                    $("#panel16").slideToggle("slow");
-                });
-            });
-
-            (function ($) {
-                // http://itmeze.com/2010/12/checkbox-has-to-be-checked-with-unobtrusive-jquery-validation-and-asp-net-mvc-3/
-                $.validator.unobtrusive.adapters.add("mandatory", function (options) {
-                    options.rules["required"] = true;
-                    if (options.message) {
-                        options.messages["required"] = options.message;
-                    }
-                });
-            }(jQuery));
-
-            (function ($) {
-                $.validator.unobtrusive.adapters.addBool("mandatory", "required");
-            }(jQuery));
-
-        </script>
-        <style>
-            #panel1, #flip1, #panel2, #flip2, #panel3, #flip3, #panel4, #flip4, #panel5, #flip5, #panel6, #flip6, #panel7, #flip7, #panel8, #flip8, #panel9, #flip9, #panel10, #flip10, #panel11, #flip11, #panel12, #flip12, #panel13, #flip13, #panel14, #flip14, #panel15, #flip15, #panel16, #flip16 {
-                padding: 5px;
-                text-align: center;
-                background-color: #e5eecc;
-                border: solid 1px #c3c3c3;
-            }
-
-            #panel1, #panel2, #panel3, #panel4, #panel5, #panel6, #panel7, #panel8, #panel9, #panel10, #panel11, #panel12, #panel13, #panel14, #panel15, #panel16 {
-                display: none;
-                user-select: none;
-            }
-        </style>
-
     }
+    else if (dana == 2)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+                $('div.show2').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 3)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+                $('div.show2').show('slow')
+                $('div.show3').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 4)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+                $('div.show2').show('slow')
+                $('div.show3').show('slow')
+                $('div.show4').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 5)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+                $('div.show2').show('slow')
+                $('div.show3').show('slow')
+                $('div.show4').show('slow')
+                $('div.show5').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 6)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+                $('div.show2').show('slow')
+                $('div.show3').show('slow')
+                $('div.show4').show('slow')
+                $('div.show5').show('slow')
+                $('div.show6').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 7)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+                $('div.show2').show('slow')
+                $('div.show3').show('slow')
+                $('div.show4').show('slow')
+                $('div.show5').show('slow')
+                $('div.show6').show('slow')
+                $('div.show7').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 8)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+                $('div.show2').show('slow')
+                $('div.show3').show('slow')
+                $('div.show4').show('slow')
+                $('div.show5').show('slow')
+                $('div.show6').show('slow')
+                $('div.show7').show('slow')
+                $('div.show8').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 9)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+                $('div.show2').show('slow')
+                $('div.show3').show('slow')
+                $('div.show4').show('slow')
+                $('div.show5').show('slow')
+                $('div.show6').show('slow')
+                $('div.show7').show('slow')
+                $('div.show8').show('slow')
+                $('div.show9').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 10)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+                $('div.show2').show('slow')
+                $('div.show3').show('slow')
+                $('div.show4').show('slow')
+                $('div.show5').show('slow')
+                $('div.show6').show('slow')
+                $('div.show7').show('slow')
+                $('div.show8').show('slow')
+                $('div.show9').show('slow')
+                $('div.show10').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 11)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+                $('div.show2').show('slow')
+                $('div.show3').show('slow')
+                $('div.show4').show('slow')
+                $('div.show5').show('slow')
+                $('div.show6').show('slow')
+                $('div.show7').show('slow')
+                $('div.show8').show('slow')
+                $('div.show9').show('slow')
+                $('div.show10').show('slow')
+                $('div.show11').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 12)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+                $('div.show2').show('slow')
+                $('div.show3').show('slow')
+                $('div.show4').show('slow')
+                $('div.show5').show('slow')
+                $('div.show6').show('slow')
+                $('div.show7').show('slow')
+                $('div.show8').show('slow')
+                $('div.show9').show('slow')
+                $('div.show10').show('slow')
+                $('div.show11').show('slow')
+                $('div.show12').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 13)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+                $('div.show2').show('slow')
+                $('div.show3').show('slow')
+                $('div.show4').show('slow')
+                $('div.show5').show('slow')
+                $('div.show6').show('slow')
+                $('div.show7').show('slow')
+                $('div.show8').show('slow')
+                $('div.show9').show('slow')
+                $('div.show10').show('slow')
+                $('div.show11').show('slow')
+                $('div.show12').show('slow')
+                $('div.show13').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 14)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+                $('div.show2').show('slow')
+                $('div.show3').show('slow')
+                $('div.show4').show('slow')
+                $('div.show5').show('slow')
+                $('div.show6').show('slow')
+                $('div.show7').show('slow')
+                $('div.show8').show('slow')
+                $('div.show9').show('slow')
+                $('div.show10').show('slow')
+                $('div.show11').show('slow')
+                $('div.show12').show('slow')
+                $('div.show13').show('slow')
+                $('div.show14').show('slow')
+            });
+        </script>
+    }
+    else if (dana == 15)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#panel1").slideToggle("slow");
+            });
+
+            $(document).ready(function () {
+                $('div.show1').show('slow')
+                $('div.show2').show('slow')
+                $('div.show3').show('slow')
+                $('div.show4').show('slow')
+                $('div.show5').show('slow')
+                $('div.show6').show('slow')
+                $('div.show7').show('slow')
+                $('div.show8').show('slow')
+                $('div.show9').show('slow')
+                $('div.show10').show('slow')
+                $('div.show11').show('slow')
+                $('div.show12').show('slow')
+                $('div.show13').show('slow')
+                $('div.show14').show('slow')
+                $('div.show15').show('slow')
+            });
+        </script>
+    }
+
+    <script>
+
+        $(document).on("change", "input.show1", function () {
+            $('div.show1').show('slow');
+        });
+
+        $(document).on("change", "input.hide1", function () {
+            $('div.show1').hide('slow');
+        });
+
+        $(document).on("change", "input.show2", function () {
+            $('div.show2').show('slow');
+        });
+
+        $(document).on("change", "input.hide2", function () {
+            $('div.show2').hide('slow');
+        });
+
+        $(document).on("change", "input.show3", function () {
+            $('div.show3').show('slow');
+        });
+
+        $(document).on("change", "input.hide3", function () {
+            $('div.show3').hide('slow');
+        });
+
+        $(document).on("change", "input.show4", function () {
+            $('div.show4').show('slow');
+        });
+
+        $(document).on("change", "input.hide4", function () {
+            $('div.show4').hide('slow');
+        });
+
+        $(document).on("change", "input.show5", function () {
+            $('div.show5').show('slow');
+        });
+
+        $(document).on("change", "input.hide5", function () {
+            $('div.show5').hide('slow');
+        });
+
+        $(document).on("change", "input.show6", function () {
+            $('div.show6').show('slow');
+        });
+
+        $(document).on("change", "input.hide6", function () {
+            $('div.show6').hide('slow');
+        });
+
+        $(document).on("change", "input.show7", function () {
+            $('div.show7').show('slow');
+        });
+
+        $(document).on("change", "input.hide7", function () {
+            $('div.show7').hide('slow');
+        });
+
+        $(document).on("change", "input.show8", function () {
+            $('div.show8').show('slow');
+        });
+
+        $(document).on("change", "input.hide8", function () {
+            $('div.show8').hide('slow');
+        });
+
+        $(document).on("change", "input.show9", function () {
+            $('div.show9').show('slow');
+        });
+
+        $(document).on("change", "input.hide9", function () {
+            $('div.show9').hide('slow');
+        });
+
+        $(document).on("change", "input.show10", function () {
+            $('div.show10').show('slow');
+        });
+
+        $(document).on("change", "input.hide10", function () {
+            $('div.show10').hide('slow');
+        });
+
+        $(document).on("change", "input.show11", function () {
+            $('div.show11').show('slow');
+        });
+
+        $(document).on("change", "input.hide11", function () {
+            $('div.show11').hide('slow');
+        });
+
+        $(document).on("change", "input.show12", function () {
+            $('div.show12').show('slow');
+        });
+
+        $(document).on("change", "input.hide12", function () {
+            $('div.show12').hide('slow');
+        });
+
+        $(document).on("change", "input.show13", function () {
+            $('div.show13').show('slow');
+        });
+
+        $(document).on("change", "input.hide13", function () {
+            $('div.show13').hide('slow');
+        });
+
+        $(document).on("change", "input.show14", function () {
+            $('div.show14').show('slow');
+        });
+
+        $(document).on("change", "input.hide14", function () {
+            $('div.show14').hide('slow');
+        });
+
+        $(document).on("change", "input.show15", function () {
+            $('div.show15').show('slow');
+        });
+
+        $(document).on("change", "input.hide15", function () {
+            $('div.show15').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass1", function () {
+            $('div.showSubClass1').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass1", function () {
+            $('div.showSubClass1').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass2", function () {
+            $('div.showSubClass2').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass2", function () {
+            $('div.showSubClass2').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass3", function () {
+            $('div.showSubClass3').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass3", function () {
+            $('div.showSubClass3').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass4", function () {
+            $('div.showSubClass4').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass4", function () {
+            $('div.showSubClass4').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass5", function () {
+            $('div.showSubClass5').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass5", function () {
+            $('div.showSubClass5').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass6", function () {
+            $('div.showSubClass6').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass6", function () {
+            $('div.showSubClass6').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass7", function () {
+            $('div.showSubClass7').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass7", function () {
+            $('div.showSubClass7').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass8", function () {
+            $('div.showSubClass8').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass8", function () {
+            $('div.showSubClass8').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass9", function () {
+            $('div.showSubClass9').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass9", function () {
+            $('div.showSubClass9').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass10", function () {
+            $('div.showSubClass10').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass10", function () {
+            $('div.showSubClass10').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass11", function () {
+            $('div.showSubClass11').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass11", function () {
+            $('div.showSubClass11').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass12", function () {
+            $('div.showSubClass12').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass12", function () {
+            $('div.showSubClass12').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass13", function () {
+            $('div.showSubClass13').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass13", function () {
+            $('div.showSubClass13').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass14", function () {
+            $('div.showSubClass14').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass14", function () {
+            $('div.showSubClass14').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass15", function () {
+            $('div.showSubClass15').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass15", function () {
+            $('div.showSubClass15').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass16", function () {
+            $('div.showSubClass16').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass16", function () {
+            $('div.showSubClass16').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass17", function () {
+            $('div.showSubClass17').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass17", function () {
+            $('div.showSubClass17').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass18", function () {
+            $('div.showSubClass18').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass18", function () {
+            $('div.showSubClass18').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass19", function () {
+            $('div.showSubClass19').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass19", function () {
+            $('div.showSubClass19').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass20", function () {
+            $('div.showSubClass20').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass20", function () {
+            $('div.showSubClass20').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass21", function () {
+            $('div.showSubClass21').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass21", function () {
+            $('div.showSubClass21').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass22", function () {
+            $('div.showSubClass22').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass22", function () {
+            $('div.showSubClass22').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass23", function () {
+            $('div.showSubClass23').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass23", function () {
+            $('div.showSubClass23').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass24", function () {
+            $('div.showSubClass24').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass24", function () {
+            $('div.showSubClass24').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass25", function () {
+            $('div.showSubClass25').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass25", function () {
+            $('div.showSubClass25').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass26", function () {
+            $('div.showSubClass26').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass26", function () {
+            $('div.showSubClass26').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass27", function () {
+            $('div.showSubClass27').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass27", function () {
+            $('div.showSubClass27').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass28", function () {
+            $('div.showSubClass28').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass28", function () {
+            $('div.showSubClass28').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass29", function () {
+            $('div.showSubClass29').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass29", function () {
+            $('div.showSubClass29').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass30", function () {
+            $('div.showSubClass30').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass30", function () {
+            $('div.showSubClass30').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass31", function () {
+            $('div.showSubClass31').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass31", function () {
+            $('div.showSubClass31').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass32", function () {
+            $('div.showSubClass32').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass32", function () {
+            $('div.showSubClass32').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass33", function () {
+            $('div.showSubClass33').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass33", function () {
+            $('div.showSubClass33').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass34", function () {
+            $('div.showSubClass34').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass34", function () {
+            $('div.showSubClass34').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass35", function () {
+            $('div.showSubClass35').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass35", function () {
+            $('div.showSubClass35').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass36", function () {
+            $('div.showSubClass36').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass36", function () {
+            $('div.showSubClass36').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass37", function () {
+            $('div.showSubClass37').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass37", function () {
+            $('div.showSubClass37').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass38", function () {
+            $('div.showSubClass38').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass38", function () {
+            $('div.showSubClass38').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass39", function () {
+            $('div.showSubClass39').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass39", function () {
+            $('div.showSubClass39').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass40", function () {
+            $('div.showSubClass40').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass40", function () {
+            $('div.showSubClass40').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass41", function () {
+            $('div.showSubClass41').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass41", function () {
+            $('div.showSubClass41').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass42", function () {
+            $('div.showSubClass42').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass42", function () {
+            $('div.showSubClass42').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass43", function () {
+            $('div.showSubClass43').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass43", function () {
+            $('div.showSubClass43').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass44", function () {
+            $('div.showSubClass44').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass44", function () {
+            $('div.showSubClass44').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass45", function () {
+            $('div.showSubClass45').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass45", function () {
+            $('div.showSubClass45').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass46", function () {
+            $('div.showSubClass46').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass46", function () {
+            $('div.showSubClass46').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass47", function () {
+            $('div.showSubClass47').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass47", function () {
+            $('div.showSubClass47').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass48", function () {
+            $('div.showSubClass48').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass48", function () {
+            $('div.showSubClass48').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass49", function () {
+            $('div.showSubClass49').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass49", function () {
+            $('div.showSubClass49').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass50", function () {
+            $('div.showSubClass50').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass50", function () {
+            $('div.showSubClass50').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass51", function () {
+            $('div.showSubClass51').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass51", function () {
+            $('div.showSubClass51').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass52", function () {
+            $('div.showSubClass52').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass52", function () {
+            $('div.showSubClass52').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass53", function () {
+            $('div.showSubClass53').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass53", function () {
+            $('div.showSubClass53').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass54", function () {
+            $('div.showSubClass54').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass54", function () {
+            $('div.showSubClass54').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass55", function () {
+            $('div.showSubClass55').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass55", function () {
+            $('div.showSubClass55').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass56", function () {
+            $('div.showSubClass56').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass56", function () {
+            $('div.showSubClass56').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass57", function () {
+            $('div.showSubClass57').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass57", function () {
+            $('div.showSubClass57').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass58", function () {
+            $('div.showSubClass58').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass58", function () {
+            $('div.showSubClass58').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass59", function () {
+            $('div.showSubClass59').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass59", function () {
+            $('div.showSubClass59').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass60", function () {
+            $('div.showSubClass60').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass60", function () {
+            $('div.showSubClass60').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass61", function () {
+            $('div.showSubClass61').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass61", function () {
+            $('div.showSubClass61').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass62", function () {
+            $('div.showSubClass62').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass62", function () {
+            $('div.showSubClass62').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass63", function () {
+            $('div.showSubClass63').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass63", function () {
+            $('div.showSubClass63').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass64", function () {
+            $('div.showSubClass64').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass64", function () {
+            $('div.showSubClass64').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass65", function () {
+            $('div.showSubClass65').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass65", function () {
+            $('div.showSubClass65').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass66", function () {
+            $('div.showSubClass66').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass66", function () {
+            $('div.showSubClass66').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass67", function () {
+            $('div.showSubClass67').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass67", function () {
+            $('div.showSubClass67').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass68", function () {
+            $('div.showSubClass68').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass68", function () {
+            $('div.showSubClass68').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass69", function () {
+            $('div.showSubClass69').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass69", function () {
+            $('div.showSubClass69').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass70", function () {
+            $('div.showSubClass70').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass70", function () {
+            $('div.showSubClass70').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass71", function () {
+            $('div.showSubClass71').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass71", function () {
+            $('div.showSubClass71').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass72", function () {
+            $('div.showSubClass72').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass72", function () {
+            $('div.showSubClass72').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass73", function () {
+            $('div.showSubClass73').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass73", function () {
+            $('div.showSubClass73').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass74", function () {
+            $('div.showSubClass74').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass74", function () {
+            $('div.showSubClass74').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass75", function () {
+            $('div.showSubClass75').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass75", function () {
+            $('div.showSubClass75').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass76", function () {
+            $('div.showSubClass76').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass76", function () {
+            $('div.showSubClass76').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass77", function () {
+            $('div.showSubClass77').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass77", function () {
+            $('div.showSubClass77').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass78", function () {
+            $('div.showSubClass78').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass78", function () {
+            $('div.showSubClass78').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass79", function () {
+            $('div.showSubClass79').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass79", function () {
+            $('div.showSubClass79').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass80", function () {
+            $('div.showSubClass80').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass80", function () {
+            $('div.showSubClass80').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass81", function () {
+            $('div.showSubClass81').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass81", function () {
+            $('div.showSubClass81').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass82", function () {
+            $('div.showSubClass82').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass82", function () {
+            $('div.showSubClass82').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass83", function () {
+            $('div.showSubClass83').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass83", function () {
+            $('div.showSubClass83').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass84", function () {
+            $('div.showSubClass84').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass84", function () {
+            $('div.showSubClass84').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass85", function () {
+            $('div.showSubClass85').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass85", function () {
+            $('div.showSubClass85').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass86", function () {
+            $('div.showSubClass86').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass86", function () {
+            $('div.showSubClass86').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass87", function () {
+            $('div.showSubClass87').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass87", function () {
+            $('div.showSubClass87').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass88", function () {
+            $('div.showSubClass88').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass88", function () {
+            $('div.showSubClass88').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass89", function () {
+            $('div.showSubClass89').show('slow');
+        });
+
+        $(document).on("change", "input.hideSubClass89", function () {
+            $('div.showSubClass89').hide('slow');
+        });
+
+        $(document).on("change", "input.showSubClass90", function () {
+            $('div.showSubClass90').show('slow');
+        });
+
+
+
+        $(document).ready(function () {
+            $("#flip1").click(function () {
+                $("#panel1").slideToggle("slow");
+            });
+        });
+
+        $(document).ready(function () {
+            $("#flip2").click(function () {
+                $("#panel2").slideToggle("slow");
+            });
+        });
+
+        $(document).ready(function () {
+            $("#flip3").click(function () {
+                $("#panel3").slideToggle("slow");
+            });
+        });
+
+        $(document).ready(function () {
+            $("#flip4").click(function () {
+                $("#panel4").slideToggle("slow");
+            });
+        });
+
+        $(document).ready(function () {
+            $("#flip5").click(function () {
+                $("#panel5").slideToggle("slow");
+            });
+        });
+
+        $(document).ready(function () {
+            $("#flip6").click(function () {
+                $("#panel6").slideToggle("slow");
+            });
+        });
+
+        $(document).ready(function () {
+            $("#flip7").click(function () {
+                $("#panel7").slideToggle("slow");
+            });
+        });
+
+        $(document).ready(function () {
+            $("#flip8").click(function () {
+                $("#panel8").slideToggle("slow");
+            });
+        });
+
+        $(document).ready(function () {
+            $("#flip9").click(function () {
+                $("#panel9").slideToggle("slow");
+            });
+        });
+
+        $(document).ready(function () {
+            $("#flip10").click(function () {
+                $("#panel10").slideToggle("slow");
+            });
+        });
+
+        $(document).ready(function () {
+            $("#flip11").click(function () {
+                $("#panel11").slideToggle("slow");
+            });
+        });
+
+        $(document).ready(function () {
+            $("#flip12").click(function () {
+                $("#panel12").slideToggle("slow");
+            });
+        });
+
+        $(document).ready(function () {
+            $("#flip13").click(function () {
+                $("#panel13").slideToggle("slow");
+            });
+        });
+
+        $(document).ready(function () {
+            $("#flip14").click(function () {
+                $("#panel14").slideToggle("slow");
+            });
+        });
+
+        $(document).ready(function () {
+            $("#flip15").click(function () {
+                $("#panel15").slideToggle("slow");
+            });
+        });
+
+        $(document).ready(function () {
+            $("#flip16").click(function () {
+                $("#panel16").slideToggle("slow");
+            });
+        });
+
+        (function ($) {
+            // http://itmeze.com/2010/12/checkbox-has-to-be-checked-with-unobtrusive-jquery-validation-and-asp-net-mvc-3/
+            $.validator.unobtrusive.adapters.add("mandatory", function (options) {
+                options.rules["required"] = true;
+                if (options.message) {
+                    options.messages["required"] = options.message;
+                }
+            });
+        }(jQuery));
+
+        (function ($) {
+            $.validator.unobtrusive.adapters.addBool("mandatory", "required");
+        }(jQuery));
+
+    </script>
+
+
+    @if (page == 7 || page == 9)
+    { }
+    else
+    {
+        foreach (var item in danaSubClass)
+        {
+            <script>
+            $(document).ready(function () {
+                $('div.@item').show('slow')
+            });
+            </script>
+        }
+    }
+
+    <style>
+        #panel1, #flip1, #panel2, #flip2, #panel3, #flip3, #panel4, #flip4, #panel5, #flip5, #panel6, #flip6, #panel7, #flip7, #panel8, #flip8, #panel9, #flip9, #panel10, #flip10, #panel11, #flip11, #panel12, #flip12, #panel13, #flip13, #panel14, #flip14, #panel15, #flip15, #panel16, #flip16 {
+            padding: 5px;
+            text-align: center;
+            background-color: #e5eecc;
+            border: solid 1px #c3c3c3;
+        }
+
+        #panel1, #panel2, #panel3, #panel4, #panel5, #panel6, #panel7, #panel8, #panel9, #panel10, #panel11, #panel12, #panel13, #panel14, #panel15, #panel16 {
+            display: none;
+            user-select: none;
+        }
+    </style>
+}

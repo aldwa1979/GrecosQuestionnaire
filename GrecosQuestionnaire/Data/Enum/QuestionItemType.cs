@@ -39,6 +39,8 @@ namespace GrecosQuestionnaire.Data.Enum
 
         NumberBox = 16,
 
-        DistanceBox = 17
+        DistanceBoxM = 17,
+
+        DistanceBoxKM = 18
     }
 }

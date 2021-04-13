@@ -1,0 +1,1766 @@
+﻿@using System.Globalization
+@using GrecosQuestionnaire.Models
+@model IEnumerable<GrecosQuestionnaire.Models.Question>
+
+@{
+    Layout = "_LayoutSurvey";
+}
+
+@{
+    ViewBag.Title = "Questionnaire";
+}
+
+<div class="col-md-3"></div>
+
+@{
+    int page = int.Parse(ViewData["page"].ToString());
+    int hotel = ViewBag.Hotel;
+    int numberOfQuestion = 0;
+    int? dana = ViewBag.Number;
+}
+
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<div class="container">
+    @Html.ValidationSummary()
+</div>
+
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-md-8" style="margin-top: 40px;">
+
+            @using (Html.BeginForm("Edit", "Survey", FormMethod.Post, new { role = "form", @style = "color: #005EA8" }))
+            {
+                @Html.Hidden("page", ViewData["page"])
+                @Html.Hidden("hotel", new { hotel })
+
+                <div style="text-align: center; color:black; font-size : 24px; font-weight: 700">@ViewBag.HotelCodeName</div>
+                <div style="text-align: center; color:black; font-weight: 700">Step @ViewBag.Page / 11</div>
+                <br />
+
+                <div style="text-align: center">
+                    @if (page == 1)
+                    {
+
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="back">
+                            Back
+                            <span class="glyphicon glyphicon-chevron-left"></span>
+                        </button>
+                    }
+
+                    @if (page == 11)
+                    {
+                        <button type="submit" class="btn btn-primary alert-danger" name="action" value="save">
+                            Save and Exit
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </button>
+                    }
+
+                    else
+                    {
+                        <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="next">
+                            Next Page
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </button>
+
+                        <button type="submit" class="btn btn-primary alert-danger" name="action" value="save">
+                            Save and Exit
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </button>
+                    }
+                    <br />
+                </div>
+
+                /*Zliczabie petli*/
+
+
+                foreach (var question in Model)
+                {
+
+                    if (question.IsHeader)
+                    {
+                        <br />
+                        <h3><span class="custom-control-label">@question.Title</span></h3>
+                        continue;
+                    }
+
+                    numberOfQuestion++;
+
+                    <div class="form-group @question.Class" style="margin-top: 25px;">
+
+                        @{
+                            string flipValue = "flip" + numberOfQuestion;
+                            string panelValue = "panel" + numberOfQuestion;
+                        }
+
+                        <div id="@flipValue">
+                            @Html.Label(question.Title, question.Title, new { @class = "control-label", @style = "font-weight: bold ;color: #005EA8; margin-bottom: 0; font-size: 1.1em;" })
+                            <spam class="glyphicon glyphicon-chevron-down"></spam>
+                        </div>
+
+                        <div id="@panelValue">
+                            @if (!string.IsNullOrEmpty(question.Subtitle))
+                            {
+                                <br />
+                                @Html.Label(question.Subtitle, question.Subtitle, new { @class = "control-label small", @style = "color: gray; margin-top: -5px; margin-bottom: 0;" })
+                            }
+
+                            <div style="margin-top: 6px;">
+                                @{ int i = 0;}
+                                @foreach (var item in question.Items)
+                                {
+                                    if (item.Parts == 0)
+                                    {
+                                        item.Parts = 7;
+                                    }
+
+                                    if (item.SingleSpace == 0)
+                                    {
+                                        item.SingleSpace = 2;
+                                    }
+
+                                    string itemValue = ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)] != null ? ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)].ToString() : string.Empty;
+
+
+
+                                    if (item.QuestionItemType == QuestionItemType.Rate5)
+                                    {
+                                        if (!string.IsNullOrEmpty(item.Title))
+                                        {
+                                            <div class="col-md-@(12 - item.Parts) col-xs-@(12 - item.Parts)" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
+                                                @item.Title
+                                            </div>
+                                        }
+
+                                        <div class="col-md-@item.Parts col-xs-@item.Parts" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "")">
+                                            <div class="row" style="font-size: 10px; text-align: center; white-space: nowrap;">
+                                                <div class="col-md-2 col-xs-2" style="padding: 0; padding-left: 5px;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 0) ? @item.Items.Split('\n')[0] : string.Empty)
+                                                </div>
+                                                <div class="col-md-2 col-xs-2" style="padding: 0; padding-left: 3px;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 1) ? @item.Items.Split('\n')[1] : string.Empty)
+                                                </div>
+                                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 2) ? @item.Items.Split('\n')[2] : string.Empty)
+                                                </div>
+                                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 3) ? @item.Items.Split('\n')[3] : string.Empty)
+                                                </div>
+                                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 4) ? @item.Items.Split('\n')[4] : string.Empty)
+                                                </div>
+                                            </div>
+                                            <div class="row" style="text-align: center; padding-left: 5px;">
+                                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test1" value="1"
+                                                           @(itemValue == "1" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test2" value="2"
+                                                           @(itemValue == "2" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test3" value="3"
+                                                           @(itemValue == "3" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test4" value="4"
+                                                           @(itemValue == "4" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test5" value="5"
+                                                           @(itemValue == "5" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    }
+                                    else if (item.QuestionItemType == QuestionItemType.Rate6)
+                                    {
+                                        if (!string.IsNullOrEmpty(item.Title))
+                                        {
+                                            <div class="col-md-@(12 - item.Parts) col-xs-@(12 - item.Parts)" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
+                                                @item.Title
+                                            </div>
+                                        }
+
+                                        <div class="col-md-@item.Parts col-xs-@item.Parts" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "")">
+                                            <div class="row" style="font-size: 10px; text-align: center; white-space: nowrap;">
+                                                <div class="col-md-2 col-xs-2" style="padding: 0; padding-left: 5px;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 0) ? @item.Items.Split('\n')[0] : string.Empty)
+                                                </div>
+                                                <div class="col-md-2 col-xs-2" style="padding: 0; padding-left: 3px;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 1) ? @item.Items.Split('\n')[1] : string.Empty)
+                                                </div>
+                                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 2) ? @item.Items.Split('\n')[2] : string.Empty)
+                                                </div>
+                                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 3) ? @item.Items.Split('\n')[3] : string.Empty)
+                                                </div>
+                                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 4) ? @item.Items.Split('\n')[4] : string.Empty)
+                                                </div>
+                                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 5) ? @item.Items.Split('\n')[5] : string.Empty)
+                                                </div>
+                                            </div>
+                                            <div class="row" style="text-align: center; padding-left: 5px;">
+                                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test1" value="1"
+                                                           @(itemValue == "1" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test2" value="2"
+                                                           @(itemValue == "2" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test3" value="3"
+                                                           @(itemValue == "3" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test4" value="4"
+                                                           @(itemValue == "4" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test5" value="5"
+                                                           @(itemValue == "5" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-2 col-xs-2" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test6" value="6"
+                                                           @(itemValue == "6" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    }
+                                    else if (item.QuestionItemType == QuestionItemType.Rate7)
+                                    {
+                                        if (!string.IsNullOrEmpty(item.Title))
+                                        {
+                                            <div class="col-md-@(12 - item.Parts) col-xs-@(12 - item.Parts)" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
+                                                @item.Title
+                                            </div>
+                                        }
+
+                                        <div class="col-md-@item.Parts col-xs-@item.Parts" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "")">
+                                            <div class="row" style="font-size: 10px; text-align: center; white-space: nowrap;">
+                                                <div class="col-md-1 col-xs-1" style="padding: 0; padding-left: 5px;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 0) ? @item.Items.Split('\n')[0] : string.Empty)
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0; padding-left: 3px;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 1) ? @item.Items.Split('\n')[1] : string.Empty)
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 2) ? @item.Items.Split('\n')[2] : string.Empty)
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 3) ? @item.Items.Split('\n')[3] : string.Empty)
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 4) ? @item.Items.Split('\n')[4] : string.Empty)
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 5) ? @item.Items.Split('\n')[5] : string.Empty)
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 6) ? @item.Items.Split('\n')[6] : string.Empty)
+                                                </div>
+                                            </div>
+                                            <div class="row" style="text-align: center; padding-left: 5px;">
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test1" value="1"
+                                                           @(itemValue == "1" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test2" value="2"
+                                                           @(itemValue == "2" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test3" value="3"
+                                                           @(itemValue == "3" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test4" value="4"
+                                                           @(itemValue == "4" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test5" value="5"
+                                                           @(itemValue == "5" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test6" value="6"
+                                                           @(itemValue == "6" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test7" value="7"
+                                                           @(itemValue == "7" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    }
+                                    else if (item.QuestionItemType == QuestionItemType.Rate2)
+                                    {
+                                        if (!string.IsNullOrEmpty(item.Title))
+                                        {
+                                            <div class="col-md-@(12 - item.Parts) col-xs-@(12 - item.Parts)" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
+                                                @item.Title
+                                            </div>
+                                        }
+
+                                        <div class="col-md-@item.Parts col-xs-@item.Parts" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "")">
+                                            <div class="row" style="font-size: 10px; text-align: center; white-space: nowrap;   ">
+                                                <div class="col-md-@item.SingleSpace col-xs-@item.SingleSpace" style="padding: 0; padding-left: 5px;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 0) ? @item.Items.Split('\n')[0] : string.Empty)
+                                                </div>
+                                                <div class="col-md-@item.SingleSpace col-xs-@item.SingleSpace" style="padding: 0; padding-left: 3px;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 1) ? @item.Items.Split('\n')[1] : string.Empty)
+                                                </div>
+
+
+                                            </div>
+                                            <div class="row" style="text-align: center; padding-left: 5px;">
+                                                <div class="col-md-@item.SingleSpace col-xs-@item.SingleSpace" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test1" value="1"
+                                                           @(itemValue == "1" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-@item.SingleSpace col-xs-@item.SingleSpace" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test2" value="2"
+                                                           @(itemValue == "2" ? "checked='checked'" : string.Empty) />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    }
+                                    else if (item.QuestionItemType == QuestionItemType.Label)
+                                    {
+                                        if (!string.IsNullOrEmpty(item.Title))
+                                        {
+                                            <div class="col-md-@(12 - item.Parts) col-xs-@(12 - item.Parts)" style="font-weight: bold; padding-top: 20px; padding-bottom: 20px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 20px")">
+                                                @item.Title
+                                                <br />
+                                            </div>
+                                        }
+
+                                        <div class="clearfix"></div>
+                                    }
+                                    else if (item.QuestionItemType == QuestionItemType.Rate4)
+                                    {
+                                        if (!string.IsNullOrEmpty(item.Title))
+                                        {
+                                            <div class="col-md-@(12 - item.Parts) col-xs-@(12 - item.Parts)" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
+                                                @item.Title
+                                            </div>
+                                        }
+
+                                        <div class="col-md-@item.Parts col-xs-@item.Parts" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "")">
+                                            <div class="row" style="font-size: 10px; text-align: center; white-space: nowrap;   ">
+                                                <div class="col-md-@item.SingleSpace col-xs-@item.SingleSpace" style="padding: 0; padding-left: 5px;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 0) ? @item.Items.Split('\n')[0] : string.Empty)
+                                                </div>
+                                                <div class="col-md-@item.SingleSpace col-xs-@item.SingleSpace" style="padding: 0; padding-left: 3px;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 1) ? @item.Items.Split('\n')[1] : string.Empty)
+                                                </div>
+                                                <div class="col-md-@item.SingleSpace col-xs-@item.SingleSpace" style="padding: 0;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 2) ? @item.Items.Split('\n')[2] : string.Empty)
+                                                </div>
+                                                <div class="col-md-@item.SingleSpace col-xs-@item.SingleSpace" style="padding: 0;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 3) ? @item.Items.Split('\n')[3] : string.Empty)
+                                                </div>
+
+                                            </div>
+                                            <div class="row" style="text-align: center; padding-left: 5px;">
+                                                <div class="col-md-@item.SingleSpace col-xs-@item.SingleSpace" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test1" value="1"
+                                                           @(itemValue == "1" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-@item.SingleSpace col-xs-@item.SingleSpace" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test2" value="2"
+                                                           @(itemValue == "2" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-@item.SingleSpace col-xs-@item.SingleSpace" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test3" value="3"
+                                                           @(itemValue == "3" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-@item.SingleSpace col-xs-@item.SingleSpace" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test4" value="4"
+                                                           @(itemValue == "4" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    }
+                                    else if (item.QuestionItemType == QuestionItemType.Rate3)
+                                    {
+                                        if (!string.IsNullOrEmpty(item.Title))
+                                        {
+                                            <div class="col-md-@(12 - item.Parts) col-xs-@(12 - item.Parts)" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
+                                                @item.Title
+                                            </div>
+                                        }
+
+                                        <div class="col-md-@item.Parts col-xs-@item.Parts" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "")">
+
+                                            <div class="row" style="font-size: 10px; text-align: center; white-space: nowrap;   ">
+                                                <div class="col-md-@item.SingleSpace col-xs-@item.SingleSpace" style="padding: 0; padding-left: 5px;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 0) ? @item.Items.Split('\n')[0] : string.Empty)
+                                                </div>
+                                                <div class="col-md-@item.SingleSpace col-xs-@item.SingleSpace" style="padding: 0 ; padding-left: 3px;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 1) ? @item.Items.Split('\n')[1] : string.Empty)
+                                                </div>
+                                                <div class="col-md-@item.SingleSpace col-xs-@item.SingleSpace" style="padding: 0;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 2) ? @item.Items.Split('\n')[2] : string.Empty)
+                                                </div>
+                                            </div>
+
+                                            <div class="row" style="text-align: center; padding-left: 5px; ">
+                                                <span class="field-validation-valid" data-valmsg-for="@(item.Id + "1")" data-valmsg-replace="true"></span>
+                                                <div class="col-md-@item.SingleSpace col-xs-@item.SingleSpace" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="@(item.Id + "1")" value="1"
+                                                           @(itemValue == "1" ? "checked='checked'" : string.Empty) />
+                                                </div>
+                                                <div class="col-md-@item.SingleSpace col-xs-@item.SingleSpace" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="@(item.Id + "2")" value="2"
+                                                           @(itemValue == "2" ? "checked='checked'" : string.Empty) />
+                                                </div>
+                                                <div class="col-md-@item.SingleSpace col-xs-@item.SingleSpace" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="@(item.Id + "3")" value="3"
+                                                           @(itemValue == "3" ? "checked='checked'" : string.Empty) />
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    }
+                                    else if (item.QuestionItemType == QuestionItemType.ComboList)
+                                    {
+                                        if (item.Parts == 0)
+                                        {
+                                            item.Parts = 8;
+                                        }
+
+                                        @if (!string.IsNullOrEmpty(item.Title))
+                                        {
+                                            <div class="col-md-@(12 - item.Parts) col-xs-@(12 - item.Parts)" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
+                                                @item.Title
+                                            </div>
+                                        }
+
+                                        foreach (var line in item.Items.Split('\n'))
+                                        {
+                                            if (line.Contains("$"))
+                                            {
+                                                var newLine = line.Split('$')[0];
+                                                var cssClass = line.Split('$')[1];
+
+                                                <label class="radio-inline">
+                                                    <input class="@cssClass" type="radio" name="@item.Id" value="@newLine"
+                                                           @(itemValue.Contains(newLine) ? "checked='checked'" : string.Empty) />
+                                                    @newLine
+                                                </label>
+                                            }
+                                            else
+                                            {
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="@item.Id" value="@line"
+                                                           @(itemValue.Contains(line) ? "checked='checked'" : string.Empty) />
+                                                    @line
+                                                </label>
+                                            }
+                                        }
+                                    }
+                                    else if (item.QuestionItemType == QuestionItemType.CheckList)
+                                    {
+                                        <div class="form-group row">
+
+                                            @if (!string.IsNullOrEmpty(item.Title))
+                                            {
+                                                <div class="col-md-@(12 - item.Parts) col-xs-@(12 - item.Parts)" style="padding-left: 20px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
+                                                    @item.Title
+                                                </div>
+                                            }
+
+                                            <div class="col-sm-7">
+                                                <div class="dropdown">
+                                                    <a class="dropdown-toggle" data-toggle="dropdown">
+                                                        Select <span class="caret"></span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+
+                                                        @foreach (var line in item.Items.Split('\n'))
+                                                        {
+                                                            <li>
+                                                                <div class="checkbox" style="margin-top: 4px; padding-left: 50px;">
+                                                                    @if (line.Contains("[]"))
+                                                                    {
+                                                                        string newline = line.Replace("[]", "");
+
+                                                                        <label>
+                                                                            <input type="checkbox" name="@item.Id" value="@newline"
+                                                                                   @(itemValue.Contains(newline) ? "checked='checked'" : string.Empty) />
+                                                                            @newline
+                                                                        </label>
+                                                                        <input type="text" name="@(item.Id+"t")" value="@ViewData[(item.Id+"t").ToString(CultureInfo.InvariantCulture)]" />
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <label>
+                                                                            <input type="checkbox" name="@item.Id" value="@line"
+                                                                                   @(itemValue.Contains(line) ? "checked='checked'" : string.Empty) />
+                                                                            @line
+                                                                        </label>
+                                                                    }
+
+                                                                </div>
+                                                            </li>
+                                                        }
+
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    }
+                                    else if (item.QuestionItemType == QuestionItemType.TextArea)
+                                    {
+                                        if (!string.IsNullOrEmpty(item.Title))
+                                        {
+                                            <br />
+                                            <span>@item.Title</span>
+                                        }
+
+                                        <textarea class="form-control" name="@item.Id" rows="4">@ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)]</textarea>
+                                    }
+                                    else if (item.QuestionItemType == QuestionItemType.TextBox)
+                                    {
+                                        <div class="form-group row">
+                                            <label for="textbox" class="col-sm-5 col-form-label" style="padding-left:20px">@item.Title</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control" id="textbox" name="@item.Id" value="@ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)]" />
+                                            </div>
+                                        </div>
+                                    }
+                                    else if (item.QuestionItemType == QuestionItemType.CostBox)
+                                    {
+                                        <div class="form-group row">
+                                            <label for="costbox" class="col-sm-5 col-form-label" style="padding-left:20px">@item.Title</label>
+                                            <div class="col-sm-2">
+                                                <span class="input-symbol-euro">
+                                                    <input type="number" step="0.01" min="0" class="form-control" id="costbox" placeholder="0,00" name="@item.Id" value="@ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)]" />
+                                                </span>
+                                            </div>
+                                        </div>
+                                    }
+                                    else if (item.QuestionItemType == QuestionItemType.DistanceBoxM)
+                                    {
+                                        <div class="form-group row">
+                                            <label for="distancebox" class="col-sm-5 col-form-label" style="padding-left:20px">@item.Title</label>
+                                            <div class="col-sm-2">
+                                                <span class="input-symbol-m">
+                                                    <input type="number" step="1" min="0" class="form-control" id="distancebox" placeholder="0,00" name="@item.Id" value="@ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)]" />
+                                                </span>
+                                            </div>
+                                        </div>
+                                    }
+                                    else if (item.QuestionItemType == QuestionItemType.NumberBox)
+                                    {
+                                        <div class="form-group row">
+                                            <label for="numberbox" class="col-sm-5 col-form-label" style="padding-left:20px">@item.Title</label>
+                                            <div class="col-sm-2">
+                                                <input type="number" step="0.01" min="0" class="form-control" id="numberbox" placeholder="0,00" name="@item.Id" value="@ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)]" />
+                                            </div>
+                                        </div>
+                                    }
+                                    else if (item.QuestionItemType == QuestionItemType.Rate10)
+                                    {
+
+                                        if (!string.IsNullOrEmpty(item.Title))
+                                        {
+                                            <div class="col-md-@(12 - item.Parts) col-xs-@(12 - item.Parts)" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
+                                                @item.Title
+                                            </div>
+                                        }
+
+                                        <div class="col-md-@item.Parts col-xs-@item.Parts" style="padding-left: 10px; @(i > 0 ? "margin-top: 8px;" : "")">
+                                            @*Wyświetalnie podpowiedzi*@
+
+                                            @*Inna podpowiedz dla jednego pytania*@
+                                            @{if (question.Title == "W jakim stopniu poleciłaby Pani/Pan wakacje z Grecosem swoim znajomym?")
+                                                {
+                                                    <div class="row" style="font-size: 10px; text-align: center; white-space: nowrap;">
+
+                                                        <div class="col-xs-1 col-md-1" style="padding: 0; padding-left: 5px;">
+
+
+                                                        </div>
+                                                        <div class="col-xs-1 col-md-1" style="padding: 0; padding-left: 5px;"></div>
+                                                        <div class="col-xs-1 col-md-1" style="padding: 0; padding-left: 5px;"></div>
+                                                        <div class="col-xs-1 col-md-1" style="padding: 0; padding-left: 5px;"></div>
+                                                        <div class="col-xs-1 col-md-1" style="padding: 0; padding-left: 5px;"></div>
+                                                        <div class="col-xs-1 col-md-1" style="padding: 0;"></div>
+                                                        <div class="col-xs-1 col-md-1" style="padding: 0;"></div>
+                                                        <div class="col-xs-1 col-md-1" style="padding: 0;"></div>
+                                                        <div class="col-xs-1 col-md-1" style="padding: 0;"></div>
+                                                        <div class="col-xs-1 col-md-1" style="padding: 0;"></div>
+                                                    </div>
+                                                }
+
+                                                else
+                                                {
+
+                                                    if (i < 1)
+                                                    {
+                                                        <div class="row" style="font-size: 10px; text-align: center; white-space: nowrap;">
+
+                                                            <div class="col-xs-1 col-md-1" style="padding: 0; padding-left: 5px;">
+
+
+                                                            </div>
+                                                            <div class="col-xs-1 col-md-1" style="padding: 0; padding-left: 5px;"></div>
+                                                            <div class="col-xs-1 col-md-1" style="padding: 0; padding-left: 5px;"></div>
+                                                            <div class="col-xs-1 col-md-1" style="padding: 0; padding-left: 5px;"></div>
+                                                            <div class="col-xs-1 col-md-1" style="padding: 0; padding-left: 5px;"></div>
+                                                            <div class="col-xs-1 col-md-1" style="padding: 0;"></div>
+                                                            <div class="col-xs-1 col-md-1" style="padding: 0;"></div>
+                                                            <div class="col-xs-1 col-md-1" style="padding: 0;"></div>
+                                                            <div class="col-xs-1 col-md-1" style="padding: 0;"></div>
+                                                            <div class="col-xs-1 col-md-1" style="padding: 0;"></div>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    { <div class="row" style="font-size: 10px; text-align: center; white-space: nowrap;">
+
+                                                            <div class="col-xs-1 visible-xs" style="padding: 0; padding-left: 5px;">
+
+
+                                                            </div>
+                                                            <div class="col-xs-1 visible-xs" style="padding: 0; padding-left: 5px;"></div>
+                                                            <div class="col-xs-1 visible-xs" style="padding: 0; padding-left: 5px;"></div>
+                                                            <div class="col-xs-1 visible-xs" style="padding: 0; padding-left: 5px;"></div>
+                                                            <div class="col-xs-1 visible-xs" style="padding: 0; padding-left: 5px;"></div>
+                                                            <div class="col-xs-1 visible-xs" style="padding: 0;"></div>
+                                                            <div class="col-xs-1 visible-xs" style="padding: 0;"></div>
+                                                            <div class="col-xs-1 visible-xs" style="padding: 0;"></div>
+                                                            <div class="col-xs-1 visible-xs" style="padding: 0;"></div>
+                                                            <div class="col-xs-1 visible-xs" style="padding: 0;"></div>
+                                                        </div>
+                                                    }
+                                                }
+                                            }
+                                            @*Koniec wyświetalnie podpowiedzi*@
+
+                                            <div class="row" style="font-size: 10px; text-align: center; white-space: nowrap;">
+                                                <div class="col-md-1 col-xs-1" style="padding: 0; padding-left: 5px;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 0) ? @item.Items.Split('\n')[0] : string.Empty)
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0; padding-left: 5px;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 1) ? @item.Items.Split('\n')[1] : string.Empty)
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0; padding-left: 5px;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 2) ? @item.Items.Split('\n')[2] : string.Empty)
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0; padding-left: 5px;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 3) ? @item.Items.Split('\n')[3] : string.Empty)
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0; padding-left: 5px;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 4) ? @item.Items.Split('\n')[4] : string.Empty)
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 5) ? @item.Items.Split('\n')[5] : string.Empty)
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 6) ? @item.Items.Split('\n')[6] : string.Empty)
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 7) ? @item.Items.Split('\n')[7] : string.Empty)
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 8) ? @item.Items.Split('\n')[8] : string.Empty)
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    @((item.Items != null && item.Items.Split('\n').Length > 9) ? @item.Items.Split('\n')[9] : string.Empty)
+                                                </div>
+                                            </div>
+                                            <div class="row" style="text-align: center; padding-left: 5px;">
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test1" value="1"
+                                                           @(itemValue == "1" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test2" value="2"
+                                                           @(itemValue == "2" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test3" value="3"
+                                                           @(itemValue == "3" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test4" value="4"
+                                                           @(itemValue == "4" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test5" value="5"
+                                                           @(itemValue == "5" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test6" value="6"
+                                                           @(itemValue == "6" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test7" value="7"
+                                                           @(itemValue == "7" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test8" value="8"
+                                                           @(itemValue == "8" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test9" value="9"
+                                                           @(itemValue == "9" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                                <div class="col-md-1 col-xs-1" style="padding: 0;">
+                                                    <input type="radio" name="@item.Id" id="test10" value="10"
+                                                           @(itemValue == "10" ? "checked='checked'" : string.Empty) />
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+
+                                    }
+                                    else if (item.QuestionItemType == QuestionItemType.Date)
+                                    {
+                                        @if (!string.IsNullOrEmpty(item.Title))
+                                        {
+                                            <div class="col-md-@(12 - item.Parts) col-xs-@(12 - item.Parts)" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
+                                                @item.Title
+                                            </div>
+                                        }
+                                        <div>
+                                            <div class="form-group row">
+                                                <label for="from" class="col-sm-2 col-form-label">
+                                                    from:
+                                                </label>
+                                                <div class="col-sm-1" style="padding-top: 5px">
+                                                    <input type="date" name="@item.Id" id="from" value="@ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)]" />
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label for="to" class="col-sm-6 col-form-label" style="text-align:right">
+                                                    to:
+                                                </label>
+                                                <div class="col-sm-1" style="padding-top: 5px; padding-left: 25px">
+                                                    <input type="date" name="@(item.Id+"t")" id="to" value="@ViewData[(item.Id+"t").ToString(CultureInfo.InvariantCulture)]" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else if (item.QuestionItemType == QuestionItemType.Time)
+                                    {
+                                        @if (!string.IsNullOrEmpty(item.Title))
+                                        {
+                                            <div class="col-md-@(12 - item.Parts) col-xs-@(12 - item.Parts)" style="padding-left: 5px; @(i > 0 ? "margin-top: 8px;" : "padding-top: 13px")">
+                                                @item.Title
+                                            </div>
+                                        }
+                                        <div>
+                                            <div class="form-group row">
+                                                <label for="from" class="col-sm-2 col-form-label">
+                                                    from:
+                                                </label>
+                                                <div class="col-sm-1" style="padding-top: 5px">
+                                                    <input type="time" name="@item.Id" id="from" value="@ViewData[@item.Id.ToString(CultureInfo.InvariantCulture)]" />
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label for="to" class="col-sm-6 col-form-label" style="text-align:right">
+                                                    to:
+                                                </label>
+                                                <div class="col-sm-1" style="padding-top: 5px; padding-left: 25px">
+                                                    <input type="time" name="@(item.Id+"t")" id="to" value="@ViewData[(item.Id+"t").ToString(CultureInfo.InvariantCulture)]" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    i++;
+
+                                    <div class="col-sm-4 text-danger text-center" style="font-size: 10px">
+                                        @Html.ValidationMessage(item.Id.ToString(), "*Field is required")
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+                <div style="text-align: center">
+                    @if (page == 1)
+                    {
+
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="back">
+                            Back
+                            <span class="glyphicon glyphicon-chevron-left"></span>
+                        </button>
+                    }
+
+                    @if (page == 11)
+                    {
+                        <button type="submit" class="btn btn-primary alert-danger" name="action" value="save">
+                            Save and Exit
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </button>
+                    }
+
+                    else
+                    {
+                        <button type="submit" class="btn btn-primary" style="background-color:#005EA8" name="action" value="next">
+                            Next Page
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </button>
+
+                        <button type="submit" class="btn btn-primary alert-danger" name="action" value="save">
+                            Save and Exit
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </button>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+    <div class="col-md-3"></div>
+    <div class="clearfix"></div>
+
+
+    @section Scripts {
+
+        <script>
+
+            $(function () {
+                $('div.show1').hide();
+                $('div.show2').hide();
+                $('div.show3').hide();
+                $('div.show4').hide();
+                $('div.show5').hide();
+                $('div.show6').hide();
+                $('div.show7').hide();
+                $('div.show8').hide();
+                $('div.show9').hide();
+                $('div.show10').hide();
+                $('div.show11').hide();
+                $('div.show12').hide();
+                $('div.show13').hide();
+                $('div.show14').hide();
+                $('div.show15').hide();
+
+                $('.spinner').spinner({
+                    spin: function (event, ui) {
+                        if (ui.value > 10) {
+                            $(this).spinner("value", 10);
+                            return false;
+                        } else if (ui.value < 0) {
+                            $(this).spinner("value", 0);
+                            return false;
+                        }
+                    }
+                });
+            });
+        </script>
+
+        @if (dana == 1)
+        {
+            <script>
+                $(document).ready(function () {
+                    $("#panel1").slideToggle("slow");
+                });
+
+                $(document).ready(function () {
+                    $('div.show1').show('slow')
+                });
+            </script>
+        }
+        else if (dana == 2)
+        {
+            <script>
+                $(document).ready(function () {
+                    $("#panel1").slideToggle("slow");
+                });
+
+                $(document).ready(function () {
+                    $('div.show1').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show2').show('slow')
+                });
+            </script>
+        }
+        else if (dana == 3)
+        {
+            <script>
+                $(document).ready(function () {
+                    $("#panel1").slideToggle("slow");
+                });
+
+                $(document).ready(function () {
+                    $('div.show1').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show2').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show3').show('slow')
+                });
+            </script>
+        }
+        else if (dana == 4)
+        {
+            <script>
+                $(document).ready(function () {
+                    $("#panel1").slideToggle("slow");
+                });
+
+                $(document).ready(function () {
+                    $('div.show1').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show2').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show3').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show4').show('slow')
+                });
+            </script>
+        }
+        else if (dana == 5)
+        {
+            <script>
+                $(document).ready(function () {
+                    $("#panel1").slideToggle("slow");
+                });
+
+                $(document).ready(function () {
+                    $('div.show1').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show2').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show3').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show4').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show5').show('slow')
+                });
+            </script>
+        }
+        else if (dana == 6)
+        {
+            <script>
+                $(document).ready(function () {
+                    $("#panel1").slideToggle("slow");
+                });
+
+                $(document).ready(function () {
+                    $('div.show1').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show2').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show3').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show4').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show5').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show6').show('slow')
+                });
+            </script>
+        }
+        else if (dana == 7)
+        {
+            <script>
+                $(document).ready(function () {
+                    $("#panel1").slideToggle("slow");
+                });
+
+                $(document).ready(function () {
+                    $('div.show1').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show2').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show3').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show4').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show5').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show6').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show7').show('slow')
+                });
+            </script>
+        }
+        else if (dana == 8)
+        {
+            <script>
+                $(document).ready(function () {
+                    $("#panel1").slideToggle("slow");
+                });
+
+                $(document).ready(function () {
+                    $('div.show1').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show2').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show3').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show4').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show5').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show6').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show7').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show8').show('slow')
+                });
+            </script>
+        }
+        else if (dana == 9)
+        {
+            <script>
+                $(document).ready(function () {
+                    $("#panel1").slideToggle("slow");
+                });
+
+                $(document).ready(function () {
+                    $('div.show1').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show2').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show3').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show4').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show5').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show6').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show7').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show8').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show9').show('slow')
+                });
+            </script>
+        }
+        else if (dana == 10)
+        {
+            <script>
+                $(document).ready(function () {
+                    $("#panel1").slideToggle("slow");
+                });
+
+                $(document).ready(function () {
+                    $('div.show1').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show2').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show3').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show4').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show5').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show6').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show7').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show8').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show9').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show10').show('slow')
+                });
+            </script>
+        }
+        else if (dana == 11)
+        {
+            <script>
+                $(document).ready(function () {
+                    $("#panel1").slideToggle("slow");
+                });
+
+                $(document).ready(function () {
+                    $('div.show1').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show2').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show3').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show4').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show5').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show6').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show7').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show8').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show9').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show10').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show11').show('slow')
+                });
+            </script>
+        }
+        else if (dana == 12)
+        {
+            <script>
+                $(document).ready(function () {
+                    $("#panel1").slideToggle("slow");
+                });
+
+                $(document).ready(function () {
+                    $('div.show1').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show2').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show3').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show4').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show5').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show6').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show7').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show8').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show9').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show10').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show11').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show12').show('slow')
+                });
+            </script>
+        }
+        else if (dana == 13)
+        {
+            <script>
+                $(document).ready(function () {
+                    $("#panel1").slideToggle("slow");
+                });
+
+                $(document).ready(function () {
+                    $('div.show1').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show2').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show3').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show4').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show5').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show6').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show7').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show8').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show9').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show10').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show11').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show12').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show13').show('slow')
+                });
+            </script>
+        }
+        else if (dana == 14)
+        {
+            <script>
+                $(document).ready(function () {
+                    $("#panel1").slideToggle("slow");
+                });
+
+                $(document).ready(function () {
+                    $('div.show1').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show2').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show3').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show4').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show5').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show6').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show7').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show8').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show9').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show10').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show11').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show12').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show13').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show14').show('slow')
+                });
+            </script>
+        }
+        else if (dana == 15)
+        {
+            <script>
+                $(document).ready(function () {
+                    $("#panel1").slideToggle("slow");
+                });
+
+                $(document).ready(function () {
+                    $('div.show1').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show2').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show3').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show4').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show5').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show6').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show7').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show8').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show9').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show10').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show11').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show12').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show13').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show14').show('slow')
+                });
+
+                $(document).ready(function () {
+                    $('div.show15').show('slow')
+                });
+            </script>
+        }
+
+
+        <script>
+
+            $(document).on("change", "input.show1", function () {
+                $('div.show1').show('slow');
+            });
+
+            $(document).on("change", "input.hide1", function () {
+                $('div.show1').hide('slow');
+            });
+
+            $(document).on("change", "input.show2", function () {
+                $('div.show2').show('slow');
+            });
+
+            $(document).on("change", "input.hide2", function () {
+                $('div.show2').hide('slow');
+            });
+
+            $(document).on("change", "input.show3", function () {
+                $('div.show3').show('slow');
+            });
+
+            $(document).on("change", "input.hide3", function () {
+                $('div.show3').hide('slow');
+            });
+
+            $(document).on("change", "input.show4", function () {
+                $('div.show4').show('slow');
+            });
+
+            $(document).on("change", "input.hide4", function () {
+                $('div.show4').hide('slow');
+            });
+
+            $(document).on("change", "input.show5", function () {
+                $('div.show5').show('slow');
+            });
+
+            $(document).on("change", "input.hide5", function () {
+                $('div.show5').hide('slow');
+            });
+
+            $(document).on("change", "input.show6", function () {
+                $('div.show6').show('slow');
+            });
+
+            $(document).on("change", "input.hide6", function () {
+                $('div.show6').hide('slow');
+            });
+
+            $(document).on("change", "input.show7", function () {
+                $('div.show7').show('slow');
+            });
+
+            $(document).on("change", "input.hide7", function () {
+                $('div.show7').hide('slow');
+            });
+
+            $(document).on("change", "input.show8", function () {
+                $('div.show8').show('slow');
+            });
+
+            $(document).on("change", "input.hide8", function () {
+                $('div.show8').hide('slow');
+            });
+
+            $(document).on("change", "input.show9", function () {
+                $('div.show9').show('slow');
+            });
+
+            $(document).on("change", "input.hide9", function () {
+                $('div.show9').hide('slow');
+            });
+
+            $(document).on("change", "input.show10", function () {
+                $('div.show10').show('slow');
+            });
+
+            $(document).on("change", "input.hide10", function () {
+                $('div.show10').hide('slow');
+            });
+
+            $(document).on("change", "input.show11", function () {
+                $('div.show11').show('slow');
+            });
+
+            $(document).on("change", "input.hide11", function () {
+                $('div.show11').hide('slow');
+            });
+
+            $(document).on("change", "input.show12", function () {
+                $('div.show12').show('slow');
+            });
+
+            $(document).on("change", "input.hide12", function () {
+                $('div.show12').hide('slow');
+            });
+
+            $(document).on("change", "input.show13", function () {
+                $('div.show13').show('slow');
+            });
+
+            $(document).on("change", "input.hide13", function () {
+                $('div.show13').hide('slow');
+            });
+
+            $(document).on("change", "input.show14", function () {
+                $('div.show14').show('slow');
+            });
+
+            $(document).on("change", "input.hide14", function () {
+                $('div.show14').hide('slow');
+            });
+
+            $(document).on("change", "input.show15", function () {
+                $('div.show15').show('slow');
+            });
+
+            $(document).on("change", "input.hide15", function () {
+                $('div.show15').hide('slow');
+            });
+
+
+            $(document).ready(function () {
+                $("#flip1").click(function () {
+                    $("#panel1").slideToggle("slow");
+                });
+            });
+
+            $(document).ready(function () {
+                $("#flip2").click(function () {
+                    $("#panel2").slideToggle("slow");
+                });
+            });
+
+            $(document).ready(function () {
+                $("#flip3").click(function () {
+                    $("#panel3").slideToggle("slow");
+                });
+            });
+
+            $(document).ready(function () {
+                $("#flip4").click(function () {
+                    $("#panel4").slideToggle("slow");
+                });
+            });
+
+            $(document).ready(function () {
+                $("#flip5").click(function () {
+                    $("#panel5").slideToggle("slow");
+                });
+            });
+
+            $(document).ready(function () {
+                $("#flip6").click(function () {
+                    $("#panel6").slideToggle("slow");
+                });
+            });
+
+            $(document).ready(function () {
+                $("#flip7").click(function () {
+                    $("#panel7").slideToggle("slow");
+                });
+            });
+
+            $(document).ready(function () {
+                $("#flip8").click(function () {
+                    $("#panel8").slideToggle("slow");
+                });
+            });
+
+            $(document).ready(function () {
+                $("#flip9").click(function () {
+                    $("#panel9").slideToggle("slow");
+                });
+            });
+
+            $(document).ready(function () {
+                $("#flip10").click(function () {
+                    $("#panel10").slideToggle("slow");
+                });
+            });
+
+            $(document).ready(function () {
+                $("#flip11").click(function () {
+                    $("#panel11").slideToggle("slow");
+                });
+            });
+
+            $(document).ready(function () {
+                $("#flip12").click(function () {
+                    $("#panel12").slideToggle("slow");
+                });
+            });
+
+            $(document).ready(function () {
+                $("#flip13").click(function () {
+                    $("#panel13").slideToggle("slow");
+                });
+            });
+
+            $(document).ready(function () {
+                $("#flip14").click(function () {
+                    $("#panel14").slideToggle("slow");
+                });
+            });
+
+            $(document).ready(function () {
+                $("#flip15").click(function () {
+                    $("#panel15").slideToggle("slow");
+                });
+            });
+
+            $(document).ready(function () {
+                $("#flip16").click(function () {
+                    $("#panel16").slideToggle("slow");
+                });
+            });
+
+            (function ($) {
+                // http://itmeze.com/2010/12/checkbox-has-to-be-checked-with-unobtrusive-jquery-validation-and-asp-net-mvc-3/
+                $.validator.unobtrusive.adapters.add("mandatory", function (options) {
+                    options.rules["required"] = true;
+                    if (options.message) {
+                        options.messages["required"] = options.message;
+                    }
+                });
+            }(jQuery));
+
+            (function ($) {
+                $.validator.unobtrusive.adapters.addBool("mandatory", "required");
+            }(jQuery));
+
+        </script>
+        <style>
+            #panel1, #flip1, #panel2, #flip2, #panel3, #flip3, #panel4, #flip4, #panel5, #flip5, #panel6, #flip6, #panel7, #flip7, #panel8, #flip8, #panel9, #flip9, #panel10, #flip10, #panel11, #flip11, #panel12, #flip12, #panel13, #flip13, #panel14, #flip14, #panel15, #flip15, #panel16, #flip16 {
+                padding: 5px;
+                text-align: center;
+                background-color: #e5eecc;
+                border: solid 1px #c3c3c3;
+            }
+
+            #panel1, #panel2, #panel3, #panel4, #panel5, #panel6, #panel7, #panel8, #panel9, #panel10, #panel11, #panel12, #panel13, #panel14, #panel15, #panel16 {
+                display: none;
+                user-select: none;
+            }
+        </style>
+
+    }
