@@ -725,12 +725,20 @@ namespace GrecosQuestionnaire.Controllers
                 //pobieram listę odpowiedzi powiązanych z odpowiedzią
                 var responseitems = _hotelRepository.GetResponseItem().Where(r => r.Response.Id == response.Id).ToList();
 
+                //pobieram listę odpowiedzi powiązanych z subodpowiedzią
+                var responseitemitems = _hotelRepository.GetResponseItemItem().Where(r => r.ResponseItem.Response.Id == response.Id).ToList();
+
                 //pobieram listę pytań
                 var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
 
-                foreach (var item in responseitems)
+                foreach (var item1 in responseitems)
                 {
-                    ViewData[item.Value] = item.RawValue;
+                    ViewData[item1.Value] = item1.RawValue;
+                }
+
+                foreach (var item2 in responseitemitems)
+                {
+                    ViewData[item2.Value] = item2.RawValue;
                 }
 
                 PassToView(page, hotel, hotelCodeName);

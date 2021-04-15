@@ -144,7 +144,7 @@ namespace GrecosQuestionnaire.Logic.Hotels
         {
             //var responses = _context.ResponseItems.ToList();
             //var responses = _context.ResponseItemItems.AsQueryable().Include(p => p.ResponseItem).Include(p => p.QuestionItemItem).AsNoTracking().ToList();
-            var responses = _context.ResponseItemItems.AsQueryable().Include(p => p.ResponseItem).Include(p => p.QuestionItemItem).ToList();
+            var responses = _context.ResponseItemItems.AsQueryable().Include(p => p.ResponseItem).ToList();   //Include(p => p.QuestionItemItem).ToList();
             return responses;
         }
 
