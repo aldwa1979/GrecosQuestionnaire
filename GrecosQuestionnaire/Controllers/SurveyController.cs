@@ -535,6 +535,7 @@ namespace GrecosQuestionnaire.Controllers
                         }
 
                         PassToView(page, hotel, hotelCodeName);
+                        SubClassMethod(page, items);
                     }
 
                     else
@@ -719,6 +720,9 @@ namespace GrecosQuestionnaire.Controllers
             {
                 page = 1;
 
+                //pobieram listę pytań
+                var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
+
                 //pobieram ID odpowiedzi powiązanej z hotelem
                 var response = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
 
@@ -727,9 +731,6 @@ namespace GrecosQuestionnaire.Controllers
 
                 //pobieram listę odpowiedzi powiązanych z subodpowiedzią
                 var responseitemitems = _hotelRepository.GetResponseItemItem().Where(r => r.ResponseItem.Response.Id == response.Id).ToList();
-
-                //pobieram listę pytań
-                var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
 
                 foreach (var item1 in responseitems)
                 {
@@ -741,6 +742,12 @@ namespace GrecosQuestionnaire.Controllers
                     ViewData[item2.Value] = item2.RawValue;
                 }
 
+
+                foreach (var item in responseitems)
+                {
+                    HttpContext.Session.SetString(item.Value, item.RawValue);
+                }
+
                 PassToView(page, hotel, hotelCodeName);
 
                 SubClassMethod(page, items);
@@ -750,14 +757,17 @@ namespace GrecosQuestionnaire.Controllers
 
             else if (page == 1 || page == 2 || page == 3 || page == 4 || page == 5 || page == 6 || page == 8 || page == 10 || page == 11)
             {
+                //pobieram listę pytań - nie sortuje mi pytań podrzędnych - do rozwiązania !!!!!!!!
+                var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
+
                 //pobieram ID odpowiedzi powiązanej z hotelem
                 var response = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
 
                 //pobieram listę odpowiedzi powiązanych z odpowiedzią
                 var responseitems = _hotelRepository.GetResponseItem().Where(r => r.Response.Id == response.Id).ToList();
 
-                //pobieram listę pytań
-                var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
+                //pobieram listę odpowiedzi powiązanych z subodpowiedzią
+                var responseitemitems = _hotelRepository.GetResponseItemItem().Where(r => r.ResponseItem.Response.Id == response.Id).ToList();
 
                 //wyszukuję pytania z grupy ComboList aby na automacie w widoku pokazywać wszystkie wybrane part1
                 var comboListQuestions = _hotelRepository.GetQuestionItems().Where(z => z.QuestionItemType.ToString() == "ComboList").Select(z => z.Id).ToArray();
@@ -766,19 +776,30 @@ namespace GrecosQuestionnaire.Controllers
                 int comboQuestionPerPageToViewFromDB = 0;
                 int number = 0;
 
-                foreach (var item in responseitems)
+                foreach (var item1 in responseitems)
                 {
                     foreach (var item2 in comboListQuestions)
                     {
                         foreach (var item3 in items)
                         {
-                            if (item3.Items != null && item3.ItemPage == page && item3.Items.Where(x => x.Id == item.QuestionItem.Id).Any() && item.QuestionItem.Id == item2)
+                            if (item3.Items != null && item3.ItemPage == page && item3.Items.Where(x => x.Id == item1.QuestionItem.Id).Any() && item1.QuestionItem.Id == item2 )
                             {
-                                comboQuestionPerPageToViewFromDB = Int32.Parse(item.RawValue);
+                                comboQuestionPerPageToViewFromDB = (Int32.TryParse(item1.RawValue, out number)) ? Int32.Parse(item1.RawValue) : comboQuestionPerPageToViewFromDB;
                             }
                         }
                     }
-                    ViewData[item.Value] = item.RawValue;
+
+                    ViewData[item1.Value] = item1.RawValue;
+                }
+
+                foreach (var item2 in responseitemitems)
+                {
+                    ViewData[item2.Value] = item2.RawValue;
+                }
+
+                foreach (var item in responseitems)
+                {
+                    HttpContext.Session.SetString(item.Value, item.RawValue);
                 }
 
                 foreach (var key in HttpContext.Session.Keys)
@@ -787,6 +808,8 @@ namespace GrecosQuestionnaire.Controllers
                 }
 
                 PassToView(page, hotel, hotelCodeName);
+
+                SubClassMethod(page, items);
 
                 //wyszukuję pytania z grupy ComboList aby na automacie w widoku pokazywać wszystkie wybrane part2
                 foreach (var item in comboListQuestions)
@@ -896,19 +919,27 @@ namespace GrecosQuestionnaire.Controllers
                     }
                 }
 
+                //pobieram listę pytań
+                var items2 = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
+                var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).Where(s => lista.Contains(s.Id)).OrderBy(x => x.ItemOrder);
+
                 //pobieram ID odpowiedzi powiązanej z hotelem
                 var response = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
 
                 //pobieram listę odpowiedzi powiązanych z odpowiedzią
                 var responseitems = _hotelRepository.GetResponseItem().Where(r => r.Response.Id == response.Id).ToList();
 
-                //pobieram listę pytań
-                var items2 = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
-                var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).Where(s => lista.Contains(s.Id)).OrderBy(x => x.ItemOrder);
+                //pobieram listę odpowiedzi powiązanych z subodpowiedzią
+                var responseitemitems = _hotelRepository.GetResponseItemItem().Where(r => r.ResponseItem.Response.Id == response.Id).ToList();
 
-                foreach (var item in responseitems)
+                foreach (var item1 in responseitems)
                 {
-                    ViewData[item.Value] = item.RawValue;
+                    ViewData[item1.Value] = item1.RawValue;
+                }
+
+                foreach (var item2 in responseitemitems)
+                {
+                    ViewData[item2.Value] = item2.RawValue;
                 }
 
                 foreach (var key in HttpContext.Session.Keys)
@@ -917,6 +948,8 @@ namespace GrecosQuestionnaire.Controllers
                 }
 
                 PassToView(page, hotel, hotelCodeName);
+
+                SubClassMethod(page, items);
 
                 return View(items);
 
@@ -986,19 +1019,27 @@ namespace GrecosQuestionnaire.Controllers
                     }
                 }
 
+                //pobieram listę pytań
+                var items2 = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
+                var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).Where(s => lista.Contains(s.Id)).OrderBy(x => x.ItemOrder);
+
                 //pobieram ID odpowiedzi powiązanej z hotelem
                 var response = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
 
                 //pobieram listę odpowiedzi powiązanych z odpowiedzią
                 var responseitems = _hotelRepository.GetResponseItem().Where(r => r.Response.Id == response.Id).ToList();
 
-                //pobieram listę pytań
-                var items2 = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
-                var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).Where(s => lista.Contains(s.Id)).OrderBy(x => x.ItemOrder);
+                //pobieram listę odpowiedzi powiązanych z subodpowiedzią
+                var responseitemitems = _hotelRepository.GetResponseItemItem().Where(r => r.ResponseItem.Response.Id == response.Id).ToList();
 
-                foreach (var item in responseitems)
+                foreach (var item1 in responseitems)
                 {
-                    ViewData[item.Value] = item.RawValue;
+                    ViewData[item1.Value] = item1.RawValue;
+                }
+
+                foreach (var item2 in responseitemitems)
+                {
+                    ViewData[item2.Value] = item2.RawValue;
                 }
 
                 foreach (var key in HttpContext.Session.Keys)
@@ -1007,6 +1048,8 @@ namespace GrecosQuestionnaire.Controllers
                 }
 
                 PassToView(page, hotel, hotelCodeName);
+
+                SubClassMethod(page, items);
 
                 return View(items);
 
@@ -1040,8 +1083,15 @@ namespace GrecosQuestionnaire.Controllers
                 hotel = int.Parse(formCollection["hotel"].ToString().Substring(10, 4));
             }
 
-            //TempData["hotel"] = hotel;
             var response = _hotelRepository.GetResponses().Where(p => p.HotelId == hotel).SingleOrDefault();
+
+            int number = 0;
+            int numberOfCheck = 100;
+            var listOfComboQuestionItems = _hotelRepository.GetQuestionItems().Where(x => x.ItemOrder == 1 && x.QuestionItemType == Data.Enum.QuestionItemType.ComboList).Select(p => p.Id).ToArray();
+            List<Question> questions = new List<Question>();
+            Dictionary<string, string> roomList = new Dictionary<string, string>();
+            List<string> list = new List<string>();
+            List<int> lista = new List<int>();
 
             foreach (var formData in formCollection)
             {
@@ -1050,37 +1100,87 @@ namespace GrecosQuestionnaire.Controllers
                 else
                 {
                     HttpContext.Session.SetString(formData.Key, formData.Value);
+
+                    bool success1 = Int32.TryParse(formData.Key, out number);
+                    bool success2 = Int32.TryParse(formData.Value, out number);
+
+                    foreach (var item in listOfComboQuestionItems)
+                    {
+                        if (success1 && success2 && int.Parse(formData.Key) == item)
+                        {
+                            numberOfCheck = int.Parse(formData.Value);
+                        }
+                    }
                 }
             }
 
+            int walidacja1 = numberOfCheck;
+            walidacja1++;
 
             //walidacja ankiety
             bool errorExist = false;
 
-            foreach (var source in _hotelRepository.GetQuestionItems().Where(x => x.Required && x.Question.ItemPage == page && !x.Question.Removed))
+            if (page == 7 || page == 9)
             {
-                if (HttpContext.Session.GetString(source.Id.ToString()) == null || string.IsNullOrEmpty(HttpContext.Session.GetString(source.Id.ToString())))
+                foreach (var source in _hotelRepository.GetQuestionItems().Where(x => x.Required && x.Question.ItemPage == page && !x.Question.Removed && lista.Contains(x.Question.Id)))
                 {
-                    if (HttpContext.Session.GetString(source.Id.ToString()) + "t" == null || string.IsNullOrEmpty(HttpContext.Session.GetString(source.Id.ToString() + "t".ToString())))
+                    if (HttpContext.Session.GetString(source.Id.ToString()) == null || string.IsNullOrEmpty(HttpContext.Session.GetString(source.Id.ToString())))
                     {
-                        errorExist = true;
-                        //ModelState.AddModelError(source.Id.ToString(), "*Field is required");
-                        ModelState.AddModelError(source.Id.ToString(), source.Question.Title + " - " + source.Title + " is required");
+                        if (HttpContext.Session.GetString(source.Id.ToString()) + "t" == null || string.IsNullOrEmpty(HttpContext.Session.GetString(source.Id.ToString() + "t".ToString())))
+                        {
+                            errorExist = true;
+                            ModelState.AddModelError(source.Id.ToString(), source.Question.Title + " - " + source.Title + " is required");
+                        }
                     }
-
                 }
-
             }
+
+            else
+            {
+                foreach (var source in _hotelRepository.GetQuestionItems().Where(x => x.Required && x.Question.ItemPage == page && !x.Question.Removed))
+                {
+                    if (HttpContext.Session.GetString(source.Id.ToString()) == null || string.IsNullOrEmpty(HttpContext.Session.GetString(source.Id.ToString())))
+                    {
+                        if (HttpContext.Session.GetString(source.Id.ToString()) + "t" == null || string.IsNullOrEmpty(HttpContext.Session.GetString(source.Id.ToString() + "t".ToString())))
+                        {
+                            if (source.Question.ItemOrder <= walidacja1)
+                            {
+                                errorExist = true;
+                                ModelState.AddModelError(source.Id.ToString(), source.Question.Title + " - " + source.Title + " is required");
+                            }
+                        }
+                    }
+                }
+            }
+
             if (errorExist)
             {
-                var items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
+                IOrderedEnumerable<Question> items = null;
 
-                foreach (var key in (HttpContext.Session.Keys))
+                if (page == 7 || page == 9)
                 {
-                    ViewData[key.ToString()] = HttpContext.Session.GetString(key);
-                }
+                    items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed && lista.Contains(x.Id)).OrderBy(x => x.ItemOrder);
 
-                PassToView(page, hotel, hotelCodeName);
+                    foreach (var key in (HttpContext.Session.Keys))
+                    {
+                        ViewData[key.ToString()] = HttpContext.Session.GetString(key);
+                    }
+
+                    PassToView(page, hotel, hotelCodeName);
+                    SubClassMethod(page, items);
+                }
+                else
+                {
+                    items = _hotelRepository.GetQuestions().Where(x => x.ItemPage == page && !x.Removed).OrderBy(x => x.ItemOrder);
+
+                    foreach (var key in (HttpContext.Session.Keys))
+                    {
+                        ViewData[key.ToString()] = HttpContext.Session.GetString(key);
+                    }
+
+                    PassToView(page, hotel, hotelCodeName);
+                    SubClassMethod(page, items);
+                }
 
                 return View(items);
             }
